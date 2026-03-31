@@ -1,40 +1,68 @@
-# Pretext Skill 项目记忆
+# Pretext Skill Project Memory
 
-## 项目简介
+## Project Summary
 
-- 项目名称：Pretext Skill
-- Skill 名称：`pretext`
-- 当前目标：基于本地参考仓库 `./pretext/` 开发一个符合统一标准的 Agent Skill
-- 参考实现：`https://github.com/chenglou/pretext`，已克隆到 `./pretext/`
+- Project name: `PretextSkill`
+- Skill name: `pretext`
+- Goal: build a standardized Codex skill from the local reference repository at `./pretext/`
+- Reference repository: `https://github.com/chenglou/pretext`, cloned locally into `./pretext/`
 
-## 仓库约定
+## Repository Conventions
 
-- Skill 开发目录：`./skills/pretext/`
-- 持久化文档目录：`./docs/`
-- 项目初始化方式：`npx skills init`
-- 当前仓库将忽略本地参考代码目录 `./pretext/`
+- Develop the skill in `./skills/pretext/`
+- Store durable project memory in `./docs/`
+- Use `npx skills init` as the project bootstrap entry point
+- Keep the local reference repository ignored via the root-only rule `/pretext/`
 
-## 使用说明
+## Current Status
 
-- 当前阶段仅完成 Git 仓库初始化、忽略规则设置、远程仓库创建与首个提交
-- 后续开发前，先阅读本文件与 `./docs/CHANGELOG.md`
-- 重要决策、待办、已知问题与阶段性结论必须优先写入 `./docs/`
+- Git repository initialized and pushed to `main`
+- Remote repository created at `https://github.com/MoYeRanqianzhi/PretextSkill`
+- Release tag `v0.0.0` created for the repository bootstrap milestone
+- `npx skills init` produced the initial minimal `skills/pretext/SKILL.md` scaffold
+- A `.gitignore` bug was discovered and fixed: `pretext/` also ignored `skills/pretext/`; the correct rule is `/pretext/`
+- `skills/pretext/` now contains:
+  - `SKILL.md`
+  - `agents/openai.yaml`
+  - `reference/api-selection.md`
+  - `reference/integration-patterns.md`
+  - `reference/validation-playbook.md`
+  - `scripts/select_pretext_api.py`
 
-## 已知问题
+## Durable Decisions
 
-- Skill 脚手架尚未初始化
-- `./skills/pretext/` 尚未创建
-- 参考仓库与目标 Skill 的能力映射尚未整理
+- Write the skill and new project docs in English to support internationalized reuse
+- Keep progressive disclosure strict:
+  - `SKILL.md` contains only workflow and decision rules
+  - `reference/` holds API, workflow, and troubleshooting details
+  - `scripts/` is reserved for deterministic helpers that are worth executing
+- Treat the reference repository as the source of truth for API names, workflows, and caveats
 
-## 待办事项
+## Known Issues
 
-- 执行 `npx skills init`
-- 使用 `skill-creator` 设计并生成 `skills/pretext/` 基础结构
-- 梳理 `pretext` 参考仓库的核心能力、输入输出与可复用脚本
-- 建立 `SKILL.md`、`scripts/`、`reference/` 的渐进式披露结构
+- The skill may still need framework-specific recipes if future work targets React, Canvas-only pipelines, or packaging examples in more depth
 
-## 开发约束
+## Next Tasks
 
-- 所有重要事项必须文档化，避免仅依赖会话上下文
-- 优先保证结论可追溯、可验证、可解释
-- 不确定的信息必须通过工具或资料核实，禁止猜测
+- Run an independent review pass against the new skill contents
+- Add more recipes only when repeated demand appears
+- Commit the first development milestone and add a milestone tag
+
+## Validation Record
+
+- `python skills/pretext/scripts/select_pretext_api.py --goal variable-width --preserve-whitespace`
+  - Result: script executed successfully and returned the expected API recommendation
+- `python C:/Users/MoYeR/.codex/skills/.system/skill-creator/scripts/quick_validate.py G:/AgentProjects/skillsProjest/PretextSkill/skills/pretext`
+  - Result: `Skill is valid!`
+- `python C:/Users/MoYeR/.codex/skills/.system/skill-creator/scripts/generate_openai_yaml.py G:/AgentProjects/skillsProjest/PretextSkill/skills/pretext ...`
+  - Result: regenerated `agents/openai.yaml` with a valid `$pretext` default prompt
+- Forward-test prompt: height-only React chat bubble estimation
+  - Result: a fresh agent selected `prepare()` plus `layout()`, cached prepared state, and warned against rerunning `prepare()` on resize
+- Forward-test prompt: Canvas text flowing around an image with Thai segmentation and preserved breaks
+  - Result: a fresh agent selected `prepareWithSegments()` plus `layoutNextLine()`, required `{ whiteSpace: 'pre-wrap' }`, and correctly called out `setLocale('th')`
+
+## Working Rules
+
+- Document important findings before relying on memory
+- Prefer verifiable claims with file-backed evidence
+- Do not guess about API behavior, CLI behavior, or repo state when a local check is possible

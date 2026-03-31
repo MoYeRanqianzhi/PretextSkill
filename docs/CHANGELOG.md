@@ -2,7 +2,14 @@
 
 ## 2026-03-31
 
-- 初始化 Git 仓库，主分支为 `main`
-- 添加 `.gitignore`，忽略本地参考目录 `pretext/`
-- 建立 `docs/` 持久化记忆文档
-- 计划创建远程仓库 `PretextSkill` 并推送首个提交
+- Initialized the Git repository with `main` as the default branch
+- Added the first `.gitignore` rule for the local reference repository
+- Created the initial durable memory docs in `./docs/`
+- Created and pushed the public GitHub repository `MoYeRanqianzhi/PretextSkill`
+- Added and pushed the annotated bootstrap tag `v0.0.0`
+- Ran `npx skills init` and generated the first minimal `skills/pretext/SKILL.md`
+- Corrected `.gitignore` from `pretext/` to `/pretext/` so `skills/pretext/` is trackable
+- Authored the first English `pretext` skill draft with curated references and a deterministic helper script
+- Generated `skills/pretext/agents/openai.yaml` with `skill-creator` tooling
+- Validated the skill structure with `quick_validate.py`
+- Forward-tested the skill on height-only and variable-width line scenarios with fresh subagents
