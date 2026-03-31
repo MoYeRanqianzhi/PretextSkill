@@ -51,6 +51,8 @@ The first version does not need to:
   - whitespace modes, break policy, tabs, zero-width separators, and soft-hyphen behavior
 - `reference/script-and-browser-caveats.md`
   - script-sensitive segmentation, browser caveats, and research canaries
+- `reference/app-recipes.md`
+  - implementation-heavy patterns for React, Canvas/SVG, shrink-wrap, editors, and package release checks
 - `reference/integration-lifecycle.md`
   - prepare/layout lifecycle patterns for product code
 - `reference/troubleshooting.md`
@@ -63,6 +65,8 @@ The first version does not need to:
   - deterministic maintenance check that compares documented API entries against `pretext/src/layout.ts`
 - `scripts/select_pretext_validation.py`
   - deterministic helper that maps a changed subsystem to the smallest defensible validation plan
+- `scripts/select_pretext_validation_by_files.py`
+  - deterministic helper that infers validation scope from changed file paths
 
 ## Current Direction
 

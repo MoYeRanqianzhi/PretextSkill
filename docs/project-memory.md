@@ -34,12 +34,14 @@
   - `reference/internal-architecture.md`
   - `reference/whitespace-and-breaks.md`
   - `reference/script-and-browser-caveats.md`
+  - `reference/app-recipes.md`
   - `reference/integration-lifecycle.md`
   - `reference/troubleshooting.md`
   - `reference/validation-playbook.md`
   - `scripts/select_pretext_api.py`
   - `scripts/check_layout_api_sync.py`
   - `scripts/select_pretext_validation.py`
+  - `scripts/select_pretext_validation_by_files.py`
 
 ## Durable Decisions
 
@@ -61,6 +63,7 @@
 - Add more recipes only when repeated demand appears
 - Observe whether the new trigger wording improves build-mode activation without increasing false positives
 - Consider deeper app-recipes only if repeated demand appears for React hooks, Canvas loops, or package-release workflows
+- Consider file-glob or git-diff integration only if path-based validation routing becomes a repeated need
 
 ## Validation Record
 
@@ -78,6 +81,8 @@
   - Result: returns a minimal validation plan tied to the changed subsystem
 - `python skills/pretext/scripts/select_pretext_validation.py --area analysis --format json`
   - Result: returns the expected first-pass validation commands and escalation checks for preprocessing changes
+- `python skills/pretext/scripts/select_pretext_validation_by_files.py --path <changed-file> ...`
+  - Result: infers validation scope from changed file ownership and returns the merged command set
 - `python C:/Users/MoYeR/.codex/skills/.system/skill-creator/scripts/quick_validate.py G:/AgentProjects/skillsProjest/PretextSkill/skills/pretext`
   - Result: `Skill is valid!`
 - `python C:/Users/MoYeR/.codex/skills/.system/skill-creator/scripts/generate_openai_yaml.py G:/AgentProjects/skillsProjest/PretextSkill/skills/pretext ...`
@@ -94,6 +99,8 @@
   - Result: a fresh agent selected `prepareWithSegments()` plus `walkLineRanges()`, and kept geometry-only width probes in the layout phase
 - Forward-test prompt: upstream preprocessing change for zero-width separators and punctuation glue
   - Result: a fresh agent assigned ownership to `analysis.ts`, recognized `line-break.ts` as the key downstream consumer, and chose the expected minimal validation plan
+- Forward-test prompt: React height-caching integration
+  - Result: a fresh agent selected the expected `prepare()` plus `layout()` cache pattern and the correct invalidation tuple
 
 ## Working Rules
 

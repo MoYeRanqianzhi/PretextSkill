@@ -42,6 +42,16 @@
   - Returned the expected minimal validation plan for line-walking changes
 
 - Command:
+  - `python skills/pretext/scripts/select_pretext_validation_by_files.py --path pretext/src/analysis.ts --path pretext/src/line-break.ts`
+- Result:
+  - Returned the expected merged validation plan spanning analysis and line-break ownership
+
+- Command:
+  - `python skills/pretext/scripts/select_pretext_validation_by_files.py --path pretext/src/layout.ts --format json`
+- Result:
+  - Returned the expected layout-API validation plan including package smoke testing and API-doc sync checks
+
+- Command:
   - `python skills/pretext/scripts/select_pretext_api.py --goal <every-supported-goal> --format json`
 - Result:
   - All helper goals executed successfully after the trigger and disclosure refactor
@@ -84,3 +94,8 @@
   - Modify upstream preprocessing for zero-width separators and punctuation glue, with the smallest defensible regression plan
 - Result:
   - A fresh agent assigned ownership to `analysis.ts`, identified `line-break.ts` as the main downstream consumer, and chose `bun test` plus `bun run check` as the first validation step before broader sweeps
+
+- Prompt:
+  - A React chat app wants to cache prepared text and only recompute cheap layout on resize
+- Result:
+  - A fresh agent selected the height-only `prepare()` plus `layout()` pattern, cached prepared state by the correct invalidation tuple, and chose `bun run check` as the smallest validation step
