@@ -30,6 +30,7 @@
   - `reference/first-principles.md`
   - `reference/public-api.md`
   - `reference/internal-exports.md`
+  - `reference/internal-architecture.md`
   - `reference/whitespace-and-breaks.md`
   - `reference/script-and-browser-caveats.md`
   - `reference/integration-lifecycle.md`
@@ -37,6 +38,7 @@
   - `reference/validation-playbook.md`
   - `scripts/select_pretext_api.py`
   - `scripts/check_layout_api_sync.py`
+  - `scripts/select_pretext_validation.py`
 
 ## Durable Decisions
 
@@ -56,9 +58,8 @@
 ## Next Tasks
 
 - Add more recipes only when repeated demand appears
-- Add an internal architecture reference if the skill starts targeting upstream engine changes frequently
-- Add at least one shrink-wrap or geometry-only forward test
 - Observe whether the new trigger wording improves build-mode activation without increasing false positives
+- Consider deeper app-recipes only if repeated demand appears for React hooks, Canvas loops, or package-release workflows
 
 ## Validation Record
 
@@ -72,6 +73,10 @@
   - Result: all helper-script goals executed successfully after the progressive-disclosure refactor
 - `python skills/pretext/scripts/check_layout_api_sync.py`
   - Result: validates that the skill's API docs cover the exports from `pretext/src/layout.ts`
+- `python skills/pretext/scripts/select_pretext_validation.py --area <area>`
+  - Result: returns a minimal validation plan tied to the changed subsystem
+- `python skills/pretext/scripts/select_pretext_validation.py --area analysis --format json`
+  - Result: returns the expected first-pass validation commands and escalation checks for preprocessing changes
 - `python C:/Users/MoYeR/.codex/skills/.system/skill-creator/scripts/quick_validate.py G:/AgentProjects/skillsProjest/PretextSkill/skills/pretext`
   - Result: `Skill is valid!`
 - `python C:/Users/MoYeR/.codex/skills/.system/skill-creator/scripts/generate_openai_yaml.py G:/AgentProjects/skillsProjest/PretextSkill/skills/pretext ...`
@@ -84,6 +89,10 @@
   - Result: a fresh agent selected `profilePrepare()` and recommended `bun run benchmark-check` as the lightest validation step
 - Forward-test prompt: textarea-like editor loses tabs and hard breaks after a locale switch
   - Result: a fresh agent selected `prepareWithSegments()` plus `layoutWithLines()`, required `{ whiteSpace: 'pre-wrap' }`, and enforced re-prepare after `setLocale()`
+- Forward-test prompt: shrink-wrap width search without materializing line strings
+  - Result: a fresh agent selected `prepareWithSegments()` plus `walkLineRanges()`, and kept geometry-only width probes in the layout phase
+- Forward-test prompt: upstream preprocessing change for zero-width separators and punctuation glue
+  - Result: a fresh agent assigned ownership to `analysis.ts`, recognized `line-break.ts` as the key downstream consumer, and chose the expected minimal validation plan
 
 ## Working Rules
 

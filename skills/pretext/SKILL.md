@@ -41,12 +41,14 @@ Keep that split intact. If a proposed solution reruns `prepare()` on resize or r
 - Read [reference/first-principles.md](reference/first-principles.md) for the irreducible model, invalidation rules, and architectural constraints.
 - Read [reference/public-api.md](reference/public-api.md) for the normal product-facing package API.
 - Read [reference/internal-exports.md](reference/internal-exports.md) only when the task explicitly needs diagnostic helpers, rich-path structural details, or source-level internals.
+- Read [reference/internal-architecture.md](reference/internal-architecture.md) when modifying the upstream repo and you need module boundaries, data-flow guidance, or change-impact validation.
 - Read [reference/whitespace-and-breaks.md](reference/whitespace-and-breaks.md) for whitespace modes, break policy, tabs, zero-width separators, and soft-hyphen behavior.
 - Read [reference/script-and-browser-caveats.md](reference/script-and-browser-caveats.md) for script-sensitive segmentation, punctuation-glue classes, bidi, emoji, browser caveats, and research canaries.
 - Read [reference/integration-lifecycle.md](reference/integration-lifecycle.md) for caching, resize, custom rendering, shrink-wrap, React or virtualization, and variable-width line flow patterns.
 - Read [reference/troubleshooting.md](reference/troubleshooting.md) for failure modes, research-backed guardrails, and diagnostic triage.
 - Read [reference/validation-playbook.md](reference/validation-playbook.md) for Bun commands, dashboards, and escalation paths.
 - Run `python scripts/select_pretext_api.py --goal ...` when a deterministic recommendation is helpful.
+- Run `python scripts/select_pretext_validation.py --area ...` when you need the smallest defensible regression plan after changing a specific subsystem.
 
 ## Non-Negotiables
 

@@ -2,6 +2,8 @@
 
 Use this file when the request is about debugging, browser parity, performance, or regression checking.
 
+For deterministic area-to-command routing, run `python scripts/select_pretext_validation.py --area <area>`.
+
 ## Choose The Smallest Useful Validation
 
 - `bun run check`

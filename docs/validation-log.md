@@ -37,6 +37,11 @@
   - Returned `Layout export docs are in sync.`
 
 - Command:
+  - `python skills/pretext/scripts/select_pretext_validation.py --area line-break`
+- Result:
+  - Returned the expected minimal validation plan for line-walking changes
+
+- Command:
   - `python skills/pretext/scripts/select_pretext_api.py --goal <every-supported-goal> --format json`
 - Result:
   - All helper goals executed successfully after the trigger and disclosure refactor
@@ -69,3 +74,13 @@
   - A textarea-like editor loses tabs, hard breaks, and soft-hyphen behavior after a locale switch
 - Result:
   - A fresh agent selected `prepareWithSegments()` plus `layoutWithLines()`, required `{ whiteSpace: 'pre-wrap' }`, and correctly enforced re-prepare on locale changes after `setLocale()`
+
+- Prompt:
+  - A product team wants the tightest multiline container width without materializing line strings on every width probe
+- Result:
+  - A fresh agent selected `prepareWithSegments()` plus `walkLineRanges()`, kept prepare/layout invalidation separate, and used the line-break validation plan correctly
+
+- Prompt:
+  - Modify upstream preprocessing for zero-width separators and punctuation glue, with the smallest defensible regression plan
+- Result:
+  - A fresh agent assigned ownership to `analysis.ts`, identified `line-break.ts` as the main downstream consumer, and chose `bun test` plus `bun run check` as the first validation step before broader sweeps

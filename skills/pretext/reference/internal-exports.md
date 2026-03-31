@@ -58,3 +58,5 @@ Ask these before touching internal exports:
 3. Do I need diagnostic visibility or only a correct product integration?
 
 If the answer to all three is not clearly "yes," stay on [public-api.md](public-api.md).
+
+When the answer is "yes," also read [internal-architecture.md](internal-architecture.md) before changing source files.

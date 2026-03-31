@@ -45,6 +45,8 @@ The first version does not need to:
   - normal package-facing API only
 - `reference/internal-exports.md`
   - diagnostic helpers, rich-path structural fields, and source-level internals
+- `reference/internal-architecture.md`
+  - source-level module boundaries, data flow, and change-impact validation
 - `reference/whitespace-and-breaks.md`
   - whitespace modes, break policy, tabs, zero-width separators, and soft-hyphen behavior
 - `reference/script-and-browser-caveats.md`
@@ -59,6 +61,14 @@ The first version does not need to:
   - deterministic helper that maps a requested layout scenario to the recommended Pretext API path, reference set, and first-principles questions
 - `scripts/check_layout_api_sync.py`
   - deterministic maintenance check that compares documented API entries against `pretext/src/layout.ts`
+- `scripts/select_pretext_validation.py`
+  - deterministic helper that maps a changed subsystem to the smallest defensible validation plan
+
+## Current Direction
+
+- Keep package-facing usage and upstream source modification paths clearly separated
+- Make validation routing deterministic instead of relying on memory or intuition
+- Prefer new references only when they reduce ambiguity or shrink the context needed for a common task
 
 ## Evidence Pointers
 

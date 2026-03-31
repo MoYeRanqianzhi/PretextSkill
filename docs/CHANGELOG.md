@@ -19,3 +19,5 @@
 - Reworked trigger wording toward build-mode intent instead of literal export enumeration
 - Split product-facing API docs from internal exports and split text behavior docs into narrower reference files
 - Added a sync-check helper to verify the skill's API docs stay aligned with `pretext/src/layout.ts`
+- Added an internal architecture reference and a validation-selector helper for upstream source modifications
+- Forward-tested geometry-only shrink-wrap usage and upstream preprocessing ownership routing
