@@ -1,38 +1,57 @@
 ---
 name: pretext
-description: Work with the `@chenglou/pretext` library for DOM-free text measurement and multiline text layout. Use when integrating Pretext into JavaScript or TypeScript code, choosing between `prepare()` and the rich line APIs, preserving `pre-wrap` whitespace, handling locale-sensitive segmentation, or validating browser accuracy and performance for virtualization, Canvas, SVG, WebGL, shrink-wrap widths, and variable-width line flows.
+description: Integrate, evaluate, or troubleshoot `@chenglou/pretext` for DOM-free multiline text measurement and layout. Use when Codex needs the correct Pretext export for a task (`prepare`, `layout`, `prepareWithSegments`, `layoutWithLines`, `walkLineRanges`, `layoutNextLine`, `profilePrepare`, `clearCache`, `setLocale`), needs guidance on whitespace, soft hyphens, zero-width separators, locale-sensitive segmentation, mixed-direction text, or browser caveats, or needs to validate behavior and performance with the upstream repo's Bun commands and dashboards.
 ---
 
 # pretext
 
-Treat Pretext as a two-phase engine: prepare text once, then lay it out as often as needed.
+Treat Pretext as a two-phase engine:
 
-## Start Here
+- `prepare` phase: turn `(text, font, whiteSpace, locale)` into reusable measured state
+- `layout` phase: turn `(prepared, maxWidth, lineHeight)` into height, lines, or line geometry
 
-1. Classify the request before writing code:
-   - Use `prepare()` plus `layout()` for paragraph height or line-count estimation.
-   - Use `prepareWithSegments()` plus `layoutWithLines()` when the caller needs concrete line strings at one fixed width.
-   - Use `prepareWithSegments()` plus `walkLineRanges()` when the caller needs geometry only and wants to avoid materializing line text.
-   - Use `prepareWithSegments()` plus `layoutNextLine()` when width changes from line to line.
-2. Keep typography synchronized with the real renderer. Treat mismatched `font` or `lineHeight` as the first suspected bug.
-3. Reuse prepared handles. Re-run `prepare()` only when text, font, locale, or whitespace mode changes. Re-run layout functions when width or line height changes.
-4. Pass `{ whiteSpace: 'pre-wrap' }` for textarea-like text or any request that must preserve spaces, tabs, or hard breaks.
-5. Call `setLocale()` before preparing new text when segmentation must be locale-aware. Remember that `setLocale()` clears caches and only affects future prepared values.
+Keep that split intact. If a proposed solution reruns `prepare()` on resize or reintroduces DOM reads into the hot path, treat it as suspect.
 
-## Workflow
+## Start From Output Shape
 
-1. Read [reference/api-selection.md](reference/api-selection.md) to map the task to the correct API surface.
-2. Read [reference/integration-patterns.md](reference/integration-patterns.md) when implementing application code or adapting Pretext to a rendering path.
-3. Read [reference/validation-playbook.md](reference/validation-playbook.md) when debugging accuracy, whitespace, locale behavior, or performance.
-4. Optionally run `python scripts/select_pretext_api.py --goal ...` for a deterministic recommendation when the request is ambiguous.
+1. Need only block height or line count:
+   - use `prepare()` plus `layout()`
+2. Need concrete line strings at one fixed width:
+   - use `prepareWithSegments()` plus `layoutWithLines()`
+3. Need geometry and cursors without line strings:
+   - use `prepareWithSegments()` plus `walkLineRanges()`
+4. Need per-line varying widths:
+   - use `prepareWithSegments()` plus `layoutNextLine()`
+5. Need prepare-phase timing or segment-count diagnostics:
+   - use `profilePrepare()`
+6. Need locale or cache control:
+   - use `setLocale()` or `clearCache()`
+7. Need deeper internals from `analysis.ts`, `measurement.ts`, `line-break.ts`, or `bidi.ts`:
+   - treat them as low-level exports, not the default product API
+
+## Load Only The Needed Reference
+
+- Read [reference/first-principles.md](reference/first-principles.md) for the irreducible model, invalidation rules, and non-negotiable architecture constraints.
+- Read [reference/public-api.md](reference/public-api.md) for exact exported functions, types, and which exports are product-facing versus low-level.
+- Read [reference/text-behaviors.md](reference/text-behaviors.md) for whitespace, soft-hyphen, zero-width separator, punctuation-glue, locale, bidi, emoji, and CJK behavior.
+- Read [reference/integration-lifecycle.md](reference/integration-lifecycle.md) for caching, resize, custom rendering, shrink-wrap, React or virtualization, and variable-width line flow patterns.
+- Read [reference/troubleshooting.md](reference/troubleshooting.md) for likely failure modes, research-backed guardrails, and known canary areas.
+- Read [reference/validation-playbook.md](reference/validation-playbook.md) for Bun commands, dashboards, and escalation paths.
+- Run `python scripts/select_pretext_api.py --goal ...` when a deterministic recommendation is helpful.
+
+## Non-Negotiables
+
+1. Re-prepare only when text, font, whitespace mode, or locale changes.
+2. Re-layout when width or line height changes.
+3. Keep `font` and `lineHeight` synchronized with the real renderer.
+4. Use `{ whiteSpace: 'pre-wrap' }` only when visible spaces, tabs, or hard breaks are semantically required.
+5. `setLocale()` affects future prepare calls only and clears caches.
+6. Avoid `system-ui` for accuracy-sensitive macOS work.
 
 ## Output Rules
 
-1. Prefer examples that cache prepared state and only recompute the cheapest stage required.
-2. Always call out the required `font`, `lineHeight`, width source, whitespace mode, and locale assumptions.
-3. Separate integration mistakes from library limitations:
-   - API mismatch
-   - typography mismatch
-   - whitespace or locale mismatch
-   - genuine engine limitation or upstream bug
-4. If the request is about validation inside the upstream repo, prefer the existing Bun commands before inventing one-off diagnostics.
+1. State the chosen output shape and why it matches the task.
+2. State the invalidation tuple: which inputs force re-prepare and which force only re-layout.
+3. Call out whitespace mode, locale, width source, `font`, and `lineHeight` assumptions explicitly.
+4. Separate integration mistakes from true engine limitations or upstream canaries.
+5. Prefer the lightest validation path that can falsify the current assumption.

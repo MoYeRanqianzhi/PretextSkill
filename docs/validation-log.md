@@ -21,6 +21,11 @@
 - Result:
   - Returned the expected `layoutNextLine()` recommendation with `pre-wrap` and locale guidance
 
+- Command:
+  - `python skills/pretext/scripts/select_pretext_api.py --goal profile --format json`
+- Result:
+  - Returned the expected `profilePrepare()` guidance, including reference files and invalidation rules
+
 ### Metadata Validation
 
 - Command:
@@ -39,3 +44,13 @@
   - Canvas text flow around an image with preserved line breaks, tabs, and Thai segmentation
 - Result:
   - A fresh agent selected `prepareWithSegments()` plus `layoutNextLine()`, required `{ whiteSpace: 'pre-wrap' }`, and correctly used `setLocale('th')`
+
+- Prompt:
+  - Diagnose whether prepare-phase slowness comes from text analysis or measurement on a large batch
+- Result:
+  - A fresh agent selected `profilePrepare()`, kept prepare and layout inputs conceptually separated, and recommended `bun run benchmark-check` as the lightest follow-up validation
+
+- Prompt:
+  - A textarea-like editor loses tabs, hard breaks, and soft-hyphen behavior after a locale switch
+- Result:
+  - A fresh agent selected `prepareWithSegments()` plus `layoutWithLines()`, required `{ whiteSpace: 'pre-wrap' }`, and correctly enforced re-prepare on locale changes after `setLocale()`

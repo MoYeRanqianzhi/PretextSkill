@@ -13,3 +13,6 @@
 - Generated `skills/pretext/agents/openai.yaml` with `skill-creator` tooling
 - Validated the skill structure with `quick_validate.py`
 - Forward-tested the skill on height-only and variable-width line scenarios with fresh subagents
+- Refactored the skill around first-principles progressive disclosure
+- Expanded reference coverage to include the full public API, text behaviors, lifecycle patterns, and troubleshooting guardrails
+- Extended the helper script to cover `profilePrepare()`, cache and locale guidance, and reference selection

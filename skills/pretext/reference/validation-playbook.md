@@ -1,67 +1,78 @@
 # Validation Playbook
 
-Use this file when the request is about debugging, browser parity, or regression checking.
+Use this file when the request is about debugging, browser parity, performance, or regression checking.
 
-## First-Pass Debugging
+## Choose The Smallest Useful Validation
 
-Check these in order before suspecting a library bug:
+- `bun run check`
+  - typecheck and lint after code changes
+- `bun test`
+  - permanent invariant suite
+- `bun run package-smoke-test`
+  - confidence check for the published artifact
 
-1. `font` mismatch between Pretext and the real renderer
-2. `lineHeight` mismatch
-3. width mismatch
-4. wrong whitespace mode
-5. wrong locale state
-6. using a rich API when height-only logic would be simpler, or vice versa
+Use these before broader browser sweeps unless the task explicitly concerns browser parity or performance.
 
-## Upstream Invariants Worth Preserving
+## Browser And Oracle Checks
 
-The upstream test suite and comments establish several important expectations:
+- `bun run accuracy-check`
+  - main Chrome browser sweep
+- `bun run accuracy-check:safari`
+- `bun run accuracy-check:firefox`
+- `bun run pre-wrap-check`
+  - dedicated whitespace-preservation oracle
+- `bun run benchmark-check`
+  - main benchmark snapshot
+- `bun run benchmark-check:safari`
 
-- `prepare()` and `prepareWithSegments()` should agree on layout behavior.
-- `layoutNextLine()` should reproduce `layoutWithLines()` line boundaries.
-- `walkLineRanges()` should reproduce geometry without materializing line text.
-- `pre-wrap` mode should preserve spaces, tabs, and hard breaks in a browser-like way.
+## Corpus And Dashboard Work
 
-Treat regressions against those invariants as high-signal failures.
+- `bun run corpus-check`
+  - diagnose representative corpus mismatches
+- `bun run corpus-sweep`
+  - broader corpus regression pass
+- `bun run corpus-font-matrix`
+  - compare the same corpus under alternate fonts
+- `bun run corpus-status`
+  - rebuild the corpus dashboard from checked-in snapshots
+- `bun run status-dashboard`
+  - rebuild the main status dashboard from checked-in snapshots
 
-## Upstream Commands
+## Demo And Manual Inspection
 
-When working inside the cloned upstream repo at `./pretext/`, use the existing commands instead of inventing ad hoc validation:
+- `bun start`
+  - start the demo server
+- useful pages:
+  - `/demos/index`
+  - `/demos/accordion`
+  - `/demos/bubbles`
+  - `/demos/dynamic-layout`
+  - `/demos/justification-comparison`
+  - `/accuracy`
+  - `/benchmark`
+  - `/corpus`
 
-- `bun run check` for typecheck and lint
-- `bun test` for invariant tests
-- `bun run accuracy-check` for browser accuracy sweeps
-- `bun run pre-wrap-check` for whitespace-preservation behavior
-- `bun run benchmark-check` for the main benchmark snapshot
-- `bun run package-smoke-test` for published-artifact confidence
+## Source-Of-Truth Files
 
-Use broader sweeps only when the task actually concerns accuracy dashboards or corpus analysis.
+- `pretext/README.md`
+  - public API framing
+- `pretext/src/layout.ts`
+  - exported semantics and source comments
+- `pretext/src/layout.test.ts`
+  - invariant and edge-case expectations
+- `pretext/DEVELOPMENT.md`
+  - developer commands and workflow
+- `pretext/STATUS.md`
+  - current main status dashboard pointers
+- `pretext/RESEARCH.md`
+  - durable reasoning log and guardrails
 
-- `bun run corpus-check` for representative corpus mismatches at selected widths
-- `bun run corpus-sweep` for broader corpus regressions
+## Escalation Rule
 
-## Source Files To Read First
+Escalate from unit checks to browser sweeps only when the task touches:
 
-For traceable answers, start from these upstream files:
-
-- `pretext/README.md` for public API and usage framing
-- `pretext/DEVELOPMENT.md` for commands and validation workflow
-- `pretext/src/layout.ts` for exported API semantics
-- `pretext/src/layout.test.ts` for invariants and edge cases
-- `pretext/STATUS.md` when the task is about current accuracy or benchmark sources of truth
-
-## Bug Report Shape
-
-When reporting or triaging a suspected issue, always include:
-
-- input text
-- font string
-- line height
-- width
-- whitespace mode
-- locale
-- chosen API
-- expected behavior
-- actual behavior
-
-This keeps reports reproducible and prevents vague "layout looks wrong" debugging.
+- browser parity
+- whitespace preservation
+- performance or benchmarking
+- long-form corpus correctness
+- research-level canaries

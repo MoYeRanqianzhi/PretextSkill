@@ -24,8 +24,11 @@
 - `skills/pretext/` now contains:
   - `SKILL.md`
   - `agents/openai.yaml`
-  - `reference/api-selection.md`
-  - `reference/integration-patterns.md`
+  - `reference/first-principles.md`
+  - `reference/public-api.md`
+  - `reference/text-behaviors.md`
+  - `reference/integration-lifecycle.md`
+  - `reference/troubleshooting.md`
   - `reference/validation-playbook.md`
   - `scripts/select_pretext_api.py`
 
@@ -33,10 +36,11 @@
 
 - Write the skill and new project docs in English to support internationalized reuse
 - Keep progressive disclosure strict:
-  - `SKILL.md` contains only workflow and decision rules
-  - `reference/` holds API, workflow, and troubleshooting details
+  - `SKILL.md` contains only the first-principles model, API-shape routing, and load instructions
+  - `reference/` is split by cognitive concern, not by arbitrary feature buckets
   - `scripts/` is reserved for deterministic helpers that are worth executing
 - Treat the reference repository as the source of truth for API names, workflows, and caveats
+- Treat `src/layout.ts` as the normal product-facing API, and lower-level exports as advanced diagnostics or upstream-hacking surfaces
 
 ## Known Issues
 
@@ -46,12 +50,15 @@
 
 - Run an independent review pass against the new skill contents
 - Add more recipes only when repeated demand appears
-- Commit the first development milestone and add a milestone tag
+- Consider a second helper script only if repeated tasks show a deterministic need beyond API selection
+- Commit the deeper disclosure refactor and add a milestone tag
 
 ## Validation Record
 
 - `python skills/pretext/scripts/select_pretext_api.py --goal variable-width --preserve-whitespace`
   - Result: script executed successfully and returned the expected API recommendation
+- `python skills/pretext/scripts/select_pretext_api.py --goal profile --format json`
+  - Result: script now returns diagnostic guidance for `profilePrepare()`, plus relevant references and invalidation rules
 - `python C:/Users/MoYeR/.codex/skills/.system/skill-creator/scripts/quick_validate.py G:/AgentProjects/skillsProjest/PretextSkill/skills/pretext`
   - Result: `Skill is valid!`
 - `python C:/Users/MoYeR/.codex/skills/.system/skill-creator/scripts/generate_openai_yaml.py G:/AgentProjects/skillsProjest/PretextSkill/skills/pretext ...`
@@ -60,6 +67,10 @@
   - Result: a fresh agent selected `prepare()` plus `layout()`, cached prepared state, and warned against rerunning `prepare()` on resize
 - Forward-test prompt: Canvas text flowing around an image with Thai segmentation and preserved breaks
   - Result: a fresh agent selected `prepareWithSegments()` plus `layoutNextLine()`, required `{ whiteSpace: 'pre-wrap' }`, and correctly called out `setLocale('th')`
+- Forward-test prompt: diagnose prepare-phase slowness on a large batch
+  - Result: a fresh agent selected `profilePrepare()` and recommended `bun run benchmark-check` as the lightest validation step
+- Forward-test prompt: textarea-like editor loses tabs and hard breaks after a locale switch
+  - Result: a fresh agent selected `prepareWithSegments()` plus `layoutWithLines()`, required `{ whiteSpace: 'pre-wrap' }`, and enforced re-prepare after `setLocale()`
 
 ## Working Rules
 

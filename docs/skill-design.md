@@ -37,17 +37,21 @@ The first version does not need to:
 ## Planned Skill Assets
 
 - `SKILL.md`
-  - concise workflow
-  - API decision rules
-  - integration and validation checklist
-- `reference/api-selection.md`
-  - API comparison and when to choose each path
-- `reference/integration-patterns.md`
-  - prepare/layout lifecycle rules and product integration patterns
+  - first-principles routing only
+- `reference/first-principles.md`
+  - irreducible model and invalidation logic
+- `reference/public-api.md`
+  - full public API surface and export cautions
+- `reference/text-behaviors.md`
+  - whitespace, glue, segmentation, and script behavior
+- `reference/integration-lifecycle.md`
+  - prepare/layout lifecycle patterns for product code
+- `reference/troubleshooting.md`
+  - research-backed debugging guardrails and canaries
 - `reference/validation-playbook.md`
   - demo, benchmark, accuracy, and corpus-related validation entry points
 - `scripts/select_pretext_api.py`
-  - deterministic helper that maps a requested layout scenario to the recommended Pretext API path
+  - deterministic helper that maps a requested layout scenario to the recommended Pretext API path and reference set
 
 ## Evidence Pointers
 

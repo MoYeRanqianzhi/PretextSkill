@@ -1,4 +1,4 @@
 interface:
   display_name: "Pretext"
-  short_description: "Guide Pretext text layout integration"
-  default_prompt: "Use $pretext to integrate or troubleshoot Pretext-based multiline text layout."
+  short_description: "Guide Pretext APIs and diagnostics"
+  default_prompt: "Use $pretext to choose the right Pretext API, preserve its invariants, or debug text-layout behavior."
