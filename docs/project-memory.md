@@ -23,6 +23,7 @@
 - Release tag `v0.2.0` created for the first-principles disclosure refactor
 - Release tag `v0.3.0` created for trigger refinement, API-boundary cleanup, and sync-check tooling
 - Release tag `v0.4.0` created for upstream internal-architecture guidance and validation routing
+- Release tag `v0.5.0` created for app-level recipes and file-based validation routing
 - `npx skills init` produced the initial minimal `skills/pretext/SKILL.md` scaffold
 - A `.gitignore` bug was discovered and fixed: `pretext/` also ignored `skills/pretext/`; the correct rule is `/pretext/`
 - `skills/pretext/` now contains:
