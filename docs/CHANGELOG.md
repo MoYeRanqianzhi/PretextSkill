@@ -16,3 +16,6 @@
 - Refactored the skill around first-principles progressive disclosure
 - Expanded reference coverage to include the full public API, text behaviors, lifecycle patterns, and troubleshooting guardrails
 - Extended the helper script to cover `profilePrepare()`, cache and locale guidance, and reference selection
+- Reworked trigger wording toward build-mode intent instead of literal export enumeration
+- Split product-facing API docs from internal exports and split text behavior docs into narrower reference files
+- Added a sync-check helper to verify the skill's API docs stay aligned with `pretext/src/layout.ts`

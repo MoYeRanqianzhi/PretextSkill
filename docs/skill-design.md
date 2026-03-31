@@ -33,6 +33,7 @@ The first version does not need to:
 - Reproduce the entire research archive from the reference repository
 - Bundle the whole reference repo into the skill
 - Expose every internal source file in `SKILL.md`
+- Pretend repo-internal source modules are equivalent to stable package-public imports
 
 ## Planned Skill Assets
 
@@ -41,9 +42,13 @@ The first version does not need to:
 - `reference/first-principles.md`
   - irreducible model and invalidation logic
 - `reference/public-api.md`
-  - full public API surface and export cautions
-- `reference/text-behaviors.md`
-  - whitespace, glue, segmentation, and script behavior
+  - normal package-facing API only
+- `reference/internal-exports.md`
+  - diagnostic helpers, rich-path structural fields, and source-level internals
+- `reference/whitespace-and-breaks.md`
+  - whitespace modes, break policy, tabs, zero-width separators, and soft-hyphen behavior
+- `reference/script-and-browser-caveats.md`
+  - script-sensitive segmentation, browser caveats, and research canaries
 - `reference/integration-lifecycle.md`
   - prepare/layout lifecycle patterns for product code
 - `reference/troubleshooting.md`
@@ -51,7 +56,9 @@ The first version does not need to:
 - `reference/validation-playbook.md`
   - demo, benchmark, accuracy, and corpus-related validation entry points
 - `scripts/select_pretext_api.py`
-  - deterministic helper that maps a requested layout scenario to the recommended Pretext API path and reference set
+  - deterministic helper that maps a requested layout scenario to the recommended Pretext API path, reference set, and first-principles questions
+- `scripts/check_layout_api_sync.py`
+  - deterministic maintenance check that compares documented API entries against `pretext/src/layout.ts`
 
 ## Evidence Pointers
 

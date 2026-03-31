@@ -26,12 +26,27 @@
 - Result:
   - Returned the expected `profilePrepare()` guidance, including reference files and invalidation rules
 
+- Command:
+  - `python skills/pretext/scripts/select_pretext_api.py --goal upstream-internals`
+- Result:
+  - Returned the expected internal-surface routing and explicit package-vs-upstream questions
+
+- Command:
+  - `python skills/pretext/scripts/check_layout_api_sync.py`
+- Result:
+  - Returned `Layout export docs are in sync.`
+
+- Command:
+  - `python skills/pretext/scripts/select_pretext_api.py --goal <every-supported-goal> --format json`
+- Result:
+  - All helper goals executed successfully after the trigger and disclosure refactor
+
 ### Metadata Validation
 
 - Command:
   - `python C:/Users/MoYeR/.codex/skills/.system/skill-creator/scripts/generate_openai_yaml.py G:/AgentProjects/skillsProjest/PretextSkill/skills/pretext ...`
 - Result:
-  - Regenerated `agents/openai.yaml` with a valid `$pretext` default prompt
+  - Regenerated `agents/openai.yaml` with build-oriented trigger wording and a valid `$pretext` default prompt
 
 ### Forward Testing
 

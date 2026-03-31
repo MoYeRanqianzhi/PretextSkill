@@ -1,4 +1,4 @@
 interface:
   display_name: "Pretext"
-  short_description: "Guide Pretext APIs and diagnostics"
-  default_prompt: "Use $pretext to choose the right Pretext API, preserve its invariants, or debug text-layout behavior."
+  short_description: "Build and debug Pretext layouts"
+  default_prompt: "Use $pretext to build with Pretext, choose the right layout path, or debug Pretext-specific text behavior."

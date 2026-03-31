@@ -19,6 +19,8 @@
 - Git repository initialized and pushed to `main`
 - Remote repository created at `https://github.com/MoYeRanqianzhi/PretextSkill`
 - Release tag `v0.0.0` created for the repository bootstrap milestone
+- Release tag `v0.1.0` created for the initial English skill milestone
+- Release tag `v0.2.0` created for the first-principles disclosure refactor
 - `npx skills init` produced the initial minimal `skills/pretext/SKILL.md` scaffold
 - A `.gitignore` bug was discovered and fixed: `pretext/` also ignored `skills/pretext/`; the correct rule is `/pretext/`
 - `skills/pretext/` now contains:
@@ -26,11 +28,14 @@
   - `agents/openai.yaml`
   - `reference/first-principles.md`
   - `reference/public-api.md`
-  - `reference/text-behaviors.md`
+  - `reference/internal-exports.md`
+  - `reference/whitespace-and-breaks.md`
+  - `reference/script-and-browser-caveats.md`
   - `reference/integration-lifecycle.md`
   - `reference/troubleshooting.md`
   - `reference/validation-playbook.md`
   - `scripts/select_pretext_api.py`
+  - `scripts/check_layout_api_sync.py`
 
 ## Durable Decisions
 
@@ -39,8 +44,9 @@
   - `SKILL.md` contains only the first-principles model, API-shape routing, and load instructions
   - `reference/` is split by cognitive concern, not by arbitrary feature buckets
   - `scripts/` is reserved for deterministic helpers that are worth executing
+- Optimize trigger text for user intent first, and literal export names second
 - Treat the reference repository as the source of truth for API names, workflows, and caveats
-- Treat `src/layout.ts` as the normal product-facing API, and lower-level exports as advanced diagnostics or upstream-hacking surfaces
+- Treat `src/layout.ts` as the normal product-facing API, and lower-level source modules as advanced diagnostics or upstream-hacking surfaces rather than package-public import targets
 
 ## Known Issues
 
@@ -48,10 +54,10 @@
 
 ## Next Tasks
 
-- Run an independent review pass against the new skill contents
 - Add more recipes only when repeated demand appears
-- Consider a second helper script only if repeated tasks show a deterministic need beyond API selection
-- Commit the deeper disclosure refactor and add a milestone tag
+- Add an internal architecture reference if the skill starts targeting upstream engine changes frequently
+- Add at least one shrink-wrap or geometry-only forward test
+- Observe whether the new trigger wording improves build-mode activation without increasing false positives
 
 ## Validation Record
 
@@ -59,10 +65,16 @@
   - Result: script executed successfully and returned the expected API recommendation
 - `python skills/pretext/scripts/select_pretext_api.py --goal profile --format json`
   - Result: script now returns diagnostic guidance for `profilePrepare()`, plus relevant references and invalidation rules
+- `python skills/pretext/scripts/select_pretext_api.py --goal upstream-internals`
+  - Result: script now routes explicitly to internal exports only when package-facing APIs are insufficient
+- `python skills/pretext/scripts/select_pretext_api.py --goal <every-supported-goal> --format json`
+  - Result: all helper-script goals executed successfully after the progressive-disclosure refactor
+- `python skills/pretext/scripts/check_layout_api_sync.py`
+  - Result: validates that the skill's API docs cover the exports from `pretext/src/layout.ts`
 - `python C:/Users/MoYeR/.codex/skills/.system/skill-creator/scripts/quick_validate.py G:/AgentProjects/skillsProjest/PretextSkill/skills/pretext`
   - Result: `Skill is valid!`
 - `python C:/Users/MoYeR/.codex/skills/.system/skill-creator/scripts/generate_openai_yaml.py G:/AgentProjects/skillsProjest/PretextSkill/skills/pretext ...`
-  - Result: regenerated `agents/openai.yaml` with a valid `$pretext` default prompt
+  - Result: regenerated `agents/openai.yaml` with build-oriented trigger text and a valid `$pretext` default prompt
 - Forward-test prompt: height-only React chat bubble estimation
   - Result: a fresh agent selected `prepare()` plus `layout()`, cached prepared state, and warned against rerunning `prepare()` on resize
 - Forward-test prompt: Canvas text flowing around an image with Thai segmentation and preserved breaks

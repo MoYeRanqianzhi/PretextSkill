@@ -1,6 +1,6 @@
 ---
 name: pretext
-description: Integrate, evaluate, or troubleshoot `@chenglou/pretext` for DOM-free multiline text measurement and layout. Use when Codex needs the correct Pretext export for a task (`prepare`, `layout`, `prepareWithSegments`, `layoutWithLines`, `walkLineRanges`, `layoutNextLine`, `profilePrepare`, `clearCache`, `setLocale`), needs guidance on whitespace, soft hyphens, zero-width separators, locale-sensitive segmentation, mixed-direction text, or browser caveats, or needs to validate behavior and performance with the upstream repo's Bun commands and dashboards.
+description: Build with `@chenglou/pretext` for DOM-free multiline text measurement and layout. Use when implementing or refactoring height prediction, custom line rendering, shrink-wrap width search, variable-width text flow, whitespace-preserving editors, locale-aware segmentation, or Pretext-specific debugging and profiling in JavaScript or TypeScript. Also use when modifying the upstream Pretext repo while preserving the prepare/layout split, cache and locale rules, and other documented invariants.
 ---
 
 # pretext
@@ -11,6 +11,13 @@ Treat Pretext as a two-phase engine:
 - `layout` phase: turn `(prepared, maxWidth, lineHeight)` into height, lines, or line geometry
 
 Keep that split intact. If a proposed solution reruns `prepare()` on resize or reintroduces DOM reads into the hot path, treat it as suspect.
+
+## Ask These Questions First
+
+1. Am I consuming the published package or modifying the upstream repo internals?
+2. What output shape do I actually need: height, concrete lines, geometry, variable-width lines, or diagnostics?
+3. Which inputs invalidate preparation, and which inputs invalidate only layout?
+4. Is this a lifecycle problem, a behavior problem, a browser caveat, or a validation problem?
 
 ## Start From Output Shape
 
@@ -23,19 +30,21 @@ Keep that split intact. If a proposed solution reruns `prepare()` on resize or r
 4. Need per-line varying widths:
    - use `prepareWithSegments()` plus `layoutNextLine()`
 5. Need prepare-phase timing or segment-count diagnostics:
-   - use `profilePrepare()`
+   - use `profilePrepare()` as a diagnostic helper, not as the normal integration path
 6. Need locale or cache control:
    - use `setLocale()` or `clearCache()`
-7. Need deeper internals from `analysis.ts`, `measurement.ts`, `line-break.ts`, or `bidi.ts`:
-   - treat them as low-level exports, not the default product API
+7. Need deeper access to `analysis.ts`, `measurement.ts`, `line-break.ts`, or `bidi.ts`:
+   - treat them as source-level internals for upstream repo work, not as default package-public imports
 
 ## Load Only The Needed Reference
 
-- Read [reference/first-principles.md](reference/first-principles.md) for the irreducible model, invalidation rules, and non-negotiable architecture constraints.
-- Read [reference/public-api.md](reference/public-api.md) for exact exported functions, types, and which exports are product-facing versus low-level.
-- Read [reference/text-behaviors.md](reference/text-behaviors.md) for whitespace, soft-hyphen, zero-width separator, punctuation-glue, locale, bidi, emoji, and CJK behavior.
+- Read [reference/first-principles.md](reference/first-principles.md) for the irreducible model, invalidation rules, and architectural constraints.
+- Read [reference/public-api.md](reference/public-api.md) for the normal product-facing package API.
+- Read [reference/internal-exports.md](reference/internal-exports.md) only when the task explicitly needs diagnostic helpers, rich-path structural details, or source-level internals.
+- Read [reference/whitespace-and-breaks.md](reference/whitespace-and-breaks.md) for whitespace modes, break policy, tabs, zero-width separators, and soft-hyphen behavior.
+- Read [reference/script-and-browser-caveats.md](reference/script-and-browser-caveats.md) for script-sensitive segmentation, punctuation-glue classes, bidi, emoji, browser caveats, and research canaries.
 - Read [reference/integration-lifecycle.md](reference/integration-lifecycle.md) for caching, resize, custom rendering, shrink-wrap, React or virtualization, and variable-width line flow patterns.
-- Read [reference/troubleshooting.md](reference/troubleshooting.md) for likely failure modes, research-backed guardrails, and known canary areas.
+- Read [reference/troubleshooting.md](reference/troubleshooting.md) for failure modes, research-backed guardrails, and diagnostic triage.
 - Read [reference/validation-playbook.md](reference/validation-playbook.md) for Bun commands, dashboards, and escalation paths.
 - Run `python scripts/select_pretext_api.py --goal ...` when a deterministic recommendation is helpful.
 
@@ -53,5 +62,6 @@ Keep that split intact. If a proposed solution reruns `prepare()` on resize or r
 1. State the chosen output shape and why it matches the task.
 2. State the invalidation tuple: which inputs force re-prepare and which force only re-layout.
 3. Call out whitespace mode, locale, width source, `font`, and `lineHeight` assumptions explicitly.
-4. Separate integration mistakes from true engine limitations or upstream canaries.
-5. Prefer the lightest validation path that can falsify the current assumption.
+4. If you descend into internals, explain why the normal package-facing API is insufficient.
+5. Separate integration mistakes from true engine limitations or upstream canaries.
+6. Prefer the lightest validation path that can falsify the current assumption.
