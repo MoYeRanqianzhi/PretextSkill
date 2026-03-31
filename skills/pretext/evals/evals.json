@@ -199,6 +199,73 @@
         "Points to pages/demos or build-demo-site.ts",
         "Separates demo presentation from core engine semantics"
       ]
+    },
+    {
+      "id": 18,
+      "prompt": "A custom rich renderer says mixed-direction segments are being painted with the wrong bidi levels, but ordinary height prediction still looks fine. I need the first owning upstream module, the correct validation area, and the narrow surface to inspect.",
+      "expected_output": "Routes to the bidi owner and validation area, keeps the problem on the rich-path custom-rendering side, and avoids treating it as a generic height-layout bug.",
+      "files": [],
+      "expectations": [
+        "Identifies bidi.ts as the primary owning module",
+        "Routes to the bidi validation area",
+        "Keeps the issue on rich-path bidi metadata rather than ordinary layout counting"
+      ]
+    },
+    {
+      "id": 19,
+      "prompt": "On macOS, Chrome and Firefox are over-measuring emoji at small sizes while Safari looks different. I need the first owning module, the right browser-oriented validation surface, and guidance that does not immediately jump to guessed substitution tables.",
+      "expected_output": "Routes to measurement ownership, points to emoji correction and browser accuracy surfaces, and keeps the diagnosis evidence-based.",
+      "files": [],
+      "expectations": [
+        "Identifies measurement.ts as the primary owning module",
+        "Routes to the measurement validation area",
+        "Points to accuracy-harness or equivalent browser-parity tooling",
+        "Avoids speculative substitution-table fixes without evidence"
+      ]
+    },
+    {
+      "id": 20,
+      "prompt": "layoutNextLine() is diverging from layoutWithLines() for the same prepared rich text, and I need to know which upstream module owns that parity problem before patching anything.",
+      "expected_output": "Routes to line-break ownership or streamed-line parity, points to behavior contracts, and treats the problem as line-range parity rather than generic integration.",
+      "files": [],
+      "expectations": [
+        "Identifies line-break.ts as the primary owner for streamed-line parity",
+        "Points to behavior-contracts.md",
+        "Routes to the line-break validation area"
+      ]
+    },
+    {
+      "id": 21,
+      "prompt": "The line ranges themselves look right, but the final materialized LayoutLine.text output loses source-only soft-hyphen behavior and cursor-based reconstruction looks wrong. Which upstream module owns that?",
+      "expected_output": "Routes to layout.ts rich-line materialization rather than line-break generation, and treats this as a rich text reconstruction problem.",
+      "files": [],
+      "expectations": [
+        "Identifies layout.ts as the primary owner",
+        "Treats the issue as rich-line materialization or reconstruction",
+        "Routes to the layout-api validation area"
+      ]
+    },
+    {
+      "id": 22,
+      "prompt": "A long breakable word is wrapping at impossible grapheme boundaries even before any downstream line materialization logic runs. I need to know the first owning module and what kind of validation to run.",
+      "expected_output": "Routes to measurement ownership for grapheme-width or prefix-width metadata, not to line materialization or package shape.",
+      "files": [],
+      "expectations": [
+        "Identifies measurement.ts as the primary owning module",
+        "Treats the issue as measurement-width metadata rather than line materialization",
+        "Routes to the measurement validation area"
+      ]
+    },
+    {
+      "id": 23,
+      "prompt": "Prepared segments and widths look correct, but final line-fit boundaries are still wrong and a long breakable run should have moved to a fresh line. Which module owns that first incorrect state?",
+      "expected_output": "Routes to line-break ownership and keeps the investigation on arithmetic line walking rather than upstream preprocessing.",
+      "files": [],
+      "expectations": [
+        "Identifies line-break.ts as the primary owner",
+        "States that the first incorrect state is in line walking after segmentation and measurement are already correct",
+        "Routes to the line-break validation area"
+      ]
     }
   ]
 }

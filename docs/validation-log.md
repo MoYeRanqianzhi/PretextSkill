@@ -249,3 +249,8 @@
   - Compared the upstream harness areas against the current eval prompts and validation taxonomy
 - Result:
   - Added `reference/upstream-tooling-surfaces.md`, `select_pretext_tooling_surface.py`, and new tooling eval prompts so harness selection can be checked deterministically instead of by memory
+
+- Check:
+  - Compared owner issues and validation areas against the current eval coverage map
+- Result:
+  - Expanded `coverage.json`, `evals.json`, and `check_pretext_eval_coverage.py` so owner-routing and validation-routing maintenance are also checked deterministically

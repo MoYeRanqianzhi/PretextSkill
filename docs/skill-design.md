@@ -90,6 +90,8 @@ The skill should help with:
   - deterministic helper that infers validation scope directly from upstream git diff state
 - `evals/evals.json`
   - formal skill-creator eval prompts covering every current selector goal and major surface
+- `evals/coverage.json`
+  - explicit mapping from eval prompts to goals, surfaces, tooling areas, owner issues, and validation areas
 
 ## Current Direction
 
@@ -99,6 +101,7 @@ The skill should help with:
 - Make validation routing deterministic instead of relying on memory or intuition
 - Cover package, browser, corpus, Gatsby, probe, and demo-site validation surfaces with one shared taxonomy
 - Keep a formal eval suite aligned with the goal and surface taxonomy so regressions are observable
+- Keep eval coverage aligned not only with goals and surfaces, but also with owner issues and validation areas
 - Keep the upstream tooling layer separate from both package API routing and engine-ownership routing
 - Make upstream module ownership explicit with deterministic routing before patching internals
 - Prefer direct narrow recipe files once the implementation shape is known, without keeping an extra generic router file

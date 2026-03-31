@@ -2,6 +2,8 @@
 
 ## 2026-04-01
 
+- Expanded eval coverage to explicitly track owner issues and validation areas in addition to goals, surfaces, and tooling areas
+- Added owner-issue and validation-area eval prompts for bidi, emoji correction, streamed-line parity, rich-line materialization, measurement-width metadata, and line-fit ownership
 - Added `reference/upstream-tooling-surfaces.md` and `select_pretext_tooling_surface.py` to route harness, reporting, and demo-site tasks more narrowly
 - Expanded the formal eval suite with tooling-surface prompts and added tooling-area coverage mapping
 - Added `select_pretext_owner.py` to route upstream issue categories to the first owning source module and validation area

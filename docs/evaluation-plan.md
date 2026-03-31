@@ -60,6 +60,14 @@ And it now covers the maintained tooling areas:
 
 The coverage mapping is checked in `skills/pretext/evals/coverage.json` and can be validated with `python skills/pretext/scripts/check_pretext_eval_coverage.py`.
 
+That coverage map now tracks:
+
+- selector goals
+- selector surfaces
+- tooling areas
+- owner issues
+- validation areas
+
 ## Review Standard
 
 Each eval should be reviewed for:

@@ -32,6 +32,7 @@
 - Release tag `v0.6.5` created for the formal eval suite and deeper advanced-type coverage
 - Release tag `v0.6.6` created for upstream ownership routing and eval-coverage maintenance
 - Release tag `v0.6.7` created for upstream tooling-surface routing and expanded harness eval coverage
+- Release tag `v0.6.8` created for owner-issue and validation-area eval coverage expansion
 - `skills/pretext/` now contains:
   - `SKILL.md`
   - `agents/openai.yaml`
@@ -109,7 +110,7 @@
 - `python -m json.tool skills/pretext/evals/evals.json`
   - Result: the formal eval suite JSON parses successfully and covers all current selector goals
 - `python skills/pretext/scripts/check_pretext_eval_coverage.py`
-  - Result: verifies that every supported goal, non-generic surface, and maintained tooling area still has at least one mapped eval
+  - Result: verifies that every supported goal, non-generic surface, maintained tooling area, owner issue, and validation area still has at least one mapped eval
 - `python skills/pretext/scripts/select_pretext_owner.py --issue segmentation --format json`
   - Result: routes preprocessing and glue issues to `analysis.ts`, with the expected references and validation area
 - `python skills/pretext/scripts/select_pretext_tooling_surface.py --area probe-surface --format json`

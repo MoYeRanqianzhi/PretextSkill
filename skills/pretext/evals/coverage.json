@@ -26,5 +26,34 @@
     "reporting-tooling": [16],
     "demo-site": [17],
     "package-workflow": [9]
+  },
+  "owner_issues": {
+    "segmentation": [8],
+    "whitespace": [5],
+    "glue": [8],
+    "measurement-width": [22],
+    "emoji-correction": [19],
+    "line-fit": [23],
+    "tab-layout": [5],
+    "streamed-lines": [20],
+    "rich-line-materialization": [21],
+    "public-api-shape": [9],
+    "cache-locale-wiring": [7],
+    "bidi-levels": [18]
+  },
+  "validation_areas": {
+    "analysis": [8],
+    "measurement": [19, 22],
+    "line-break": [5, 20, 23],
+    "layout-api": [9, 21],
+    "bidi": [18],
+    "benchmark-harness": [13],
+    "accuracy-harness": [12, 19],
+    "probe-surface": [11],
+    "corpus-tooling": [14],
+    "gatsby-surface": [15],
+    "package-workflow": [9],
+    "demo-site": [17],
+    "reporting-tooling": [16]
   }
 }
