@@ -221,6 +221,38 @@ def build_recommendation(goal: str, surface: str, preserve_whitespace: bool, loc
                 "Use it to separate analysis cost from measurement cost.",
             ],
         ),
+        "correctness": Recommendation(
+            goal="correctness",
+            surface=surface,
+            primary_apis=["depends on the exported path under dispute"],
+            helper_apis=[
+                "prepare(text, font, options)",
+                "prepareWithSegments(text, font, options)",
+                "layout(prepared, maxWidth, lineHeight)",
+                "layoutWithLines(prepared, maxWidth, lineHeight)",
+                "layoutNextLine(prepared, cursor, maxWidth)",
+                "walkLineRanges(prepared, maxWidth, onLine)",
+            ],
+            reason="Use this path when the main question is whether a behavior is a valid contract, a regression, or an integration mistake.",
+            reference_files=[
+                "reference/first-principles.md",
+                "reference/public-api.md",
+                "reference/behavior-contracts.md",
+                "reference/troubleshooting.md",
+                "reference/validation-playbook.md",
+            ],
+            invalidates_prepare_on=["text", "font", "whiteSpace", "locale"],
+            invalidates_layout_on=["maxWidth", "lineHeight"],
+            questions=[
+                "Which exact semantic contract is being disputed?",
+                "Can I reproduce the issue with the exported APIs before touching internals?",
+                "Is the failure in segmentation, measurement, line walking, or line materialization?",
+            ],
+            notes=[
+                "Use the smallest repro that still exercises the claimed contract.",
+                "Compare the plain and rich exported APIs before assuming an internal module is wrong.",
+            ],
+        ),
         "cache-locale": Recommendation(
             goal="cache-locale",
             surface=surface,
@@ -252,6 +284,7 @@ def build_recommendation(goal: str, surface: str, preserve_whitespace: bool, loc
             reference_files=[
                 "reference/internal-exports.md",
                 "reference/first-principles.md",
+                "reference/behavior-contracts.md",
                 "reference/troubleshooting.md",
                 "reference/validation-playbook.md",
             ],
@@ -275,6 +308,7 @@ def build_recommendation(goal: str, surface: str, preserve_whitespace: bool, loc
             reason="Start by identifying whether the issue is lifecycle, behavior envelope, browser caveat, or upstream canary behavior.",
             reference_files=[
                 "reference/first-principles.md",
+                "reference/behavior-contracts.md",
                 "reference/whitespace-and-breaks.md",
                 "reference/script-and-browser-caveats.md",
                 "reference/troubleshooting.md",
@@ -332,6 +366,7 @@ def main() -> int:
             "variable-width",
             "shrinkwrap",
             "profile",
+            "correctness",
             "cache-locale",
             "upstream-internals",
             "diagnostics",

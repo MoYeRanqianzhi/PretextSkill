@@ -13,6 +13,8 @@ Check these before suspecting a Pretext bug:
 5. wrong locale state
 6. wrong API shape for the task
 
+If the dispute is about what Pretext is supposed to do, not just why it is misbehaving in one integration, also load [behavior-contracts.md](behavior-contracts.md).
+
 ## Diagnostic Exports
 
 ### `profilePrepare()`

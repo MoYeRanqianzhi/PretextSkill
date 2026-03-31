@@ -2,6 +2,8 @@
 
 Use this file only when the task is about modifying the cloned upstream repo, not merely consuming the published package.
 
+Before changing source internals, also load [behavior-contracts.md](behavior-contracts.md) if the proposed patch could change exported semantics.
+
 ## Architectural Center Of Gravity
 
 Pretext keeps one non-negotiable split:

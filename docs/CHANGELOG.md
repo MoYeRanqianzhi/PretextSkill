@@ -2,6 +2,9 @@
 
 ## 2026-04-01
 
+- Added `reference/behavior-contracts.md` to separate correctness-contract routing from API and validation routing
+- Extended `select_pretext_api.py` with a `correctness` goal for regression and semantic-contract disputes
+- Updated `SKILL.md`, `public-api.md`, and `troubleshooting.md` to route correctness questions into the new behavior-contract layer
 - Narrowed `SKILL.md` further into a first-principles router based on `goal + surface`
 - Extended `select_pretext_api.py` with surface-aware routing for `react-dom`, `custom-renderer`, `package`, and `upstream`
 - Added `skills/pretext/scripts/pretext_validation_catalog.py` as the shared validation taxonomy

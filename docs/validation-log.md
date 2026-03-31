@@ -164,6 +164,11 @@
   - Added `custom-renderer-recipes.md` and renderer-specific guardrails for geometry-only shrink-wrap work
 
 - Command:
+  - `python skills/pretext/scripts/select_pretext_api.py --goal correctness --surface upstream --preserve-whitespace --locale-sensitive --format json`
+- Result:
+  - Added `behavior-contracts.md` to the reference set and returned the expected correctness-oriented questions, whitespace guidance, and locale guidance
+
+- Command:
   - `python skills/pretext/scripts/select_pretext_validation.py --area package-workflow --format json`
 - Result:
   - Returned the expected package confidence loop and follow-up API sync check
@@ -204,3 +209,8 @@
   - Compared `SKILL.md` routing against the real reference and script surface
 - Result:
   - Reframed Level 2 around `goal + surface` selection and kept the narrower recipes in Level 3 references
+
+- Check:
+  - Compared `pretext/src/layout.test.ts` contracts against the current correctness and troubleshooting references
+- Result:
+  - Added `reference/behavior-contracts.md` so correctness disputes can load cross-API and edge-case semantics without inflating `SKILL.md`

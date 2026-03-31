@@ -17,17 +17,18 @@ Keep that split intact. If a proposed solution reruns `prepare()` on resize or r
 1. Am I consuming the published package or modifying the upstream repo internals?
 2. What output shape do I actually need: height, concrete lines, geometry, variable-width lines, or diagnostics?
 3. Which inputs invalidate preparation, and which inputs invalidate only layout?
-4. Is this a lifecycle problem, a behavior problem, a browser caveat, or a validation problem?
+4. Is this an integration problem, a correctness-contract problem, a browser caveat, or a validation problem?
 
-## Choose Output Shape And Surface
+## Choose Goal And Surface
 
-1. Choose the output-shape goal:
+1. Choose the primary goal:
    - `height`
    - `fixed-lines`
    - `geometry`
    - `variable-width`
    - `shrinkwrap`
    - `profile`
+   - `correctness`
    - `cache-locale`
    - `upstream-internals`
    - `diagnostics`
@@ -45,6 +46,7 @@ Keep that split intact. If a proposed solution reruns `prepare()` on resize or r
 - Read [reference/internal-exports.md](reference/internal-exports.md) only when the task explicitly needs diagnostic helpers, rich-path structural details, or source-level internals.
 - Read [reference/internal-architecture.md](reference/internal-architecture.md) when modifying the upstream repo and you need module boundaries, data-flow guidance, or change-impact validation.
 - Read [reference/whitespace-and-breaks.md](reference/whitespace-and-breaks.md) for whitespace modes, break policy, tabs, zero-width separators, and soft-hyphen behavior.
+- Read [reference/behavior-contracts.md](reference/behavior-contracts.md) when the task is about exact semantic expectations, cross-API invariants, or whether a behavior change would be a regression.
 - Read [reference/script-and-browser-caveats.md](reference/script-and-browser-caveats.md) for script-sensitive segmentation, punctuation-glue classes, bidi, emoji, browser caveats, and research canaries.
 - Read [reference/integration-lifecycle.md](reference/integration-lifecycle.md) for caching, resize, custom rendering, shrink-wrap, React or virtualization, and variable-width line flow patterns.
 - Read [reference/react-dom-recipes.md](reference/react-dom-recipes.md) when you need React or DOM-oriented integration patterns such as height caches or whitespace-preserving editors.

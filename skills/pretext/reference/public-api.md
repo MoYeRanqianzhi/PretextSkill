@@ -73,6 +73,10 @@ Use this file when the task is about the normal package-facing Pretext API.
 - `LayoutLinesResult`
 - `PrepareOptions`
 
+## Semantics Pointer
+
+If the task is not "what is exported?" but "what behavior must stay true across these exports?", load [behavior-contracts.md](behavior-contracts.md).
+
 ## Boundary Note
 
 If the task explicitly needs `profilePrepare()`, `PrepareProfile`, `PreparedLineChunk`, rich-path structural fields like `chunks` or `segLevels`, or source modules such as `analysis.ts`, stop and load [internal-exports.md](internal-exports.md). Those are advanced surfaces, not the normal product-facing path.

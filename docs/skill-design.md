@@ -26,12 +26,14 @@ The skill should help with:
 - integrating Pretext into UI code without breaking the prepare/layout split
 - preserving correctness constraints such as matching `font`, `lineHeight`, and `whiteSpace`
 - debugging common accuracy pitfalls like `system-ui` on macOS or repeated `prepare()` calls
+- separating correctness-contract questions from integration, caveat, and validation questions
 - planning validation using deterministic selectors instead of memory or intuition
 
 ## Design Principles
 
 - Keep `SKILL.md` as a narrow Level-2 router
 - Model decisions as `output shape + integration surface + invalidation tuple`
+- Keep correctness-contract work distinct from integration work so progressive disclosure can stay narrow
 - Keep package-facing usage and upstream source modification paths clearly separated
 - Treat validation taxonomy as shared data, not duplicated prose across scripts
 - Prefer new references only when they reduce ambiguity or shrink the context needed for a common task
@@ -50,6 +52,8 @@ The skill should help with:
   - source-level module boundaries, data flow, and change-impact validation
 - `reference/whitespace-and-breaks.md`
   - whitespace modes, break policy, tabs, zero-width separators, and soft-hyphen behavior
+- `reference/behavior-contracts.md`
+  - cross-API semantic contracts and edge-case expectations derived from exported behavior and permanent tests
 - `reference/script-and-browser-caveats.md`
   - script-sensitive segmentation, browser caveats, and research canaries
 - `reference/react-dom-recipes.md`
@@ -65,7 +69,7 @@ The skill should help with:
 - `reference/validation-playbook.md`
   - area selection, git-diff routing, and validation surface inventory
 - `scripts/select_pretext_api.py`
-  - deterministic helper that maps `goal + surface` to the recommended API path, reference set, and first-principles questions
+  - deterministic helper that maps `goal + surface` to the recommended API path, reference set, and first-principles questions, including correctness-contract routing
 - `scripts/check_layout_api_sync.py`
   - deterministic maintenance check that compares documented API entries against `pretext/src/layout.ts`
 - `scripts/pretext_validation_catalog.py`
@@ -81,6 +85,7 @@ The skill should help with:
 
 - Keep package-facing usage and upstream source modification paths clearly separated
 - Make API routing explicit across both output shape and integration surface
+- Make correctness-contract routing explicit instead of burying it inside generic diagnostics
 - Make validation routing deterministic instead of relying on memory or intuition
 - Cover package, browser, corpus, Gatsby, probe, and demo-site validation surfaces with one shared taxonomy
 - Prefer direct narrow recipe files once the implementation shape is known, without keeping an extra generic router file

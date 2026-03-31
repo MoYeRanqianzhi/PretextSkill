@@ -28,6 +28,7 @@
 - Release tag `v0.6.1` created for streamlining recipe references
 - Release tag `v0.6.2` created for finalized recipe routing and git-based validation cleanup
 - Release tag `v0.6.3` created for surface-aware API routing and the shared validation catalog
+- Release tag `v0.6.4` created for behavior-contract routing and correctness-focused progressive disclosure
 - `skills/pretext/` now contains:
   - `SKILL.md`
   - `agents/openai.yaml`
@@ -36,6 +37,7 @@
   - `reference/internal-exports.md`
   - `reference/internal-architecture.md`
   - `reference/whitespace-and-breaks.md`
+  - `reference/behavior-contracts.md`
   - `reference/script-and-browser-caveats.md`
   - `reference/react-dom-recipes.md`
   - `reference/custom-renderer-recipes.md`
@@ -55,9 +57,10 @@
 - Write the skill and project docs in English to support internationalized reuse
 - Keep progressive disclosure strict:
   - `SKILL.md` contains only the first-principles model, routing questions, and load instructions
-  - `reference/` is split by cognitive concern and integration surface
+  - `reference/` is split by cognitive concern, correctness contract, and integration surface
   - `scripts/` is reserved for deterministic helpers that are worth executing
 - Model API selection as `goal + surface + invalidation tuple`
+- Model correctness work separately from API selection so agents do not confuse "what should happen" with "which API should I call"
 - Treat the reference repository as the source of truth for API names, workflows, caveats, and validation commands
 - Treat `src/layout.ts` as the normal product-facing API, and lower-level source modules as advanced diagnostics or upstream-hacking surfaces rather than package-public import targets
 - Treat validation taxonomy as shared data across scripts so the manual selector, by-file selector, and git-diff selector cannot drift silently
@@ -73,6 +76,7 @@
 
 - Add formal eval prompts and an iterative review loop using the `skill-creator` workflow
 - Observe whether the new `goal + surface` API selector reduces unnecessary reference loading in real agent use
+- Observe whether explicit correctness-contract routing reduces false jumps into upstream internals during debugging
 - Add repo-specific git-diff heuristics only if repeated multi-file change clusters prove worth encoding
 
 ## Validation Record
@@ -89,6 +93,8 @@
   - Result: now adds `react-dom-recipes.md` to the narrow reference set for height-only UI work
 - `python skills/pretext/scripts/select_pretext_api.py --goal shrinkwrap --surface custom-renderer`
   - Result: now adds `custom-renderer-recipes.md` and renderer-specific guardrails for geometry-only shrink-wrap work
+- `python skills/pretext/scripts/select_pretext_api.py --goal correctness --surface upstream --preserve-whitespace --locale-sensitive --format json`
+  - Result: now routes correctness disputes to `behavior-contracts.md` plus the appropriate diagnostic references and preserves whitespace/locale guidance
 - `python skills/pretext/scripts/select_pretext_api.py --goal <every-supported-goal> --format json`
   - Result: all helper-script goals executed successfully after the progressive-disclosure refactor
 - `python skills/pretext/scripts/check_layout_api_sync.py`

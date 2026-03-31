@@ -69,3 +69,5 @@ When a bug is tempting you toward a complicated runtime correction, first ask:
 - Is the problem a known canary rather than a clean local bug?
 
 Prefer small, semantically justified rules over heavy runtime work.
+
+If the disagreement is about exact exported behavior rather than the general model, also load [behavior-contracts.md](behavior-contracts.md).
