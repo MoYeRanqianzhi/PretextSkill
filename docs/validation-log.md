@@ -174,6 +174,16 @@
   - Parsed the formal eval suite successfully after adding prompts for all current selector goals
 
 - Command:
+  - `python skills/pretext/scripts/check_pretext_eval_coverage.py`
+- Result:
+  - Verifies that every supported goal and non-generic surface still has at least one mapped eval
+
+- Command:
+  - `python skills/pretext/scripts/select_pretext_owner.py --issue segmentation --format json`
+- Result:
+  - Returned the expected ownership recommendation for `analysis.ts`, including references and the `analysis` validation area
+
+- Command:
   - `python skills/pretext/scripts/select_pretext_validation.py --area package-workflow --format json`
 - Result:
   - Returned the expected package confidence loop and follow-up API sync check
@@ -224,3 +234,8 @@
   - Compared the current `select_pretext_api.py` goal set against the new eval prompts
 - Result:
   - Added `skills/pretext/evals/evals.json` so every current selector goal now has at least one substantive eval prompt
+
+- Check:
+  - Compared the current supported goals and surfaces against the eval coverage map
+- Result:
+  - Added `skills/pretext/evals/coverage.json` plus `check_pretext_eval_coverage.py` so eval coverage can be checked deterministically instead of by memory

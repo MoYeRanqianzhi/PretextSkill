@@ -14,6 +14,21 @@ COMMON_QUESTIONS = [
     "Am I consuming the package API or modifying upstream internals?",
 ]
 
+SUPPORTED_GOALS = [
+    "height",
+    "fixed-lines",
+    "geometry",
+    "variable-width",
+    "shrinkwrap",
+    "profile",
+    "correctness",
+    "cache-locale",
+    "upstream-internals",
+    "diagnostics",
+]
+
+SUPPORTED_SURFACES = ["generic", "react-dom", "custom-renderer", "package", "upstream"]
+
 
 @dataclass(frozen=True)
 class Recommendation:
@@ -359,23 +374,12 @@ def main() -> int:
     parser.add_argument(
         "--goal",
         required=True,
-        choices=[
-            "height",
-            "fixed-lines",
-            "geometry",
-            "variable-width",
-            "shrinkwrap",
-            "profile",
-            "correctness",
-            "cache-locale",
-            "upstream-internals",
-            "diagnostics",
-        ],
+        choices=SUPPORTED_GOALS,
         help="Integration or diagnostic goal to optimize for.",
     )
     parser.add_argument(
         "--surface",
-        choices=["generic", "react-dom", "custom-renderer", "package", "upstream"],
+        choices=SUPPORTED_SURFACES,
         default="generic",
         help="Optional integration surface used to narrow the recommended references and guardrails.",
     )

@@ -30,10 +30,12 @@
 - Release tag `v0.6.3` created for surface-aware API routing and the shared validation catalog
 - Release tag `v0.6.4` created for behavior-contract routing and correctness-focused progressive disclosure
 - Release tag `v0.6.5` created for the formal eval suite and deeper advanced-type coverage
+- Release tag `v0.6.6` created for upstream ownership routing and eval-coverage maintenance
 - `skills/pretext/` now contains:
   - `SKILL.md`
   - `agents/openai.yaml`
   - `evals/evals.json`
+  - `evals/coverage.json`
   - `reference/first-principles.md`
   - `reference/public-api.md`
   - `reference/internal-exports.md`
@@ -48,7 +50,9 @@
   - `reference/troubleshooting.md`
   - `reference/validation-playbook.md`
   - `scripts/select_pretext_api.py`
+  - `scripts/select_pretext_owner.py`
   - `scripts/check_layout_api_sync.py`
+  - `scripts/check_pretext_eval_coverage.py`
   - `scripts/pretext_validation_catalog.py`
   - `scripts/select_pretext_validation.py`
   - `scripts/select_pretext_validation_by_files.py`
@@ -77,6 +81,7 @@
 ## Next Tasks
 
 - Run the new formal eval prompts through the full `skill-creator` review loop
+- Use the ownership router on the next upstream-internals pass and refine issue categories only if repeated ambiguity remains
 - Observe whether the new `goal + surface` API selector reduces unnecessary reference loading in real agent use
 - Observe whether explicit correctness-contract routing reduces false jumps into upstream internals during debugging
 - Add repo-specific git-diff heuristics only if repeated multi-file change clusters prove worth encoding
@@ -99,6 +104,14 @@
   - Result: now routes correctness disputes to `behavior-contracts.md` plus the appropriate diagnostic references and preserves whitespace/locale guidance
 - `python -m json.tool skills/pretext/evals/evals.json`
   - Result: the formal eval suite JSON parses successfully and covers all current selector goals
+- `python skills/pretext/scripts/check_pretext_eval_coverage.py`
+  - Result: verifies that every supported goal and non-generic surface still has at least one mapped eval
+- `python skills/pretext/scripts/select_pretext_owner.py --issue segmentation --format json`
+  - Result: routes preprocessing and glue issues to `analysis.ts`, with the expected references and validation area
+- `python skills/pretext/scripts/select_pretext_validation.py --area reporting-tooling --format json`
+  - Result: returns the expected reporting-tooling commands and follow-up checks
+- `python skills/pretext/scripts/select_pretext_validation_by_files.py --path pretext/scripts/report-server.ts --path pretext/pages/report-utils.ts`
+  - Result: matches the new `reporting-tooling` area and returns the expected merged validation plan
 - `python skills/pretext/scripts/select_pretext_api.py --goal <every-supported-goal> --format json`
   - Result: all helper-script goals executed successfully after the progressive-disclosure refactor
 - `python skills/pretext/scripts/check_layout_api_sync.py`

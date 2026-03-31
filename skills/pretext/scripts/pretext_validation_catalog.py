@@ -149,6 +149,21 @@ PLANS: dict[str, ValidationPlan] = {
         ],
         source_files=["pretext/pages/demos", "pretext/scripts/build-demo-site.ts"],
     ),
+    "reporting-tooling": ValidationPlan(
+        area="reporting-tooling",
+        reason="Browser report capture, diagnostic page helpers, and posted-report plumbing live here.",
+        commands=["bun run check", "bun run status-dashboard"],
+        follow_up_checks=[
+            "bun run accuracy-check",
+            "bun run benchmark-check",
+            "bun run probe-check",
+        ],
+        source_files=[
+            "pretext/scripts/report-server.ts",
+            "pretext/pages/report-utils.ts",
+            "pretext/pages/diagnostic-utils.ts",
+        ],
+    ),
 }
 
 
@@ -188,6 +203,10 @@ FILE_PATTERNS: list[tuple[str, str]] = [
     ("tsconfig.build.json", "package-workflow"),
     ("CHANGELOG.md", "package-workflow"),
     ("scripts/build-demo-site.ts", "demo-site"),
+    ("scripts/report-server.ts", "reporting-tooling"),
+    ("pages/report-utils.ts", "reporting-tooling"),
+    ("pages/diagnostic-utils.ts", "reporting-tooling"),
+    ("pages/emoji-test.html", "accuracy-harness"),
     ("pages/demos/*", "demo-site"),
     ("pages/assets/*", "demo-site"),
     ("pages/*.html", "demo-site"),

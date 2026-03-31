@@ -70,8 +70,12 @@ The skill should help with:
   - area selection, git-diff routing, and validation surface inventory
 - `scripts/select_pretext_api.py`
   - deterministic helper that maps `goal + surface` to the recommended API path, reference set, and first-principles questions, including correctness-contract routing
+- `scripts/select_pretext_owner.py`
+  - deterministic helper that maps an upstream issue category to the first owning source module and validation area
 - `scripts/check_layout_api_sync.py`
   - deterministic maintenance check that compares documented API entries against `pretext/src/layout.ts`
+- `scripts/check_pretext_eval_coverage.py`
+  - deterministic maintenance check that ensures the formal eval suite still covers every supported goal and surface
 - `scripts/pretext_validation_catalog.py`
   - shared validation taxonomy used by the validation-selector helpers
 - `scripts/select_pretext_validation.py`
@@ -91,6 +95,7 @@ The skill should help with:
 - Make validation routing deterministic instead of relying on memory or intuition
 - Cover package, browser, corpus, Gatsby, probe, and demo-site validation surfaces with one shared taxonomy
 - Keep a formal eval suite aligned with the goal and surface taxonomy so regressions are observable
+- Make upstream module ownership explicit with deterministic routing before patching internals
 - Prefer direct narrow recipe files once the implementation shape is known, without keeping an extra generic router file
 
 ## Non-Goals

@@ -2,6 +2,9 @@
 
 ## 2026-04-01
 
+- Added `select_pretext_owner.py` to route upstream issue categories to the first owning source module and validation area
+- Added `skills/pretext/evals/coverage.json` and `check_pretext_eval_coverage.py` to keep eval coverage aligned with supported goals and surfaces
+- Expanded validation taxonomy to cover reporting tooling and tighter file-pattern ownership
 - Added `skills/pretext/evals/evals.json` as the first formal `skill-creator` eval suite covering every current selector goal
 - Added `docs/evaluation-plan.md` to document the eval coverage model and future review loop
 - Expanded `public-api.md` and `internal-exports.md` so advanced exported types and rich-path fields are more explicitly documented

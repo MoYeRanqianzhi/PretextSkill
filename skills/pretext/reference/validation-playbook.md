@@ -25,6 +25,7 @@ Supported areas:
 - `gatsby-surface`
 - `package-workflow`
 - `demo-site`
+- `reporting-tooling`
 
 ## Choose The Smallest Useful Validation
 
@@ -78,6 +79,17 @@ Use these before broader browser sweeps unless the task explicitly concerns brow
   - rebuild the demo site
 - `bun start`
   - start the demo server for targeted manual inspection
+
+## Reporting And Posted-Report Tooling
+
+- `bun run status-dashboard`
+  - rebuild status reporting that depends on checked-in snapshots and report utilities
+
+Use the `reporting-tooling` area when the task touches:
+
+- `pretext/scripts/report-server.ts`
+- `pretext/pages/report-utils.ts`
+- `pretext/pages/diagnostic-utils.ts`
 
 Useful pages:
 

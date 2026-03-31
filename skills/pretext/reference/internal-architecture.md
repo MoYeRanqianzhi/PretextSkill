@@ -138,6 +138,8 @@ Before patching upstream code, ask:
 3. Am I about to move work from prepare into layout?
 4. Am I about to overfit a known canary instead of fixing a general rule?
 
+If ownership is still unclear after those questions, run `python scripts/select_pretext_owner.py --issue ...` before patching source.
+
 ## Change-To-Validation Map
 
 ### If you change `src/analysis.ts`

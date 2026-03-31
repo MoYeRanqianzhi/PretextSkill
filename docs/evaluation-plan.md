@@ -46,6 +46,8 @@ It also covers the major integration surfaces:
 - `package`
 - `upstream`
 
+The coverage mapping is checked in `skills/pretext/evals/coverage.json` and can be validated with `python skills/pretext/scripts/check_pretext_eval_coverage.py`.
+
 ## Review Standard
 
 Each eval should be reviewed for:
@@ -63,6 +65,7 @@ Each eval should be reviewed for:
 When running the formal `skill-creator` loop:
 
 1. Use `skills/pretext/evals/evals.json` as the initial eval set.
+   Use `skills/pretext/evals/coverage.json` to verify that every supported goal and non-generic surface still has at least one eval.
 2. Store run outputs under `skills/pretext-workspace/iteration-N/`.
 3. Compare with-skill and baseline outputs before changing the skill again.
 4. Expand the eval set only when a real failure mode appears repeatedly.
