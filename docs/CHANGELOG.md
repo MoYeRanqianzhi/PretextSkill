@@ -22,3 +22,4 @@
 - Added an internal architecture reference and a validation-selector helper for upstream source modifications
 - Forward-tested geometry-only shrink-wrap usage and upstream preprocessing ownership routing
 - Added application-level recipes and a file-based validation-selector helper
+- Split app recipes into narrower recipe files and added git-diff-driven validation routing

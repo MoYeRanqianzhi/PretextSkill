@@ -35,7 +35,9 @@
   - `reference/internal-architecture.md`
   - `reference/whitespace-and-breaks.md`
   - `reference/script-and-browser-caveats.md`
-  - `reference/app-recipes.md`
+  - `reference/react-recipes.md`
+  - `reference/custom-rendering-recipes.md`
+  - `reference/package-workflows.md`
   - `reference/integration-lifecycle.md`
   - `reference/troubleshooting.md`
   - `reference/validation-playbook.md`
@@ -43,6 +45,7 @@
   - `scripts/check_layout_api_sync.py`
   - `scripts/select_pretext_validation.py`
   - `scripts/select_pretext_validation_by_files.py`
+  - `scripts/select_pretext_validation_from_git.py`
 
 ## Durable Decisions
 
@@ -63,8 +66,8 @@
 
 - Add more recipes only when repeated demand appears
 - Observe whether the new trigger wording improves build-mode activation without increasing false positives
-- Consider deeper app-recipes only if repeated demand appears for React hooks, Canvas loops, or package-release workflows
-- Consider file-glob or git-diff integration only if path-based validation routing becomes a repeated need
+- Consider deeper recipe references only if repeated demand appears for React hooks, Canvas loops, or package-release workflows
+- Consider repo-specific heuristics only if plain git-diff validation routing proves insufficient
 
 ## Validation Record
 
@@ -84,6 +87,8 @@
   - Result: returns the expected first-pass validation commands and escalation checks for preprocessing changes
 - `python skills/pretext/scripts/select_pretext_validation_by_files.py --path <changed-file> ...`
   - Result: infers validation scope from changed file ownership and returns the merged command set
+- `python skills/pretext/scripts/select_pretext_validation_from_git.py --repo pretext --rev-range ...`
+  - Result: infers validation scope directly from upstream git diff state
 - `python C:/Users/MoYeR/.codex/skills/.system/skill-creator/scripts/quick_validate.py G:/AgentProjects/skillsProjest/PretextSkill/skills/pretext`
   - Result: `Skill is valid!`
 - `python C:/Users/MoYeR/.codex/skills/.system/skill-creator/scripts/generate_openai_yaml.py G:/AgentProjects/skillsProjest/PretextSkill/skills/pretext ...`

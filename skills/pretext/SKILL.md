@@ -45,12 +45,16 @@ Keep that split intact. If a proposed solution reruns `prepare()` on resize or r
 - Read [reference/whitespace-and-breaks.md](reference/whitespace-and-breaks.md) for whitespace modes, break policy, tabs, zero-width separators, and soft-hyphen behavior.
 - Read [reference/script-and-browser-caveats.md](reference/script-and-browser-caveats.md) for script-sensitive segmentation, punctuation-glue classes, bidi, emoji, browser caveats, and research canaries.
 - Read [reference/integration-lifecycle.md](reference/integration-lifecycle.md) for caching, resize, custom rendering, shrink-wrap, React or virtualization, and variable-width line flow patterns.
-- Read [reference/app-recipes.md](reference/app-recipes.md) when you need a concrete build pattern such as a React height cache, canvas rendering loop, shrink-wrap search, variable-width flow, or release-oriented package validation.
+- Read [reference/app-recipes.md](reference/app-recipes.md) when you need the narrowest implementation recipe for React, custom rendering, or package workflows.
+- Read [reference/react-recipes.md](reference/react-recipes.md) when you need React or DOM-oriented integration patterns such as height caches or whitespace-preserving editors.
+- Read [reference/custom-rendering-recipes.md](reference/custom-rendering-recipes.md) when you need Canvas, SVG, WebGL, shrink-wrap, or variable-width rendering patterns.
+- Read [reference/package-workflows.md](reference/package-workflows.md) when the task is about package shape, published-artifact confidence, or release-oriented validation.
 - Read [reference/troubleshooting.md](reference/troubleshooting.md) for failure modes, research-backed guardrails, and diagnostic triage.
 - Read [reference/validation-playbook.md](reference/validation-playbook.md) for Bun commands, dashboards, and escalation paths.
 - Run `python scripts/select_pretext_api.py --goal ...` when a deterministic recommendation is helpful.
 - Run `python scripts/select_pretext_validation.py --area ...` when you need the smallest defensible regression plan after changing a specific subsystem.
 - Run `python scripts/select_pretext_validation_by_files.py --path ...` when you already know which files changed and want the validation plan inferred from them.
+- Run `python scripts/select_pretext_validation_from_git.py --repo pretext --rev-range ...` when you want validation inferred directly from upstream git diff state.
 
 ## Non-Negotiables
 

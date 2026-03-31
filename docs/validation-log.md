@@ -52,6 +52,16 @@
   - Returned the expected layout-API validation plan including package smoke testing and API-doc sync checks
 
 - Command:
+  - `python skills/pretext/scripts/select_pretext_validation_from_git.py --repo pretext --rev-range HEAD~1..HEAD`
+- Result:
+  - Returned a git-diff-derived validation plan based on the changed upstream files
+
+- Command:
+  - `python skills/pretext/scripts/select_pretext_validation_by_files.py --path src/analysis.ts --path src/line-break.ts`
+- Result:
+  - Confirmed the by-files validator now works for bare `src/...` paths inside the upstream repo
+
+- Command:
   - `python skills/pretext/scripts/select_pretext_api.py --goal <every-supported-goal> --format json`
 - Result:
   - All helper goals executed successfully after the trigger and disclosure refactor

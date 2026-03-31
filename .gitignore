@@ -1,1 +1,3 @@
 /pretext/
+__pycache__/
+*.pyc

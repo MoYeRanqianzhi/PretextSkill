@@ -51,8 +51,12 @@ The first version does not need to:
   - whitespace modes, break policy, tabs, zero-width separators, and soft-hyphen behavior
 - `reference/script-and-browser-caveats.md`
   - script-sensitive segmentation, browser caveats, and research canaries
-- `reference/app-recipes.md`
-  - implementation-heavy patterns for React, Canvas/SVG, shrink-wrap, editors, and package release checks
+- `reference/react-recipes.md`
+  - React height caching, virtualization, and editor-oriented patterns
+- `reference/custom-rendering-recipes.md`
+  - Canvas/SVG/WebGL, shrink-wrap, and variable-width flow patterns
+- `reference/package-workflows.md`
+  - build, smoke-test, and release-oriented package workflows
 - `reference/integration-lifecycle.md`
   - prepare/layout lifecycle patterns for product code
 - `reference/troubleshooting.md`
@@ -67,6 +71,8 @@ The first version does not need to:
   - deterministic helper that maps a changed subsystem to the smallest defensible validation plan
 - `scripts/select_pretext_validation_by_files.py`
   - deterministic helper that infers validation scope from changed file paths
+- `scripts/select_pretext_validation_from_git.py`
+  - deterministic helper that infers validation scope directly from upstream git diff state
 
 ## Current Direction
 
