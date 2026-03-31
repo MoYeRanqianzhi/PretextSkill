@@ -26,6 +26,7 @@
 - Release tag `v0.5.0` created for app-level recipes and file-based validation routing
 - Release tag `v0.6.0` created for narrowed recipe routing and git-diff-based validation inference
 - Release tag `v0.6.1` created for streamlining recipe references
+- Release tag `v0.6.2` created for finalized narrow recipe files and git-diff validation presets
 - `npx skills init` produced the initial minimal `skills/pretext/SKILL.md` scaffold
 - A `.gitignore` bug was discovered and fixed: `pretext/` also ignored `skills/pretext/`; the correct rule is `/pretext/`
 - `skills/pretext/` now contains:
