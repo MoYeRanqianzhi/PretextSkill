@@ -24,6 +24,7 @@
 - Release tag `v0.3.0` created for trigger refinement, API-boundary cleanup, and sync-check tooling
 - Release tag `v0.4.0` created for upstream internal-architecture guidance and validation routing
 - Release tag `v0.5.0` created for app-level recipes and file-based validation routing
+- Release tag `v0.6.0` created for narrowed recipe routing and git-diff-based validation inference
 - `npx skills init` produced the initial minimal `skills/pretext/SKILL.md` scaffold
 - A `.gitignore` bug was discovered and fixed: `pretext/` also ignored `skills/pretext/`; the correct rule is `/pretext/`
 - `skills/pretext/` now contains:
@@ -35,8 +36,8 @@
   - `reference/internal-architecture.md`
   - `reference/whitespace-and-breaks.md`
   - `reference/script-and-browser-caveats.md`
-  - `reference/react-recipes.md`
-  - `reference/custom-rendering-recipes.md`
+  - `reference/react-dom-recipes.md`
+  - `reference/custom-renderer-recipes.md`
   - `reference/package-workflows.md`
   - `reference/integration-lifecycle.md`
   - `reference/troubleshooting.md`
@@ -57,6 +58,7 @@
 - Optimize trigger text for user intent first, and literal export names second
 - Treat the reference repository as the source of truth for API names, workflows, and caveats
 - Treat `src/layout.ts` as the normal product-facing API, and lower-level source modules as advanced diagnostics or upstream-hacking surfaces rather than package-public import targets
+- Prefer direct narrow recipe files over a generic recipe bucket when the task intent is already clear
 
 ## Known Issues
 
@@ -107,6 +109,8 @@
   - Result: a fresh agent assigned ownership to `analysis.ts`, recognized `line-break.ts` as the key downstream consumer, and chose the expected minimal validation plan
 - Forward-test prompt: React height-caching integration
   - Result: a fresh agent selected the expected `prepare()` plus `layout()` cache pattern and the correct invalidation tuple
+- Forward-test prompt: package entrypoint and declaration output changed
+  - Result: a fresh agent selected `package-workflows.md`, the package confidence loop, and the correct package-contract checks
 
 ## Working Rules
 
