@@ -91,6 +91,7 @@
   - Result: infers validation scope from changed file ownership and returns the merged command set
 - `python skills/pretext/scripts/select_pretext_validation_from_git.py --repo pretext --rev-range ...`
   - Result: infers validation scope directly from upstream git diff state
+- Bare `src/...` paths are supported by the by-files validator when the script is invoked from the workspace root
 - `python C:/Users/MoYeR/.codex/skills/.system/skill-creator/scripts/quick_validate.py G:/AgentProjects/skillsProjest/PretextSkill/skills/pretext`
   - Result: `Skill is valid!`
 - `python C:/Users/MoYeR/.codex/skills/.system/skill-creator/scripts/generate_openai_yaml.py G:/AgentProjects/skillsProjest/PretextSkill/skills/pretext ...`

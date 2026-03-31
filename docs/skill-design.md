@@ -51,9 +51,9 @@ The first version does not need to:
   - whitespace modes, break policy, tabs, zero-width separators, and soft-hyphen behavior
 - `reference/script-and-browser-caveats.md`
   - script-sensitive segmentation, browser caveats, and research canaries
-- `reference/react-recipes.md`
+- `reference/react-dom-recipes.md`
   - React height caching, virtualization, and editor-oriented patterns
-- `reference/custom-rendering-recipes.md`
+- `reference/custom-renderer-recipes.md`
   - Canvas/SVG/WebGL, shrink-wrap, and variable-width flow patterns
 - `reference/package-workflows.md`
   - build, smoke-test, and release-oriented package workflows
@@ -79,6 +79,7 @@ The first version does not need to:
 - Keep package-facing usage and upstream source modification paths clearly separated
 - Make validation routing deterministic instead of relying on memory or intuition
 - Prefer new references only when they reduce ambiguity or shrink the context needed for a common task
+- Prefer direct narrow recipe files once the implementation shape is known, without keeping an extra generic router file
 
 ## Evidence Pointers
 

@@ -59,7 +59,7 @@
 - Command:
   - `python skills/pretext/scripts/select_pretext_validation_by_files.py --path src/analysis.ts --path src/line-break.ts`
 - Result:
-  - Confirmed the by-files validator now works for bare `src/...` paths inside the upstream repo
+  - Confirmed the by-files validator now works for bare `src/...` paths when invoked from the workspace root
 
 - Command:
   - `python skills/pretext/scripts/select_pretext_api.py --goal <every-supported-goal> --format json`
@@ -109,3 +109,8 @@
   - A React chat app wants to cache prepared text and only recompute cheap layout on resize
 - Result:
   - A fresh agent selected the height-only `prepare()` plus `layout()` pattern, cached prepared state by the correct invalidation tuple, and chose `bun run check` as the smallest validation step
+
+- Prompt:
+  - The package entrypoint and declaration output changed, and release confidence is needed for published consumers
+- Result:
+  - A fresh agent selected `package-workflows.md`, chose `bun run check`, `bun run build:package`, and `bun run package-smoke-test`, and validated the package contract correctly
