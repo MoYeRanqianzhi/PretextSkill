@@ -2,6 +2,9 @@
 
 ## 2026-04-01
 
+- Added `skills/pretext/evals/evals.json` as the first formal `skill-creator` eval suite covering every current selector goal
+- Added `docs/evaluation-plan.md` to document the eval coverage model and future review loop
+- Expanded `public-api.md` and `internal-exports.md` so advanced exported types and rich-path fields are more explicitly documented
 - Added `reference/behavior-contracts.md` to separate correctness-contract routing from API and validation routing
 - Extended `select_pretext_api.py` with a `correctness` goal for regression and semantic-contract disputes
 - Updated `SKILL.md`, `public-api.md`, and `troubleshooting.md` to route correctness questions into the new behavior-contract layer

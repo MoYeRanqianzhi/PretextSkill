@@ -12,10 +12,45 @@ Use this file only when the task explicitly requires advanced diagnostics, rich-
   - source comments position it as diagnostic-only
   - do not treat it as the ordinary application integration path
 
+### `PrepareProfile`
+
+Fields:
+
+- Field `analysisMs`
+  - time spent in preprocessing and segmentation
+- Field `measureMs`
+  - time spent measuring prepared segments
+- Field `totalMs`
+  - combined prepare-phase time
+- Field `analysisSegments`
+  - segment count before measurement expansion into prepared structures
+- Field `preparedSegments`
+  - final prepared segment count after the prepare pipeline
+- Field `breakableSegments`
+  - number of prepared segments carrying grapheme-width metadata for break-word behavior
+
+Use it to ask where prepare time or complexity is going, not to drive ordinary rendering logic.
+
 ## Advanced Exported Types
 
 - `PrepareProfile`
 - `PreparedLineChunk`
+
+### `PreparedLineChunk`
+
+Fields:
+
+- Field `startSegmentIndex`
+  - first prepared segment covered by the chunk
+- Field `endSegmentIndex`
+  - prepared segment boundary where the chunk's visible content ends
+- Field `consumedEndSegmentIndex`
+  - prepared segment boundary after any hard-break sentinel consumption
+
+Meaning:
+
+- this type exists to support chunk-aware line walking across explicit hard-break structure
+- treat it as internal layout metadata, not as a stable consumer contract to build product features around
 
 ## Rich-Path Structural Details
 
@@ -26,6 +61,33 @@ Use this file only when the task explicitly requires advanced diagnostics, rich-
 - auxiliary layout metadata such as `discretionaryHyphenWidth`, `tabStopAdvance`, `chunks`, and `segLevels`
 
 Treat this as an escape hatch for custom rendering and diagnostics, not as a promise that normal integrations should depend on every field.
+
+### High-Value Rich Fields
+
+- Field `segments`
+  - normalized prepared segments aligned with the parallel arrays
+- Field `widths`
+  - measured segment widths
+- Field `kinds`
+  - break semantics per segment such as `text`, `space`, `hard-break`, `tab`, or `soft-hyphen`
+- Field `breakableWidths`
+  - per-grapheme widths for breakable runs
+- Field `breakablePrefixWidths`
+  - prefix-width data used by narrow browser-policy shims on some engines
+- Field `discretionaryHyphenWidth`
+  - visible width added when a soft hyphen is chosen as a break
+- Field `tabStopAdvance`
+  - absolute advance between tab stops for pre-wrap tab handling
+- Field `chunks`
+  - precompiled hard-break-aware chunk metadata
+- Field `segLevels`
+  - bidi level metadata for rich-path custom rendering
+
+Selection rule:
+
+- if the task only needs height or line strings, stay on the public API path
+- if the task needs cursor reconstruction, shrink-wrap geometry, or bidi-aware custom rendering, rich fields may be justified
+- if the task wants to persist or expose these fields as product contract, stop and justify why the public surface is insufficient
 
 ## Source Modules
 

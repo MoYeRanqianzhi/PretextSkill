@@ -169,6 +169,11 @@
   - Added `behavior-contracts.md` to the reference set and returned the expected correctness-oriented questions, whitespace guidance, and locale guidance
 
 - Command:
+  - `python -m json.tool skills/pretext/evals/evals.json`
+- Result:
+  - Parsed the formal eval suite successfully after adding prompts for all current selector goals
+
+- Command:
   - `python skills/pretext/scripts/select_pretext_validation.py --area package-workflow --format json`
 - Result:
   - Returned the expected package confidence loop and follow-up API sync check
@@ -214,3 +219,8 @@
   - Compared `pretext/src/layout.test.ts` contracts against the current correctness and troubleshooting references
 - Result:
   - Added `reference/behavior-contracts.md` so correctness disputes can load cross-API and edge-case semantics without inflating `SKILL.md`
+
+- Check:
+  - Compared the current `select_pretext_api.py` goal set against the new eval prompts
+- Result:
+  - Added `skills/pretext/evals/evals.json` so every current selector goal now has at least one substantive eval prompt

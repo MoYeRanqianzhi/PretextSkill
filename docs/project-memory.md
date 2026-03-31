@@ -29,9 +29,11 @@
 - Release tag `v0.6.2` created for finalized recipe routing and git-based validation cleanup
 - Release tag `v0.6.3` created for surface-aware API routing and the shared validation catalog
 - Release tag `v0.6.4` created for behavior-contract routing and correctness-focused progressive disclosure
+- Release tag `v0.6.5` created for the formal eval suite and deeper advanced-type coverage
 - `skills/pretext/` now contains:
   - `SKILL.md`
   - `agents/openai.yaml`
+  - `evals/evals.json`
   - `reference/first-principles.md`
   - `reference/public-api.md`
   - `reference/internal-exports.md`
@@ -68,13 +70,13 @@
 
 ## Known Issues
 
-- There is not yet a formal `skill-creator` eval suite checked into `evals/`
+- The full `skill-creator` review loop has not yet been run against the checked-in eval suite
 - The git-diff validator assumes the local checkout still follows the current `./pretext/` sibling layout when `--repo` is omitted
 - Future demand may justify even narrower renderer references such as dedicated `SVG` or `WebGL` recipes
 
 ## Next Tasks
 
-- Add formal eval prompts and an iterative review loop using the `skill-creator` workflow
+- Run the new formal eval prompts through the full `skill-creator` review loop
 - Observe whether the new `goal + surface` API selector reduces unnecessary reference loading in real agent use
 - Observe whether explicit correctness-contract routing reduces false jumps into upstream internals during debugging
 - Add repo-specific git-diff heuristics only if repeated multi-file change clusters prove worth encoding
@@ -95,6 +97,8 @@
   - Result: now adds `custom-renderer-recipes.md` and renderer-specific guardrails for geometry-only shrink-wrap work
 - `python skills/pretext/scripts/select_pretext_api.py --goal correctness --surface upstream --preserve-whitespace --locale-sensitive --format json`
   - Result: now routes correctness disputes to `behavior-contracts.md` plus the appropriate diagnostic references and preserves whitespace/locale guidance
+- `python -m json.tool skills/pretext/evals/evals.json`
+  - Result: the formal eval suite JSON parses successfully and covers all current selector goals
 - `python skills/pretext/scripts/select_pretext_api.py --goal <every-supported-goal> --format json`
   - Result: all helper-script goals executed successfully after the progressive-disclosure refactor
 - `python skills/pretext/scripts/check_layout_api_sync.py`

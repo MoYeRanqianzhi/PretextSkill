@@ -47,7 +47,7 @@ The skill should help with:
 - `reference/public-api.md`
   - normal package-facing API only
 - `reference/internal-exports.md`
-  - diagnostic helpers, rich-path structural fields, and source-level internals
+  - diagnostic helpers, advanced exported types, rich-path structural fields, and source-level internals
 - `reference/internal-architecture.md`
   - source-level module boundaries, data flow, and change-impact validation
 - `reference/whitespace-and-breaks.md`
@@ -80,6 +80,8 @@ The skill should help with:
   - deterministic helper that infers validation scope from changed file paths
 - `scripts/select_pretext_validation_from_git.py`
   - deterministic helper that infers validation scope directly from upstream git diff state
+- `evals/evals.json`
+  - formal skill-creator eval prompts covering every current selector goal and major surface
 
 ## Current Direction
 
@@ -88,6 +90,7 @@ The skill should help with:
 - Make correctness-contract routing explicit instead of burying it inside generic diagnostics
 - Make validation routing deterministic instead of relying on memory or intuition
 - Cover package, browser, corpus, Gatsby, probe, and demo-site validation surfaces with one shared taxonomy
+- Keep a formal eval suite aligned with the goal and surface taxonomy so regressions are observable
 - Prefer direct narrow recipe files once the implementation shape is known, without keeping an extra generic router file
 
 ## Non-Goals

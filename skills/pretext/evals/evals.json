@@ -1,0 +1,127 @@
+{
+  "skill_name": "pretext",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I have a React chat UI with thousands of message bubbles. I need to predict each bubble's height without touching the DOM during resize, cache the expensive part, and keep the answer correct if the font or locale changes. Which Pretext path should I use and what exactly invalidates prepare vs layout?",
+      "expected_output": "Routes to the height-only React path, chooses prepare() plus layout(), names the full invalidation tuple, and loads the React/DOM recipe rather than rich-renderer references.",
+      "files": [],
+      "expectations": [
+        "Chooses the height goal rather than a rich-path goal",
+        "Selects prepare() plus layout()",
+        "States that text, font, whiteSpace, and locale invalidate preparation",
+        "States that width and lineHeight invalidate only layout",
+        "Points to react-dom-recipes.md or equivalent React/DOM guidance"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "I am drawing subtitles into Canvas at one fixed width and need the actual line strings and widths, not just height. The text includes preserved hard breaks and tabs from editor input. Which Pretext APIs fit this and what assumptions must stay explicit?",
+      "expected_output": "Routes to fixed-width custom rendering, chooses prepareWithSegments() plus layoutWithLines(), preserves pre-wrap semantics, and calls out font, lineHeight, whitespace mode, and width assumptions.",
+      "files": [],
+      "expectations": [
+        "Chooses the fixed-lines goal",
+        "Selects prepareWithSegments() plus layoutWithLines()",
+        "Requires whiteSpace pre-wrap for preserved breaks and tabs",
+        "Calls out font and lineHeight synchronization",
+        "Points to custom-renderer-recipes.md or whitespace-and-breaks.md"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Our product wants the tightest multiline bubble width that still fits the text, and we do not want to materialize line strings during the width search. What is the correct Pretext path and how should the width probe loop be structured?",
+      "expected_output": "Routes to geometry-only shrink-wrap work, chooses prepareWithSegments() plus walkLineRanges(), keeps width probes in the layout phase, and delays line materialization.",
+      "files": [],
+      "expectations": [
+        "Chooses the shrinkwrap or geometry path instead of fixed-lines",
+        "Selects walkLineRanges() rather than layoutWithLines() for the repeated probes",
+        "States that repeated probes stay in the layout phase",
+        "States that line strings should be materialized only after the final width is chosen"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "I need to flow Thai text around an image in Canvas where every row has a different width budget. Spaces, tabs, and hard breaks must stay visible, and locale-sensitive segmentation matters. What Pretext path should I use?",
+      "expected_output": "Routes to the variable-width custom-renderer path, chooses prepareWithSegments() plus layoutNextLine(), enables pre-wrap, and applies setLocale() before preparation.",
+      "files": [],
+      "expectations": [
+        "Chooses the variable-width goal",
+        "Selects layoutNextLine() with a cursor-based loop",
+        "Requires setLocale() before preparing locale-sensitive text",
+        "Requires whiteSpace pre-wrap for visible spaces, tabs, and hard breaks"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "A teammate says Pretext is broken because a pre-wrap editor line keeps trailing tabs before a hard break on the same line. I need to know whether this is an expected contract, an integration bug, or a real regression. How should I investigate?",
+      "expected_output": "Routes to correctness-contract work first, loads behavior contracts and troubleshooting, asks for a minimal repro, and avoids jumping straight into internals.",
+      "files": [],
+      "expectations": [
+        "Chooses the correctness goal or equivalent contract-focused path",
+        "Loads behavior-contracts.md",
+        "Requests an exact repro including text, width, font, lineHeight, locale, and whitespace mode",
+        "Avoids recommending immediate internal source edits before reproducing with exported APIs"
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "Prepare is too slow on a large batch and I need to know whether the cost is in text analysis or measurement. I do not want generic advice; I want the specific Pretext diagnostic path and the lightest follow-up validation.",
+      "expected_output": "Routes to profilePrepare(), distinguishes analysisMs from measureMs, and recommends the lightest benchmark-oriented validation path.",
+      "files": [],
+      "expectations": [
+        "Chooses the profile goal",
+        "Selects profilePrepare()",
+        "Explains analysisMs, measureMs, and totalMs",
+        "Recommends benchmark-check as the lightest relevant follow-up validation"
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "We switch locales at runtime in a rich text editor and after that some prepared measurements look stale. I need to know how setLocale() and clearCache() should be used, what they do to existing prepared values, and what must be re-prepared.",
+      "expected_output": "Routes to cache and locale lifecycle guidance, explains that setLocale() affects future prepares only and clears caches, and distinguishes cache lifecycle from layout invalidation.",
+      "files": [],
+      "expectations": [
+        "Chooses the cache-locale goal",
+        "Explains that setLocale() clears caches",
+        "Explains that existing prepared values do not mutate after locale change",
+        "States that locale changes require re-preparing new text"
+      ]
+    },
+    {
+      "id": 8,
+      "prompt": "I am about to patch upstream analysis.ts because zero-width separators and punctuation glue seem wrong. Before I edit anything, I want the narrowest module-ownership diagnosis and the smallest defensible validation plan.",
+      "expected_output": "Routes to upstream internals and validation planning, identifies analysis.ts ownership, distinguishes downstream line-break effects, and recommends the smallest validation chain before broader sweeps.",
+      "files": [],
+      "expectations": [
+        "Chooses the upstream-internals path rather than a package-facing path",
+        "Identifies analysis.ts as the first owner for preprocessing and glue behavior",
+        "Mentions downstream interaction with line-break.ts when relevant",
+        "Recommends bun test and bun run check before broader browser or corpus sweeps"
+      ]
+    },
+    {
+      "id": 9,
+      "prompt": "We changed the package entrypoint and declaration output and need release confidence for npm consumers, not just confidence in source internals. What should we validate and what package contract matters?",
+      "expected_output": "Routes to package workflows, reasons from package.json and the exports map, and recommends the package confidence loop rather than browser-first validation.",
+      "files": [],
+      "expectations": [
+        "Chooses the package surface",
+        "Loads package-workflows.md",
+        "Mentions the exports map or dist artifact contract",
+        "Recommends bun run check, bun run build:package, and bun run package-smoke-test"
+      ]
+    },
+    {
+      "id": 10,
+      "prompt": "A macOS report says system-ui text is off by a little, and someone wants to patch measurement.ts with guessed font substitution tables. I need a first-principles diagnosis path that distinguishes integration mismatch, known caveat, and true engine bug.",
+      "expected_output": "Routes to diagnostics and caveat handling, calls out system-ui as a known macOS caveat, asks for explicit inputs, and resists speculative internal patches without evidence.",
+      "files": [],
+      "expectations": [
+        "Chooses the diagnostics path",
+        "Identifies system-ui on macOS as a known caveat",
+        "Requests explicit inputs such as font, lineHeight, width, locale, and whitespace mode",
+        "Rejects speculative measurement-table patches without broader evidence"
+      ]
+    }
+  ]
+}

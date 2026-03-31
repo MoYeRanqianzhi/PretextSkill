@@ -73,6 +73,50 @@ Use this file when the task is about the normal package-facing Pretext API.
 - `LayoutLinesResult`
 - `PrepareOptions`
 
+### `PreparedText`
+
+- opaque prepared handle for the height-only path
+- treat it as reusable measured state, not as a structure to inspect
+
+### `PreparedTextWithSegments`
+
+- rich prepared handle for custom rendering and geometry work
+- use it when the task needs line strings, cursors, geometry, or rich-path diagnostics
+- if you only need height, this is usually richer than necessary
+
+### `LayoutCursor`
+
+- `segmentIndex` identifies the current prepared segment
+- `graphemeIndex` identifies the position within that segment
+- `start` cursors are inclusive
+- `end` cursors are exclusive
+
+### `LayoutResult`
+
+- contains only `lineCount` and `height`
+- use this when the app only needs sizing information
+
+### `LayoutLine`
+
+- contains `text`, `width`, `start`, and `end`
+- use this for fixed-width or streamed manual rendering
+
+### `LayoutLineRange`
+
+- geometry-only counterpart to `LayoutLine`
+- carries `width`, `start`, and `end` without materializing line text
+- use this for shrink-wrap, width probing, or cursor-sensitive aggregate work
+
+### `LayoutLinesResult`
+
+- contains `lineCount`, `height`, and `lines`
+- use this for one-shot fixed-width rich layout
+
+### `PrepareOptions`
+
+- currently exposes `whiteSpace?: 'normal' | 'pre-wrap'`
+- use `'pre-wrap'` only when visible spaces, tabs, or hard breaks are semantically required
+
 ## Semantics Pointer
 
 If the task is not "what is exported?" but "what behavior must stay true across these exports?", load [behavior-contracts.md](behavior-contracts.md).
