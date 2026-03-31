@@ -52,9 +52,11 @@ Keep that split intact. If a proposed solution reruns `prepare()` on resize or r
 - Read [reference/react-dom-recipes.md](reference/react-dom-recipes.md) when you need React or DOM-oriented integration patterns such as height caches or whitespace-preserving editors.
 - Read [reference/custom-renderer-recipes.md](reference/custom-renderer-recipes.md) when you need Canvas, SVG, WebGL, shrink-wrap, or variable-width rendering patterns.
 - Read [reference/package-workflows.md](reference/package-workflows.md) when the task is about package shape, published-artifact confidence, or release-oriented validation.
+- Read [reference/upstream-tooling-surfaces.md](reference/upstream-tooling-surfaces.md) when the task is about upstream harnesses, browser checkers, dashboards, report transport, or demo-site plumbing rather than the package API itself.
 - Read [reference/troubleshooting.md](reference/troubleshooting.md) for failure modes, research-backed guardrails, and diagnostic triage.
 - Read [reference/validation-playbook.md](reference/validation-playbook.md) for Bun commands, dashboards, and escalation paths.
 - Run `python scripts/select_pretext_owner.py --issue ...` when you are modifying upstream source and need the first owning module identified before patching internals.
+- Run `python scripts/select_pretext_tooling_surface.py --area ...` when you need the narrowest upstream harness or reporting surface selected before loading broader validation docs.
 - Run `python scripts/select_pretext_validation.py --area ...` when you need the smallest defensible regression plan after changing a specific subsystem or surface.
 - Run `python scripts/select_pretext_validation_by_files.py --path ...` when you already know which files changed and want the validation plan inferred from them.
 - Run `python scripts/select_pretext_validation_from_git.py --repo pretext --rev-range ...` when you want validation inferred directly from upstream git diff state.

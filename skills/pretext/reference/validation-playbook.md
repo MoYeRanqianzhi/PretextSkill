@@ -6,6 +6,7 @@ Use this file when the request is about debugging, browser parity, performance, 
 
 Use the selector scripts before guessing:
 
+- `python scripts/select_pretext_tooling_surface.py --area <area>`
 - `python scripts/select_pretext_validation.py --area <area>`
 - `python scripts/select_pretext_validation_by_files.py --path <changed-file> ...`
 - `python scripts/select_pretext_validation_from_git.py --repo pretext --rev-range <rev-range>`

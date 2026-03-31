@@ -62,6 +62,8 @@ The skill should help with:
   - Canvas/SVG/WebGL, shrink-wrap, variable-width flow, editorial flow, and frame-loop patterns
 - `reference/package-workflows.md`
   - build, smoke-test, package-contract, and release-oriented package workflows
+- `reference/upstream-tooling-surfaces.md`
+  - narrow entry point for benchmark, accuracy, probe, corpus, Gatsby, reporting, demo-site, and package-adjacent harness selection
 - `reference/integration-lifecycle.md`
   - prepare/layout lifecycle patterns for product code
 - `reference/troubleshooting.md`
@@ -72,6 +74,8 @@ The skill should help with:
   - deterministic helper that maps `goal + surface` to the recommended API path, reference set, and first-principles questions, including correctness-contract routing
 - `scripts/select_pretext_owner.py`
   - deterministic helper that maps an upstream issue category to the first owning source module and validation area
+- `scripts/select_pretext_tooling_surface.py`
+  - deterministic helper that maps an upstream harness or reporting concern to the narrowest tooling surface
 - `scripts/check_layout_api_sync.py`
   - deterministic maintenance check that compares documented API entries against `pretext/src/layout.ts`
 - `scripts/check_pretext_eval_coverage.py`
@@ -95,6 +99,7 @@ The skill should help with:
 - Make validation routing deterministic instead of relying on memory or intuition
 - Cover package, browser, corpus, Gatsby, probe, and demo-site validation surfaces with one shared taxonomy
 - Keep a formal eval suite aligned with the goal and surface taxonomy so regressions are observable
+- Keep the upstream tooling layer separate from both package API routing and engine-ownership routing
 - Make upstream module ownership explicit with deterministic routing before patching internals
 - Prefer direct narrow recipe files once the implementation shape is known, without keeping an extra generic router file
 

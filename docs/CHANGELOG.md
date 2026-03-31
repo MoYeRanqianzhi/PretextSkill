@@ -2,6 +2,8 @@
 
 ## 2026-04-01
 
+- Added `reference/upstream-tooling-surfaces.md` and `select_pretext_tooling_surface.py` to route harness, reporting, and demo-site tasks more narrowly
+- Expanded the formal eval suite with tooling-surface prompts and added tooling-area coverage mapping
 - Added `select_pretext_owner.py` to route upstream issue categories to the first owning source module and validation area
 - Added `skills/pretext/evals/coverage.json` and `check_pretext_eval_coverage.py` to keep eval coverage aligned with supported goals and surfaces
 - Expanded validation taxonomy to cover reporting tooling and tighter file-pattern ownership

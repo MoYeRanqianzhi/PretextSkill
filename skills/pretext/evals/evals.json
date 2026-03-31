@@ -122,6 +122,83 @@
         "Requests explicit inputs such as font, lineHeight, width, locale, and whitespace mode",
         "Rejects speculative measurement-table patches without broader evidence"
       ]
+    },
+    {
+      "id": 11,
+      "prompt": "I have one concrete paragraph where our predicted break offsets differ from the browser, and I want the first mismatch with both sides' line text and offsets before I touch source code. Which upstream surface should I use?",
+      "expected_output": "Routes to the probe surface, chooses the one-paragraph diagnostic path, and avoids broader browser sweeps as the first step.",
+      "files": [],
+      "expectations": [
+        "Chooses probe-surface",
+        "Points to probe.ts or probe-check.ts",
+        "Explains that this surface is for one concrete mismatch rather than broad parity"
+      ]
+    },
+    {
+      "id": 12,
+      "prompt": "Chrome and Safari snapshot rows moved across many fonts and widths, and I need the maintained browser-regression gate rather than a single repro page. Which upstream tooling surface should I use first?",
+      "expected_output": "Routes to the accuracy harness and points to the maintained browser snapshot workflow.",
+      "files": [],
+      "expectations": [
+        "Chooses accuracy-harness",
+        "Points to accuracy.ts or accuracy-check.ts",
+        "Distinguishes this from the one-paragraph probe surface"
+      ]
+    },
+    {
+      "id": 13,
+      "prompt": "A prepare regression may have changed analysis-vs-measure cost, and I need the maintained benchmark page and snapshot workflow, not just one inline profile call. Which upstream tooling surface should I use?",
+      "expected_output": "Routes to the benchmark harness and points to the maintained benchmark snapshot workflow.",
+      "files": [],
+      "expectations": [
+        "Chooses benchmark-harness",
+        "Points to benchmark.ts or benchmark-check.ts",
+        "Recognizes analysis-vs-measure split as benchmark-harness work"
+      ]
+    },
+    {
+      "id": 14,
+      "prompt": "A long-form representative corpus row drifts only at certain widths and under alternate fonts, and I need the maintained corpus sweep and font-matrix tooling. Which upstream surface should I use?",
+      "expected_output": "Routes to corpus tooling and points to width sweeps, corpus diagnostics, and font-matrix checks.",
+      "files": [],
+      "expectations": [
+        "Chooses corpus-tooling",
+        "Points to corpus.ts or corpus-check.ts",
+        "Mentions sweeps or font-matrix tooling"
+      ]
+    },
+    {
+      "id": 15,
+      "prompt": "The regression is specifically in the Gatsby long-form compatibility slice, and I want the existing alias workflow rather than a generic corpus command. Which upstream surface should I use?",
+      "expected_output": "Routes to the Gatsby surface and points to the dedicated Gatsby compatibility workflow.",
+      "files": [],
+      "expectations": [
+        "Chooses gatsby-surface",
+        "Points to gatsby.ts or gatsby-check.ts",
+        "Distinguishes this from generic corpus-tooling"
+      ]
+    },
+    {
+      "id": 16,
+      "prompt": "Report posting and dashboard hash transport look broken, but I do not think the text engine itself is wrong. Which upstream tooling surface should I inspect first?",
+      "expected_output": "Routes to reporting tooling and separates report transport from engine semantics.",
+      "files": [],
+      "expectations": [
+        "Chooses reporting-tooling",
+        "Points to report-server.ts or report-utils.ts",
+        "Separates reporting-pipeline failures from engine-correctness failures"
+      ]
+    },
+    {
+      "id": 17,
+      "prompt": "A demo page changed and I need to know whether the human-facing demos and static site still build and present correctly, independent of whether the core engine is right. Which upstream surface should I use?",
+      "expected_output": "Routes to the demo-site surface and treats this as site assembly and presentation work.",
+      "files": [],
+      "expectations": [
+        "Chooses demo-site",
+        "Points to pages/demos or build-demo-site.ts",
+        "Separates demo presentation from core engine semantics"
+      ]
     }
   ]
 }

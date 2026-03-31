@@ -31,6 +31,7 @@
 - Release tag `v0.6.4` created for behavior-contract routing and correctness-focused progressive disclosure
 - Release tag `v0.6.5` created for the formal eval suite and deeper advanced-type coverage
 - Release tag `v0.6.6` created for upstream ownership routing and eval-coverage maintenance
+- Release tag `v0.6.7` created for upstream tooling-surface routing and expanded harness eval coverage
 - `skills/pretext/` now contains:
   - `SKILL.md`
   - `agents/openai.yaml`
@@ -46,11 +47,13 @@
   - `reference/react-dom-recipes.md`
   - `reference/custom-renderer-recipes.md`
   - `reference/package-workflows.md`
+  - `reference/upstream-tooling-surfaces.md`
   - `reference/integration-lifecycle.md`
   - `reference/troubleshooting.md`
   - `reference/validation-playbook.md`
   - `scripts/select_pretext_api.py`
   - `scripts/select_pretext_owner.py`
+  - `scripts/select_pretext_tooling_surface.py`
   - `scripts/check_layout_api_sync.py`
   - `scripts/check_pretext_eval_coverage.py`
   - `scripts/pretext_validation_catalog.py`
@@ -82,6 +85,7 @@
 
 - Run the new formal eval prompts through the full `skill-creator` review loop
 - Use the ownership router on the next upstream-internals pass and refine issue categories only if repeated ambiguity remains
+- Observe whether the tooling-surface router reduces unnecessary loading of the full validation playbook for harness-only tasks
 - Observe whether the new `goal + surface` API selector reduces unnecessary reference loading in real agent use
 - Observe whether explicit correctness-contract routing reduces false jumps into upstream internals during debugging
 - Add repo-specific git-diff heuristics only if repeated multi-file change clusters prove worth encoding
@@ -105,9 +109,11 @@
 - `python -m json.tool skills/pretext/evals/evals.json`
   - Result: the formal eval suite JSON parses successfully and covers all current selector goals
 - `python skills/pretext/scripts/check_pretext_eval_coverage.py`
-  - Result: verifies that every supported goal and non-generic surface still has at least one mapped eval
+  - Result: verifies that every supported goal, non-generic surface, and maintained tooling area still has at least one mapped eval
 - `python skills/pretext/scripts/select_pretext_owner.py --issue segmentation --format json`
   - Result: routes preprocessing and glue issues to `analysis.ts`, with the expected references and validation area
+- `python skills/pretext/scripts/select_pretext_tooling_surface.py --area probe-surface --format json`
+  - Result: routes one-paragraph mismatch work to the probe surface with the expected files, references, and validation area
 - `python skills/pretext/scripts/select_pretext_validation.py --area reporting-tooling --format json`
   - Result: returns the expected reporting-tooling commands and follow-up checks
 - `python skills/pretext/scripts/select_pretext_validation_by_files.py --path pretext/scripts/report-server.ts --path pretext/pages/report-utils.ts`

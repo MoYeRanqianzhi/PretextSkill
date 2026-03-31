@@ -25,6 +25,7 @@ The current eval suite in `skills/pretext/evals/evals.json` is designed to cover
 - upstream internal modifications
 - package release confidence
 - diagnostics and caveat handling
+- upstream tooling-surface selection
 
 This gives at least one realistic prompt for every current `select_pretext_api.py` goal:
 
@@ -45,6 +46,17 @@ It also covers the major integration surfaces:
 - `custom-renderer`
 - `package`
 - `upstream`
+
+And it now covers the maintained tooling areas:
+
+- `accuracy-harness`
+- `benchmark-harness`
+- `probe-surface`
+- `corpus-tooling`
+- `gatsby-surface`
+- `reporting-tooling`
+- `demo-site`
+- `package-workflow`
 
 The coverage mapping is checked in `skills/pretext/evals/coverage.json` and can be validated with `python skills/pretext/scripts/check_pretext_eval_coverage.py`.
 

@@ -8,6 +8,7 @@ import sys
 from pathlib import Path
 
 from select_pretext_api import SUPPORTED_GOALS, SUPPORTED_SURFACES
+from select_pretext_tooling_surface import SUPPORTED_TOOLING_AREAS
 
 
 def main() -> int:
@@ -28,18 +29,34 @@ def main() -> int:
         for eval_id in ids:
             if eval_id not in eval_ids and eval_id not in missing_eval_ids:
                 missing_eval_ids.append(eval_id)
+    for area, ids in coverage_data.get("tooling_areas", {}).items():
+        for eval_id in ids:
+            if eval_id not in eval_ids and eval_id not in missing_eval_ids:
+                missing_eval_ids.append(eval_id)
 
     missing_goals = [goal for goal in SUPPORTED_GOALS if goal not in coverage_data["goals"]]
     missing_surfaces = [surface for surface in SUPPORTED_SURFACES if surface != "generic" and surface not in coverage_data["surfaces"]]
+    missing_tooling_areas = [area for area in SUPPORTED_TOOLING_AREAS if area not in coverage_data.get("tooling_areas", {})]
     empty_goals = [goal for goal in SUPPORTED_GOALS if not coverage_data["goals"].get(goal)]
     empty_surfaces = [
         surface
         for surface in SUPPORTED_SURFACES
         if surface != "generic" and not coverage_data["surfaces"].get(surface)
     ]
+    empty_tooling_areas = [
+        area for area in SUPPORTED_TOOLING_AREAS if not coverage_data.get("tooling_areas", {}).get(area)
+    ]
 
-    if not missing_goals and not missing_surfaces and not empty_goals and not empty_surfaces and not missing_eval_ids:
-        print("Eval coverage is in sync with supported goals and surfaces.")
+    if (
+        not missing_goals
+        and not missing_surfaces
+        and not missing_tooling_areas
+        and not empty_goals
+        and not empty_surfaces
+        and not empty_tooling_areas
+        and not missing_eval_ids
+    ):
+        print("Eval coverage is in sync with supported goals, surfaces, and tooling areas.")
         return 0
 
     if missing_goals:
@@ -58,6 +75,14 @@ def main() -> int:
         print("Surfaces without mapped evals:")
         for surface in empty_surfaces:
             print(f"- {surface}")
+    if missing_tooling_areas:
+        print("Missing tooling areas in coverage.json:")
+        for area in missing_tooling_areas:
+            print(f"- {area}")
+    if empty_tooling_areas:
+        print("Tooling areas without mapped evals:")
+        for area in empty_tooling_areas:
+            print(f"- {area}")
     if missing_eval_ids:
         print("Coverage references unknown eval IDs:")
         for eval_id in sorted(missing_eval_ids):

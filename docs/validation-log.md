@@ -184,6 +184,11 @@
   - Returned the expected ownership recommendation for `analysis.ts`, including references and the `analysis` validation area
 
 - Command:
+  - `python skills/pretext/scripts/select_pretext_tooling_surface.py --area probe-surface --format json`
+- Result:
+  - Returned the expected probe-surface routing with the correct primary files, references, and validation area
+
+- Command:
   - `python skills/pretext/scripts/select_pretext_validation.py --area package-workflow --format json`
 - Result:
   - Returned the expected package confidence loop and follow-up API sync check
@@ -239,3 +244,8 @@
   - Compared the current supported goals and surfaces against the eval coverage map
 - Result:
   - Added `skills/pretext/evals/coverage.json` plus `check_pretext_eval_coverage.py` so eval coverage can be checked deterministically instead of by memory
+
+- Check:
+  - Compared the upstream harness areas against the current eval prompts and validation taxonomy
+- Result:
+  - Added `reference/upstream-tooling-surfaces.md`, `select_pretext_tooling_surface.py`, and new tooling eval prompts so harness selection can be checked deterministically instead of by memory

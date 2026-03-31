@@ -16,5 +16,15 @@
     "custom-renderer": [2, 3, 4],
     "package": [9],
     "upstream": [5, 8, 10]
+  },
+  "tooling_areas": {
+    "accuracy-harness": [12],
+    "benchmark-harness": [13],
+    "probe-surface": [11],
+    "corpus-tooling": [14],
+    "gatsby-surface": [15],
+    "reporting-tooling": [16],
+    "demo-site": [17],
+    "package-workflow": [9]
   }
 }
