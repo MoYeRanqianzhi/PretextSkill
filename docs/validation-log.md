@@ -62,6 +62,11 @@
   - Confirmed the by-files validator now works for bare `src/...` paths when invoked from the workspace root
 
 - Command:
+  - `python skills/pretext/scripts/select_pretext_validation_from_git.py --repo pretext --staged`
+- Result:
+  - Returned the expected empty staged-change plan when no upstream files were staged
+
+- Command:
   - `python skills/pretext/scripts/select_pretext_api.py --goal <every-supported-goal> --format json`
 - Result:
   - All helper goals executed successfully after the trigger and disclosure refactor
@@ -72,6 +77,13 @@
   - `python C:/Users/MoYeR/.codex/skills/.system/skill-creator/scripts/generate_openai_yaml.py G:/AgentProjects/skillsProjest/PretextSkill/skills/pretext ...`
 - Result:
   - Regenerated `agents/openai.yaml` with build-oriented trigger wording and a valid `$pretext` default prompt
+
+### Reliability Checks
+
+- Check:
+  - Compared `SKILL.md` reference links against the actual `skills/pretext/reference/` directory
+- Result:
+  - Fixed a real structural mismatch where the skill referenced recipe filenames that did not exist on disk
 
 ### Forward Testing
 
@@ -114,3 +126,8 @@
   - The package entrypoint and declaration output changed, and release confidence is needed for published consumers
 - Result:
   - A fresh agent selected `package-workflows.md`, chose `bun run check`, `bun run build:package`, and `bun run package-smoke-test`, and validated the package contract correctly
+
+- Prompt:
+  - A reusable React hook should cache prepared text for height-only measurement across many chat bubbles
+- Result:
+  - A fresh agent selected the height-only React pattern, preserved the prepare/layout split in hook form, and used the expected invalidation tuple

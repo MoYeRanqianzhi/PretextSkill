@@ -33,6 +33,7 @@ def run_git_diff(repo_root: Path, staged: bool, rev_range: str | None) -> list[s
 def main() -> int:
     parser = argparse.ArgumentParser(description="Infer a Pretext validation plan from git diff state.")
     parser.add_argument("--repo", default=".", help="Repository root to inspect.")
+    parser.add_argument("--working-tree", action="store_true", help="Use the current working tree diff (default behavior).")
     parser.add_argument("--staged", action="store_true", help="Use staged changes instead of the working tree diff.")
     parser.add_argument("--rev-range", help="Optional git diff revision range, for example HEAD~1..HEAD.")
     parser.add_argument("--revspec", help="Alias for --rev-range, for example HEAD~1..HEAD.")
@@ -41,8 +42,12 @@ def main() -> int:
 
     repo_root = Path(args.repo).resolve()
     rev_range = args.revspec or args.rev_range
+    staged = args.staged
+    if args.working_tree:
+        staged = False
+
     try:
-        changed_paths = run_git_diff(repo_root, args.staged, rev_range)
+        changed_paths = run_git_diff(repo_root, staged, rev_range)
     except RuntimeError as exc:
         print(str(exc), file=sys.stderr)
         return 1

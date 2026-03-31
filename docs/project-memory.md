@@ -25,6 +25,7 @@
 - Release tag `v0.4.0` created for upstream internal-architecture guidance and validation routing
 - Release tag `v0.5.0` created for app-level recipes and file-based validation routing
 - Release tag `v0.6.0` created for narrowed recipe routing and git-diff-based validation inference
+- Release tag `v0.6.1` created for streamlining recipe references
 - `npx skills init` produced the initial minimal `skills/pretext/SKILL.md` scaffold
 - A `.gitignore` bug was discovered and fixed: `pretext/` also ignored `skills/pretext/`; the correct rule is `/pretext/`
 - `skills/pretext/` now contains:
@@ -68,7 +69,7 @@
 
 - Add more recipes only when repeated demand appears
 - Observe whether the new trigger wording improves build-mode activation without increasing false positives
-- Consider deeper recipe references only if repeated demand appears for React hooks, Canvas loops, or package-release workflows
+- Consider deeper recipe references only if repeated demand appears for React hooks, Canvas loops, SVG/WebGL variants, or package-release workflows
 - Consider repo-specific heuristics only if plain git-diff validation routing proves insufficient
 
 ## Validation Record
@@ -91,6 +92,8 @@
   - Result: infers validation scope from changed file ownership and returns the merged command set
 - `python skills/pretext/scripts/select_pretext_validation_from_git.py --repo pretext --rev-range ...`
   - Result: infers validation scope directly from upstream git diff state
+- `python skills/pretext/scripts/select_pretext_validation_from_git.py --repo pretext --staged`
+  - Result: supports an explicit staged-change preset in addition to working-tree and revision-range usage
 - Bare `src/...` paths are supported by the by-files validator when the script is invoked from the workspace root
 - `python C:/Users/MoYeR/.codex/skills/.system/skill-creator/scripts/quick_validate.py G:/AgentProjects/skillsProjest/PretextSkill/skills/pretext`
   - Result: `Skill is valid!`
