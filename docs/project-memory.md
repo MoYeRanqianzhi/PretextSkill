@@ -21,6 +21,7 @@
 - Release tag `v0.0.0` created for the repository bootstrap milestone
 - Release tag `v0.1.0` created for the initial English skill milestone
 - Release tag `v0.2.0` created for the first-principles disclosure refactor
+- Release tag `v0.3.0` created for trigger refinement, API-boundary cleanup, and sync-check tooling
 - `npx skills init` produced the initial minimal `skills/pretext/SKILL.md` scaffold
 - A `.gitignore` bug was discovered and fixed: `pretext/` also ignored `skills/pretext/`; the correct rule is `/pretext/`
 - `skills/pretext/` now contains:
