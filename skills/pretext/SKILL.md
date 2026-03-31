@@ -19,22 +19,24 @@ Keep that split intact. If a proposed solution reruns `prepare()` on resize or r
 3. Which inputs invalidate preparation, and which inputs invalidate only layout?
 4. Is this a lifecycle problem, a behavior problem, a browser caveat, or a validation problem?
 
-## Start From Output Shape
+## Choose Output Shape And Surface
 
-1. Need only block height or line count:
-   - use `prepare()` plus `layout()`
-2. Need concrete line strings at one fixed width:
-   - use `prepareWithSegments()` plus `layoutWithLines()`
-3. Need geometry and cursors without line strings:
-   - use `prepareWithSegments()` plus `walkLineRanges()`
-4. Need per-line varying widths:
-   - use `prepareWithSegments()` plus `layoutNextLine()`
-5. Need prepare-phase timing or segment-count diagnostics:
-   - use `profilePrepare()` as a diagnostic helper, not as the normal integration path
-6. Need locale or cache control:
-   - use `setLocale()` or `clearCache()`
-7. Need deeper access to `analysis.ts`, `measurement.ts`, `line-break.ts`, or `bidi.ts`:
-   - treat them as source-level internals for upstream repo work, not as default package-public imports
+1. Choose the output-shape goal:
+   - `height`
+   - `fixed-lines`
+   - `geometry`
+   - `variable-width`
+   - `shrinkwrap`
+   - `profile`
+   - `cache-locale`
+   - `upstream-internals`
+   - `diagnostics`
+2. Choose the integration surface when it matters:
+   - `react-dom`
+   - `custom-renderer`
+   - `package`
+   - `upstream`
+3. Run `python scripts/select_pretext_api.py --goal <goal> --surface <surface>` when you want the narrow API path, invalidation tuple, and reference set selected deterministically.
 
 ## Load Only The Needed Reference
 
@@ -50,8 +52,7 @@ Keep that split intact. If a proposed solution reruns `prepare()` on resize or r
 - Read [reference/package-workflows.md](reference/package-workflows.md) when the task is about package shape, published-artifact confidence, or release-oriented validation.
 - Read [reference/troubleshooting.md](reference/troubleshooting.md) for failure modes, research-backed guardrails, and diagnostic triage.
 - Read [reference/validation-playbook.md](reference/validation-playbook.md) for Bun commands, dashboards, and escalation paths.
-- Run `python scripts/select_pretext_api.py --goal ...` when a deterministic recommendation is helpful.
-- Run `python scripts/select_pretext_validation.py --area ...` when you need the smallest defensible regression plan after changing a specific subsystem.
+- Run `python scripts/select_pretext_validation.py --area ...` when you need the smallest defensible regression plan after changing a specific subsystem or surface.
 - Run `python scripts/select_pretext_validation_by_files.py --path ...` when you already know which files changed and want the validation plan inferred from them.
 - Run `python scripts/select_pretext_validation_from_git.py --repo pretext --rev-range ...` when you want validation inferred directly from upstream git diff state.
 

@@ -26,9 +26,8 @@
 - Release tag `v0.5.0` created for app-level recipes and file-based validation routing
 - Release tag `v0.6.0` created for narrowed recipe routing and git-diff-based validation inference
 - Release tag `v0.6.1` created for streamlining recipe references
-- Release tag `v0.6.2` created for finalized narrow recipe files and git-diff validation presets
-- `npx skills init` produced the initial minimal `skills/pretext/SKILL.md` scaffold
-- A `.gitignore` bug was discovered and fixed: `pretext/` also ignored `skills/pretext/`; the correct rule is `/pretext/`
+- Release tag `v0.6.2` created for finalized recipe routing and git-based validation cleanup
+- Release tag `v0.6.3` created for surface-aware API routing and the shared validation catalog
 - `skills/pretext/` now contains:
   - `SKILL.md`
   - `agents/openai.yaml`
@@ -46,62 +45,76 @@
   - `reference/validation-playbook.md`
   - `scripts/select_pretext_api.py`
   - `scripts/check_layout_api_sync.py`
+  - `scripts/pretext_validation_catalog.py`
   - `scripts/select_pretext_validation.py`
   - `scripts/select_pretext_validation_by_files.py`
   - `scripts/select_pretext_validation_from_git.py`
 
 ## Durable Decisions
 
-- Write the skill and new project docs in English to support internationalized reuse
+- Write the skill and project docs in English to support internationalized reuse
 - Keep progressive disclosure strict:
-  - `SKILL.md` contains only the first-principles model, API-shape routing, and load instructions
-  - `reference/` is split by cognitive concern, not by arbitrary feature buckets
+  - `SKILL.md` contains only the first-principles model, routing questions, and load instructions
+  - `reference/` is split by cognitive concern and integration surface
   - `scripts/` is reserved for deterministic helpers that are worth executing
-- Optimize trigger text for user intent first, and literal export names second
-- Treat the reference repository as the source of truth for API names, workflows, and caveats
+- Model API selection as `goal + surface + invalidation tuple`
+- Treat the reference repository as the source of truth for API names, workflows, caveats, and validation commands
 - Treat `src/layout.ts` as the normal product-facing API, and lower-level source modules as advanced diagnostics or upstream-hacking surfaces rather than package-public import targets
+- Treat validation taxonomy as shared data across scripts so the manual selector, by-file selector, and git-diff selector cannot drift silently
 - Prefer direct narrow recipe files over a generic recipe bucket when the task intent is already clear
 
 ## Known Issues
 
-- The skill may still need framework-specific recipes if future work targets React, Canvas-only pipelines, or packaging examples in more depth
+- There is not yet a formal `skill-creator` eval suite checked into `evals/`
+- The git-diff validator assumes the local checkout still follows the current `./pretext/` sibling layout when `--repo` is omitted
+- Future demand may justify even narrower renderer references such as dedicated `SVG` or `WebGL` recipes
 
 ## Next Tasks
 
-- Add more recipes only when repeated demand appears
-- Observe whether the new trigger wording improves build-mode activation without increasing false positives
-- Consider deeper recipe references only if repeated demand appears for React hooks, Canvas loops, SVG/WebGL variants, or package-release workflows
-- Consider repo-specific heuristics only if plain git-diff validation routing proves insufficient
+- Add formal eval prompts and an iterative review loop using the `skill-creator` workflow
+- Observe whether the new `goal + surface` API selector reduces unnecessary reference loading in real agent use
+- Add repo-specific git-diff heuristics only if repeated multi-file change clusters prove worth encoding
 
 ## Validation Record
 
+- `python <codex-home>/skills/.system/skill-creator/scripts/quick_validate.py skills/pretext`
+  - Result: `Skill is valid!`
 - `python skills/pretext/scripts/select_pretext_api.py --goal variable-width --preserve-whitespace`
   - Result: script executed successfully and returned the expected API recommendation
 - `python skills/pretext/scripts/select_pretext_api.py --goal profile --format json`
-  - Result: script now returns diagnostic guidance for `profilePrepare()`, plus relevant references and invalidation rules
+  - Result: returns diagnostic guidance for `profilePrepare()`, plus relevant references and invalidation rules
 - `python skills/pretext/scripts/select_pretext_api.py --goal upstream-internals`
-  - Result: script now routes explicitly to internal exports only when package-facing APIs are insufficient
+  - Result: routes explicitly to internal exports only when package-facing APIs are insufficient
+- `python skills/pretext/scripts/select_pretext_api.py --goal height --surface react-dom --format json`
+  - Result: now adds `react-dom-recipes.md` to the narrow reference set for height-only UI work
+- `python skills/pretext/scripts/select_pretext_api.py --goal shrinkwrap --surface custom-renderer`
+  - Result: now adds `custom-renderer-recipes.md` and renderer-specific guardrails for geometry-only shrink-wrap work
 - `python skills/pretext/scripts/select_pretext_api.py --goal <every-supported-goal> --format json`
   - Result: all helper-script goals executed successfully after the progressive-disclosure refactor
 - `python skills/pretext/scripts/check_layout_api_sync.py`
   - Result: validates that the skill's API docs cover the exports from `pretext/src/layout.ts`
 - `python skills/pretext/scripts/select_pretext_validation.py --area <area>`
-  - Result: returns a minimal validation plan tied to the changed subsystem
-- `python skills/pretext/scripts/select_pretext_validation.py --area analysis --format json`
-  - Result: returns the expected first-pass validation commands and escalation checks for preprocessing changes
+  - Result: returns a minimal validation plan tied to the changed subsystem or surface
+- `python skills/pretext/scripts/select_pretext_validation.py --area package-workflow --format json`
+  - Result: returns the expected package-contract confidence loop
+- `python skills/pretext/scripts/select_pretext_validation.py --area accuracy-harness`
+  - Result: returns the expected browser-parity and whitespace-oracle plan
 - `python skills/pretext/scripts/select_pretext_validation_by_files.py --path <changed-file> ...`
   - Result: infers validation scope from changed file ownership and returns the merged command set
-- `python skills/pretext/scripts/select_pretext_validation_from_git.py --repo pretext --rev-range ...`
+- `python skills/pretext/scripts/select_pretext_validation_by_files.py --path pretext/pages/demos/bubbles.ts --path pretext/pages/probe.ts`
+  - Result: now merges demo-site and probe validation surfaces correctly
+- `python skills/pretext/scripts/select_pretext_validation_by_files.py --path docs/CHANGELOG.md --path pretext/CHANGELOG.md`
+  - Result: ignores the workspace changelog and matches only the upstream `pretext/CHANGELOG.md` package surface
+- `python skills/pretext/scripts/select_pretext_validation_from_git.py --repo pretext --rev-range HEAD~1..HEAD`
   - Result: infers validation scope directly from upstream git diff state
 - `python skills/pretext/scripts/select_pretext_validation_from_git.py --repo pretext --staged`
-  - Result: supports an explicit staged-change preset in addition to working-tree and revision-range usage
-- Bare `src/...` paths are supported by the by-files validator when the script is invoked from the workspace root
-- `python C:/Users/MoYeR/.codex/skills/.system/skill-creator/scripts/quick_validate.py G:/AgentProjects/skillsProjest/PretextSkill/skills/pretext`
-  - Result: `Skill is valid!`
-- `python C:/Users/MoYeR/.codex/skills/.system/skill-creator/scripts/generate_openai_yaml.py G:/AgentProjects/skillsProjest/PretextSkill/skills/pretext ...`
+  - Result: supports an explicit staged-change mode and returns an empty plan when no upstream files are staged
+- `Get-ChildItem 'skills/pretext/scripts' -Filter '*.py' | ForEach-Object { python -m py_compile $_.FullName }`
+  - Result: all helper scripts compile after the shared-catalog refactor
+- `python <codex-home>/skills/.system/skill-creator/scripts/generate_openai_yaml.py skills/pretext ...`
   - Result: regenerated `agents/openai.yaml` with build-oriented trigger text and a valid `$pretext` default prompt
 - Forward-test prompt: height-only React chat bubble estimation
-  - Result: a fresh agent selected `prepare()` plus `layout()`, cached prepared state, and warned against rerunning `prepare()` on resize
+  - Result: a fresh agent selected `prepare()` plus `layout()`, cached prepared state correctly, and warned against rerunning `prepare()` on resize
 - Forward-test prompt: Canvas text flowing around an image with Thai segmentation and preserved breaks
   - Result: a fresh agent selected `prepareWithSegments()` plus `layoutNextLine()`, required `{ whiteSpace: 'pre-wrap' }`, and correctly called out `setLocale('th')`
 - Forward-test prompt: diagnose prepare-phase slowness on a large batch

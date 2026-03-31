@@ -4,8 +4,11 @@
 from __future__ import annotations
 
 import argparse
+import fnmatch
 import json
 from dataclasses import asdict, dataclass
+
+from pretext_validation_catalog import FILE_PATTERNS, PLANS
 
 
 @dataclass(frozen=True)
@@ -17,77 +20,6 @@ class FilePlan:
     matched_paths: list[str]
 
 
-AREA_BY_PATTERN: list[tuple[str, str]] = [
-    ("src/analysis.ts", "analysis"),
-    ("src/measurement.ts", "measurement"),
-    ("src/line-break.ts", "line-break"),
-    ("src/layout.ts", "layout-api"),
-    ("src/bidi.ts", "bidi"),
-    ("pages/benchmark.ts", "benchmark-harness"),
-    ("scripts/browser-automation.ts", "browser-tooling"),
-    ("scripts/accuracy-check.ts", "browser-tooling"),
-    ("scripts/probe-check.ts", "browser-tooling"),
-    ("scripts/pre-wrap-check.ts", "browser-tooling"),
-    ("scripts/benchmark-check.ts", "benchmark-harness"),
-    ("scripts/status-dashboard.ts", "benchmark-harness"),
-    ("scripts/corpus-check.ts", "corpus-tooling"),
-    ("scripts/corpus-sweep.ts", "corpus-tooling"),
-    ("scripts/corpus-font-matrix.ts", "corpus-tooling"),
-    ("scripts/corpus-status.ts", "corpus-tooling"),
-    ("scripts/corpus-representative.ts", "corpus-tooling"),
-    ("scripts/corpus-taxonomy.ts", "corpus-tooling"),
-    ("scripts/gatsby-check.ts", "corpus-tooling"),
-    ("scripts/gatsby-sweep.ts", "corpus-tooling"),
-    ("scripts/package-smoke-test.ts", "package-workflow"),
-    ("scripts/build-demo-site.ts", "site-tooling"),
-    ("package.json", "layout-api"),
-    ("README.md", "layout-api"),
-]
-
-COMMANDS_BY_AREA: dict[str, tuple[list[str], list[str]]] = {
-    "analysis": (
-        ["bun test", "bun run check"],
-        ["bun run pre-wrap-check", "bun run accuracy-check", "bun run corpus-check"],
-    ),
-    "measurement": (
-        ["bun test", "bun run check"],
-        ["bun run benchmark-check", "bun run accuracy-check", "bun run probe-check", "bun run benchmark-check:safari"],
-    ),
-    "line-break": (
-        ["bun test", "bun run check"],
-        ["bun run pre-wrap-check", "geometry-only forward test", "shrink-wrap forward test", "bun run accuracy-check", "bun run corpus-check"],
-    ),
-    "layout-api": (
-        ["bun test", "bun run check", "bun run package-smoke-test", "python skills/pretext/scripts/check_layout_api_sync.py"],
-        ["bun run benchmark-check"],
-    ),
-    "bidi": (
-        ["bun test", "bun run check"],
-        ["targeted mixed-direction repro", "bun run accuracy-check", "bun run corpus-check"],
-    ),
-    "benchmark-harness": (
-        ["bun run benchmark-check", "bun run status-dashboard"],
-        ["bun run benchmark-check:safari"],
-    ),
-    "browser-tooling": (
-        ["bun run accuracy-check", "bun run probe-check"],
-        ["bun run accuracy-check:safari", "bun run accuracy-check:firefox", "bun run pre-wrap-check"],
-    ),
-    "corpus-tooling": (
-        ["bun run corpus-check", "bun run corpus-status"],
-        ["bun run corpus-sweep", "bun run corpus-font-matrix", "bun run accuracy-check"],
-    ),
-    "package-workflow": (
-        ["bun run package-smoke-test", "bun run check", "bun run build:package"],
-        ["python skills/pretext/scripts/check_layout_api_sync.py"],
-    ),
-    "site-tooling": (
-        ["bun run site:build"],
-        ["bun run check"],
-    ),
-}
-
-
 def normalize(path: str) -> str:
     return path.replace("\\", "/").strip()
 
@@ -95,8 +27,24 @@ def normalize(path: str) -> str:
 def matches_pattern(path: str, pattern: str) -> bool:
     normalized_path = normalize(path)
     normalized_pattern = normalize(pattern)
-    repo_relative_pattern = normalized_pattern.removeprefix("pretext/")
-    return normalized_path.endswith(normalized_pattern) or normalized_path.endswith(repo_relative_pattern)
+    candidates = {
+        normalized_path,
+        normalized_path.removeprefix("pretext/"),
+    }
+    patterns = {
+        normalized_pattern,
+        normalized_pattern.removeprefix("pretext/"),
+    }
+    for candidate in candidates:
+        for candidate_pattern in patterns:
+            if "*" in candidate_pattern and fnmatch.fnmatch(candidate, candidate_pattern):
+                return True
+            if "/" in candidate_pattern:
+                if candidate.endswith(candidate_pattern):
+                    return True
+            elif candidate == candidate_pattern:
+                return True
+    return False
 
 
 def plan_for_paths(paths: list[str]) -> FilePlan:
@@ -104,7 +52,7 @@ def plan_for_paths(paths: list[str]) -> FilePlan:
     areas: list[str] = []
     for raw_path in paths:
         path = normalize(raw_path)
-        for pattern, area in AREA_BY_PATTERN:
+        for pattern, area in FILE_PATTERNS:
             if matches_pattern(path, pattern):
                 matched_paths.append(path)
                 if area not in areas:
@@ -123,11 +71,11 @@ def plan_for_paths(paths: list[str]) -> FilePlan:
     commands: list[str] = []
     follow_up_checks: list[str] = []
     for area in areas:
-        base_commands, base_follow_ups = COMMANDS_BY_AREA[area]
-        for command in base_commands:
+        plan = PLANS[area]
+        for command in plan.commands:
             if command not in commands:
                 commands.append(command)
-        for check in base_follow_ups:
+        for check in plan.follow_up_checks:
             if check not in follow_up_checks:
                 follow_up_checks.append(check)
 

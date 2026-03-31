@@ -16,6 +16,19 @@ The published package is a built ESM artifact:
 
 Treat this as the package-consumer contract. Do not reason from raw source alone when the task is about publishing or consuming the package.
 
+## Shipped Files Versus Exported Contract
+
+The tarball also ships:
+
+- `dist/`
+- `src/`
+- `pages/demos/`
+- `pages/assets/`
+- `CHANGELOG.md`
+- `LICENSE`
+
+This does not mean consumers should import repo-internal modules from `src/`. The `exports` map still defines the supported import surface.
+
 ## Package Confidence Loop
 
 Commands:
@@ -30,6 +43,7 @@ Use this loop when:
 - exported types change
 - package build output changes
 - consumer-facing API shape changes
+- `package.json`, `tsconfig.build.json`, or `scripts/package-smoke-test.ts` changes
 
 ## Packaging Mechanics
 
@@ -42,6 +56,14 @@ Use this loop when:
 - validate package-consumer behavior separately from upstream source internals
 - use [public-api.md](public-api.md) for the package-facing contract
 - use [internal-exports.md](internal-exports.md) only when the release is about upstream repo internals rather than package consumers
+- when package shape changes, also run `python skills/pretext/scripts/check_layout_api_sync.py`
+
+## Upstream Anchors
+
+- `pretext/package.json`
+- `pretext/CHANGELOG.md`
+- `pretext/scripts/package-smoke-test.ts`
+- `pretext/tsconfig.build.json`
 
 ## When To Escalate
 
@@ -50,3 +72,4 @@ Escalate beyond the package confidence loop when:
 - browser parity may have shifted
 - benchmark methodology changed
 - text-engine internals changed in a way that could move correctness or performance
+- demo-site assets or exported demo pages changed and the packaged examples may need checking

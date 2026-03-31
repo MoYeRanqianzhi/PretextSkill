@@ -5,7 +5,7 @@
 ### Structure Validation
 
 - Command:
-  - `python C:/Users/MoYeR/.codex/skills/.system/skill-creator/scripts/quick_validate.py G:/AgentProjects/skillsProjest/PretextSkill/skills/pretext`
+  - `python <codex-home>/skills/.system/skill-creator/scripts/quick_validate.py skills/pretext`
 - Result:
   - `Skill is valid!`
 
@@ -74,7 +74,7 @@
 ### Metadata Validation
 
 - Command:
-  - `python C:/Users/MoYeR/.codex/skills/.system/skill-creator/scripts/generate_openai_yaml.py G:/AgentProjects/skillsProjest/PretextSkill/skills/pretext ...`
+  - `python <codex-home>/skills/.system/skill-creator/scripts/generate_openai_yaml.py skills/pretext ...`
 - Result:
   - Regenerated `agents/openai.yaml` with build-oriented trigger wording and a valid `$pretext` default prompt
 
@@ -131,3 +131,76 @@
   - A reusable React hook should cache prepared text for height-only measurement across many chat bubbles
 - Result:
   - A fresh agent selected the height-only React pattern, preserved the prepare/layout split in hook form, and used the expected invalidation tuple
+
+## 2026-04-01
+
+### Structure Validation
+
+- Command:
+  - `python <codex-home>/skills/.system/skill-creator/scripts/quick_validate.py skills/pretext`
+- Result:
+  - `Skill is valid!`
+
+### Script Validation
+
+- Command:
+  - `Get-ChildItem 'skills/pretext/scripts' -Filter '*.py' | ForEach-Object { python -m py_compile $_.FullName }`
+- Result:
+  - All helper scripts compiled successfully after introducing the shared validation catalog
+
+- Command:
+  - `python skills/pretext/scripts/check_layout_api_sync.py`
+- Result:
+  - Returned `Layout export docs are in sync.`
+
+- Command:
+  - `python skills/pretext/scripts/select_pretext_api.py --goal height --surface react-dom --format json`
+- Result:
+  - Added `react-dom-recipes.md` to the reference set and returned the expected height-only invalidation tuple
+
+- Command:
+  - `python skills/pretext/scripts/select_pretext_api.py --goal shrinkwrap --surface custom-renderer`
+- Result:
+  - Added `custom-renderer-recipes.md` and renderer-specific guardrails for geometry-only shrink-wrap work
+
+- Command:
+  - `python skills/pretext/scripts/select_pretext_validation.py --area package-workflow --format json`
+- Result:
+  - Returned the expected package confidence loop and follow-up API sync check
+
+- Command:
+  - `python skills/pretext/scripts/select_pretext_validation.py --area accuracy-harness`
+- Result:
+  - Returned the expected browser-parity and whitespace-oracle plan
+
+- Command:
+  - `python skills/pretext/scripts/select_pretext_validation_by_files.py --path pretext/pages/demos/bubbles.ts --path pretext/pages/probe.ts`
+- Result:
+  - Merged `demo-site` and `probe-surface` validation areas into one command plan
+
+- Command:
+  - `python skills/pretext/scripts/select_pretext_validation_by_files.py --path docs/CHANGELOG.md --path pretext/CHANGELOG.md`
+- Result:
+  - Matched only `pretext/CHANGELOG.md`, confirming the path matcher no longer over-matches unrelated workspace files
+
+- Command:
+  - `python skills/pretext/scripts/select_pretext_validation_from_git.py --repo pretext --rev-range HEAD~1..HEAD`
+- Result:
+  - Returned a git-diff-derived validation plan for the current upstream revision range
+
+- Command:
+  - `python skills/pretext/scripts/select_pretext_validation_from_git.py --repo pretext --staged`
+- Result:
+  - Returned an empty plan when no upstream files were staged
+
+### Reliability Checks
+
+- Check:
+  - Compared the validation area taxonomy across `select_pretext_validation.py`, `select_pretext_validation_by_files.py`, and `select_pretext_validation_from_git.py`
+- Result:
+  - Replaced duplicated area definitions with the shared `pretext_validation_catalog.py` module
+
+- Check:
+  - Compared `SKILL.md` routing against the real reference and script surface
+- Result:
+  - Reframed Level 2 around `goal + surface` selection and kept the narrower recipes in Level 3 references

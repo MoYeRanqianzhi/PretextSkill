@@ -15,25 +15,26 @@ Core exported workflows from the README and source:
 - `walkLineRanges()` for width and cursor-only iteration without building line strings
 - `layoutNextLine()` for variable-width line-by-line layout
 - `clearCache()` and `setLocale()` for cache and locale management
+- `profilePrepare()` as a diagnostic export rather than a default integration path
 
 ## Skill Scope
 
 The skill should help with:
 
-- Choosing the correct Pretext API for a product requirement
-- Integrating Pretext into UI code without breaking the prepare/layout split
-- Preserving correctness constraints such as matching `font`, `lineHeight`, and `whiteSpace`
-- Debugging common accuracy pitfalls like `system-ui` on macOS or repeated `prepare()` calls
-- Planning validation using the reference repo's demo pages and benchmark or accuracy scripts
+- choosing the correct Pretext API for a product requirement
+- choosing the correct integration surface, not only the correct API shape
+- integrating Pretext into UI code without breaking the prepare/layout split
+- preserving correctness constraints such as matching `font`, `lineHeight`, and `whiteSpace`
+- debugging common accuracy pitfalls like `system-ui` on macOS or repeated `prepare()` calls
+- planning validation using deterministic selectors instead of memory or intuition
 
-## Non-Goals
+## Design Principles
 
-The first version does not need to:
-
-- Reproduce the entire research archive from the reference repository
-- Bundle the whole reference repo into the skill
-- Expose every internal source file in `SKILL.md`
-- Pretend repo-internal source modules are equivalent to stable package-public imports
+- Keep `SKILL.md` as a narrow Level-2 router
+- Model decisions as `output shape + integration surface + invalidation tuple`
+- Keep package-facing usage and upstream source modification paths clearly separated
+- Treat validation taxonomy as shared data, not duplicated prose across scripts
+- Prefer new references only when they reduce ambiguity or shrink the context needed for a common task
 
 ## Planned Skill Assets
 
@@ -52,39 +53,54 @@ The first version does not need to:
 - `reference/script-and-browser-caveats.md`
   - script-sensitive segmentation, browser caveats, and research canaries
 - `reference/react-dom-recipes.md`
-  - React height caching, hook patterns, virtualization, and editor-oriented patterns
+  - React height caching, hook patterns, virtualization, editor-oriented patterns, and DOM guardrails
 - `reference/custom-renderer-recipes.md`
-  - Canvas/SVG/WebGL, shrink-wrap, variable-width flow, and frame-loop patterns
+  - Canvas/SVG/WebGL, shrink-wrap, variable-width flow, editorial flow, and frame-loop patterns
 - `reference/package-workflows.md`
-  - build, smoke-test, and release-oriented package workflows
+  - build, smoke-test, package-contract, and release-oriented package workflows
 - `reference/integration-lifecycle.md`
   - prepare/layout lifecycle patterns for product code
 - `reference/troubleshooting.md`
   - research-backed debugging guardrails and canaries
 - `reference/validation-playbook.md`
-  - demo, benchmark, accuracy, and corpus-related validation entry points
+  - area selection, git-diff routing, and validation surface inventory
 - `scripts/select_pretext_api.py`
-  - deterministic helper that maps a requested layout scenario to the recommended Pretext API path, reference set, and first-principles questions
+  - deterministic helper that maps `goal + surface` to the recommended API path, reference set, and first-principles questions
 - `scripts/check_layout_api_sync.py`
   - deterministic maintenance check that compares documented API entries against `pretext/src/layout.ts`
+- `scripts/pretext_validation_catalog.py`
+  - shared validation taxonomy used by the validation-selector helpers
 - `scripts/select_pretext_validation.py`
-  - deterministic helper that maps a changed subsystem to the smallest defensible validation plan
+  - deterministic helper that maps a changed subsystem or surface to the smallest defensible validation plan
 - `scripts/select_pretext_validation_by_files.py`
   - deterministic helper that infers validation scope from changed file paths
 - `scripts/select_pretext_validation_from_git.py`
-  - deterministic helper that infers validation scope directly from upstream git diff state, staged changes, or revision ranges
+  - deterministic helper that infers validation scope directly from upstream git diff state
 
 ## Current Direction
 
 - Keep package-facing usage and upstream source modification paths clearly separated
+- Make API routing explicit across both output shape and integration surface
 - Make validation routing deterministic instead of relying on memory or intuition
-- Prefer new references only when they reduce ambiguity or shrink the context needed for a common task
+- Cover package, browser, corpus, Gatsby, probe, and demo-site validation surfaces with one shared taxonomy
 - Prefer direct narrow recipe files once the implementation shape is known, without keeping an extra generic router file
+
+## Non-Goals
+
+The skill still does not try to:
+
+- reproduce the entire research archive from the reference repository
+- bundle the whole reference repo into the skill
+- expose every internal source file in `SKILL.md`
+- pretend repo-internal source modules are equivalent to stable package-public imports
 
 ## Evidence Pointers
 
 - `pretext/README.md`
 - `pretext/src/layout.ts`
+- `pretext/src/layout.test.ts`
 - `pretext/src/analysis.ts`
 - `pretext/DEVELOPMENT.md`
 - `pretext/STATUS.md`
+- `pretext/RESEARCH.md`
+- `pretext/package.json`

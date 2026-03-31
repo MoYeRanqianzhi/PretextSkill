@@ -2,6 +2,13 @@
 
 Use this file when the task is about Canvas, SVG, WebGL, shrink-wrap search, or variable-width flow.
 
+## First-Principles Lens
+
+- Height-only consumers should stay on `prepare()` plus `layout()`
+- Rich renderers should pay for `prepareWithSegments()` only when they need lines, cursors, or geometry
+- Repeated width probes, animation frames, and row-by-row flow belong in the layout phase
+- Final text materialization should happen as late as possible
+
 ## Fixed-Width Canvas Or SVG Rendering
 
 Use this pattern when the renderer needs concrete lines at one width.
@@ -17,6 +24,12 @@ Rules:
 
 - prefer `layoutWithLines()` when the renderer needs actual line text
 - keep `font` and `lineHeight` synchronized with the rendering context
+- do not use the rich path if the renderer only needs final height
+
+Upstream anchors:
+
+- `pretext/pages/probe.ts`
+- `pretext/pages/corpus.ts`
 
 ## Geometry-Only Shrink-Wrap Search
 
@@ -36,6 +49,12 @@ Rules:
 - keep repeated width probes in `walkLineRanges()`
 - materialize lines only after choosing the final width
 - treat geometry-only probing as layout-phase work, not prepare-phase work
+
+Upstream anchors:
+
+- `pretext/pages/demos/bubbles-shared.ts`
+- `pretext/pages/demos/bubbles.ts`
+- `pretext/pages/demos/bubbles.html`
 
 ## Variable-Width Flow Around Media
 
@@ -57,6 +76,25 @@ Rules:
 - treat `line.end` as the next cursor
 - keep width selection external to Pretext
 - prefer this only when widths actually vary per line
+
+Upstream anchors:
+
+- `pretext/pages/demos/dynamic-layout.ts`
+- `pretext/pages/demos/wrap-geometry.ts`
+
+## Editorial Or Multi-Column Flow
+
+Use this path when the same prepared paragraph must continue across columns, slots, or shaped regions.
+
+Rules:
+
+- keep one prepared paragraph and move only the cursor forward
+- use `walkLineRanges()` for speculative geometry and `layoutNextLine()` for the final stream
+- avoid reconstructing or resegmenting text per column
+
+Upstream anchor:
+
+- `pretext/pages/demos/editorial-engine.ts`
 
 ## Canvas Animation Loop
 
@@ -84,3 +122,11 @@ Rules:
 - use the rich path only when height-only output is insufficient
 - do not rebuild prepared state during rendering loops
 - if the final renderer only needs geometry, stay on `walkLineRanges()` as long as possible
+- when debugging custom rendering, distinguish engine line geometry from your own draw-order, transform, or clipping bugs
+
+Validation surfaces:
+
+- `bun run check`
+- `bun run site:build`
+- `bun run probe-check`
+- targeted demo inspection via `bun start`

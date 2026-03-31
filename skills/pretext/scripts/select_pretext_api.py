@@ -18,6 +18,7 @@ COMMON_QUESTIONS = [
 @dataclass(frozen=True)
 class Recommendation:
     goal: str
+    surface: str
     primary_apis: list[str]
     helper_apis: list[str]
     reason: str
@@ -28,10 +29,71 @@ class Recommendation:
     notes: list[str]
 
 
-def build_recommendation(goal: str, preserve_whitespace: bool, locale_sensitive: bool) -> Recommendation:
+def append_unique(items: list[str], additions: list[str]) -> list[str]:
+    merged = list(items)
+    for item in additions:
+        if item not in merged:
+            merged.append(item)
+    return merged
+
+
+def apply_surface(
+    surface: str,
+    reference_files: list[str],
+    notes: list[str],
+) -> tuple[list[str], list[str]]:
+    if surface == "react-dom":
+        return (
+            append_unique(reference_files, ["reference/react-dom-recipes.md"]),
+            append_unique(
+                notes,
+                [
+                    "Keep DOM reads limited to width acquisition or lifecycle coordination, not post-hoc text measurement.",
+                    "Treat React hooks and component caches as wrappers around the prepare/layout split, not replacements for it.",
+                ],
+            ),
+        )
+    if surface == "custom-renderer":
+        return (
+            append_unique(reference_files, ["reference/custom-renderer-recipes.md"]),
+            append_unique(
+                notes,
+                [
+                    "Choose the rich path only when the renderer needs lines, cursors, or geometry rather than height alone.",
+                    "Keep repeated frame or width-probe work in the layout phase whenever possible.",
+                ],
+            ),
+        )
+    if surface == "package":
+        return (
+            append_unique(reference_files, ["reference/package-workflows.md"]),
+            append_unique(
+                notes,
+                [
+                    "Validate the published artifact separately from source-level reasoning.",
+                    "Do not treat shipped `src/` files as a consumer-facing import contract just because they appear in the tarball.",
+                ],
+            ),
+        )
+    if surface == "upstream":
+        return (
+            append_unique(reference_files, ["reference/internal-exports.md", "reference/internal-architecture.md"]),
+            append_unique(
+                notes,
+                [
+                    "Use source-level internals only when the task explicitly modifies the cloned upstream repo.",
+                    "Be explicit about which module owns the first incorrect observable state before patching internals.",
+                ],
+            ),
+        )
+    return reference_files, notes
+
+
+def build_recommendation(goal: str, surface: str, preserve_whitespace: bool, locale_sensitive: bool) -> Recommendation:
     base: dict[str, Recommendation] = {
         "height": Recommendation(
             goal="height",
+            surface=surface,
             primary_apis=["prepare(text, font, options)", "layout(prepared, maxWidth, lineHeight)"],
             helper_apis=[],
             reason="Use the lightest package-facing API when the caller only needs height or line count.",
@@ -50,6 +112,7 @@ def build_recommendation(goal: str, preserve_whitespace: bool, locale_sensitive:
         ),
         "fixed-lines": Recommendation(
             goal="fixed-lines",
+            surface=surface,
             primary_apis=[
                 "prepareWithSegments(text, font, options)",
                 "layoutWithLines(prepared, maxWidth, lineHeight)",
@@ -72,6 +135,7 @@ def build_recommendation(goal: str, preserve_whitespace: bool, locale_sensitive:
         ),
         "geometry": Recommendation(
             goal="geometry",
+            surface=surface,
             primary_apis=[
                 "prepareWithSegments(text, font, options)",
                 "walkLineRanges(prepared, maxWidth, onLine)",
@@ -92,6 +156,7 @@ def build_recommendation(goal: str, preserve_whitespace: bool, locale_sensitive:
         ),
         "variable-width": Recommendation(
             goal="variable-width",
+            surface=surface,
             primary_apis=[
                 "prepareWithSegments(text, font, options)",
                 "layoutNextLine(prepared, cursor, maxWidth)",
@@ -114,6 +179,7 @@ def build_recommendation(goal: str, preserve_whitespace: bool, locale_sensitive:
         ),
         "shrinkwrap": Recommendation(
             goal="shrinkwrap",
+            surface=surface,
             primary_apis=[
                 "prepareWithSegments(text, font, options)",
                 "walkLineRanges(prepared, maxWidth, onLine)",
@@ -134,6 +200,7 @@ def build_recommendation(goal: str, preserve_whitespace: bool, locale_sensitive:
         ),
         "profile": Recommendation(
             goal="profile",
+            surface=surface,
             primary_apis=["profilePrepare(text, font, options)"],
             helper_apis=["prepare(text, font, options)", "prepareWithSegments(text, font, options)"],
             reason="Use the diagnostic export when the question is about prepare-phase cost or segment counts.",
@@ -156,6 +223,7 @@ def build_recommendation(goal: str, preserve_whitespace: bool, locale_sensitive:
         ),
         "cache-locale": Recommendation(
             goal="cache-locale",
+            surface=surface,
             primary_apis=["setLocale(locale?)", "clearCache()"],
             helper_apis=["prepare(text, font, options)", "prepareWithSegments(text, font, options)"],
             reason="Use helper APIs deliberately when locale-sensitive segmentation or cache lifecycle is the real concern.",
@@ -177,6 +245,7 @@ def build_recommendation(goal: str, preserve_whitespace: bool, locale_sensitive:
         ),
         "upstream-internals": Recommendation(
             goal="upstream-internals",
+            surface=surface,
             primary_apis=["source modules: analysis.ts, measurement.ts, line-break.ts, bidi.ts"],
             helper_apis=["profilePrepare(text, font, options)", "prepareWithSegments(text, font, options)"],
             reason="Use this path only when the task explicitly requires upstream source changes or deep diagnostics inside the cloned repo.",
@@ -200,6 +269,7 @@ def build_recommendation(goal: str, preserve_whitespace: bool, locale_sensitive:
         ),
         "diagnostics": Recommendation(
             goal="diagnostics",
+            surface=surface,
             primary_apis=["depends on the failing path"],
             helper_apis=["profilePrepare(text, font, options)", "setLocale(locale?)", "clearCache()"],
             reason="Start by identifying whether the issue is lifecycle, behavior envelope, browser caveat, or upstream canary behavior.",
@@ -223,20 +293,26 @@ def build_recommendation(goal: str, preserve_whitespace: bool, locale_sensitive:
             ],
         ),
     }
+
     recommendation = base[goal]
+    reference_files = list(recommendation.reference_files)
     notes = list(recommendation.notes)
+    reference_files, notes = apply_surface(surface, reference_files, notes)
+
     if preserve_whitespace:
         notes.append("Pass options = {'whiteSpace': 'pre-wrap'} to preserve spaces, tabs, and hard breaks.")
     if locale_sensitive:
         notes.append("Call setLocale(locale) before preparing new text; it clears shared caches.")
-    if goal not in {"upstream-internals"}:
+    if goal != "upstream-internals":
         notes.append("Keep the font shorthand and lineHeight synchronized with the real renderer.")
+
     return Recommendation(
         goal=recommendation.goal,
+        surface=surface,
         primary_apis=recommendation.primary_apis,
         helper_apis=recommendation.helper_apis,
         reason=recommendation.reason,
-        reference_files=recommendation.reference_files,
+        reference_files=reference_files,
         invalidates_prepare_on=recommendation.invalidates_prepare_on,
         invalidates_layout_on=recommendation.invalidates_layout_on,
         questions=recommendation.questions,
@@ -263,6 +339,12 @@ def main() -> int:
         help="Integration or diagnostic goal to optimize for.",
     )
     parser.add_argument(
+        "--surface",
+        choices=["generic", "react-dom", "custom-renderer", "package", "upstream"],
+        default="generic",
+        help="Optional integration surface used to narrow the recommended references and guardrails.",
+    )
+    parser.add_argument(
         "--preserve-whitespace",
         action="store_true",
         help="Include pre-wrap guidance for spaces, tabs, and hard breaks.",
@@ -282,6 +364,7 @@ def main() -> int:
 
     recommendation = build_recommendation(
         goal=args.goal,
+        surface=args.surface,
         preserve_whitespace=args.preserve_whitespace,
         locale_sensitive=args.locale_sensitive,
     )
@@ -291,6 +374,7 @@ def main() -> int:
         return 0
 
     print(f"Goal: {recommendation.goal}")
+    print(f"Surface: {recommendation.surface}")
     print(f"Primary APIs: {', '.join(recommendation.primary_apis)}")
     print(f"Helper APIs: {', '.join(recommendation.helper_apis) if recommendation.helper_apis else '(none)'}")
     print(f"Reason: {recommendation.reason}")
