@@ -78,6 +78,10 @@ The skill should help with:
   - deterministic helper that maps an upstream harness or reporting concern to the narrowest tooling surface
 - `scripts/select_pretext_route_plan.py`
   - deterministic helper that combines goal, surface, owner issue, tooling area, and validation area into one minimal route plan
+- `scripts/run_pretext_review_iteration.py`
+  - deterministic helper that executes one with-skill vs baseline review iteration into a skill-creator-style workspace
+- `scripts/grade_pretext_review_iteration.py`
+  - deterministic helper that grades the resulting iteration runs and writes `grading.json`
 - `scripts/check_layout_api_sync.py`
   - deterministic maintenance check that compares documented API entries against `pretext/src/layout.ts`
 - `scripts/check_pretext_eval_coverage.py`
@@ -107,6 +111,7 @@ The skill should help with:
 - Keep the upstream tooling layer separate from both package API routing and engine-ownership routing
 - Add a top-level route-plan layer so multi-dimensional tasks do not force the agent to manually compose multiple selectors
 - Make upstream module ownership explicit with deterministic routing before patching internals
+- Keep the first real review loop reproducible in-repo instead of as an ad hoc shell sequence
 - Prefer direct narrow recipe files once the implementation shape is known, without keeping an extra generic router file
 
 ## Non-Goals

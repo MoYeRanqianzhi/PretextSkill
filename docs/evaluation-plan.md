@@ -92,4 +92,16 @@ When running the formal `skill-creator` loop:
 
 ## Current Gap
 
-The eval file now exists, but the full iterative benchmark and review loop has not yet been run in this repository state.
+The first real iteration has now been run on a representative subset:
+
+- eval IDs: `1, 4, 5, 8, 9, 11, 24`
+- workspace: `skills/pretext-workspace/iteration-1`
+- benchmark summary:
+  - with skill: `93.6%`
+  - without skill: `67.9%`
+  - delta: `+0.26`
+
+The remaining gap is:
+
+- human review feedback has not yet been collected from `skills/pretext-workspace/iteration-1/review.html`
+- the full 24-eval suite has not yet been run through the same loop

@@ -34,6 +34,7 @@
 - Release tag `v0.6.7` created for upstream tooling-surface routing and expanded harness eval coverage
 - Release tag `v0.6.8` created for owner-issue and validation-area eval coverage expansion
 - Release tag `v0.6.9` created for unified route-plan routing across selectors
+- Release tag `v0.7.0` created for explicit version-support documentation and the first real skill-creator review loop
 - `skills/pretext/` now contains:
   - `SKILL.md`
   - `agents/openai.yaml`
@@ -57,6 +58,8 @@
   - `scripts/select_pretext_owner.py`
   - `scripts/select_pretext_tooling_surface.py`
   - `scripts/select_pretext_route_plan.py`
+  - `scripts/run_pretext_review_iteration.py`
+  - `scripts/grade_pretext_review_iteration.py`
   - `scripts/check_layout_api_sync.py`
   - `scripts/check_pretext_eval_coverage.py`
   - `scripts/pretext_validation_catalog.py`
@@ -77,16 +80,35 @@
 - Treat `src/layout.ts` as the normal product-facing API, and lower-level source modules as advanced diagnostics or upstream-hacking surfaces rather than package-public import targets
 - Treat validation taxonomy as shared data across scripts so the manual selector, by-file selector, and git-diff selector cannot drift silently
 - Prefer direct narrow recipe files over a generic recipe bucket when the task intent is already clear
+- Record version support with two anchors:
+  - published npm version
+  - local upstream source commit
+- Do not collapse package version and source commit into one unsupported "latest" claim
+
+## Version Support Snapshot
+
+- Checked on: `2026-04-01`
+- Local upstream branch: `main`
+- Local upstream commit: `a8d1e35d3973a0f63c007f7645f4a8918135a57b`
+- Local upstream HEAD subject: `Keep correctness browser automation in background`
+- Local `pretext/package.json` version: `0.0.3`
+- Latest published npm version: `0.0.3`
+- Local `origin/HEAD` currently matches the checked-out local upstream clone
+- Durable procedure document: `docs/version-support.md`
 
 ## Known Issues
 
-- The full `skill-creator` review loop has not yet been run against the checked-in eval suite
+- A first real `skill-creator` review iteration has now been run, but only on a representative subset rather than the full 24-eval suite
+- Human review feedback has not yet been collected from the generated static review viewer
 - The git-diff validator assumes the local checkout still follows the current `./pretext/` sibling layout when `--repo` is omitted
 - Future demand may justify even narrower renderer references such as dedicated `SVG` or `WebGL` recipes
 
 ## Next Tasks
 
 - Run the new formal eval prompts through the full `skill-creator` review loop
+- Keep `docs/version-support.md` and this memory snapshot updated whenever upstream package or source anchors move
+- Collect human review feedback from `skills/pretext-workspace/iteration-1/review.html`
+- Decide whether iteration 2 should expand from the representative subset to the full eval suite
 - Use the ownership router on the next upstream-internals pass and refine issue categories only if repeated ambiguity remains
 - Observe whether the tooling-surface router reduces unnecessary loading of the full validation playbook for harness-only tasks
 - Observe whether the unified route-plan router reduces manual composition across selectors for multi-dimensional tasks
@@ -120,6 +142,18 @@
   - Result: routes one-paragraph mismatch work to the probe surface with the expected files, references, and validation area
 - `python skills/pretext/scripts/select_pretext_route_plan.py --goal variable-width --surface custom-renderer --issue streamed-lines --tooling-area probe-surface --preserve-whitespace --locale-sensitive --format json`
   - Result: returns a single combined route plan with the expected minimal reference set, helper commands, and derived validation plan
+- `npm view @chenglou/pretext version time --json`
+  - Result: latest published npm version is `0.0.3`
+- `git -C pretext rev-parse HEAD`
+  - Result: local upstream source anchor is `a8d1e35d3973a0f63c007f7645f4a8918135a57b`
+- `python skills/pretext/scripts/run_pretext_review_iteration.py --workspace skills/pretext-workspace/iteration-1`
+  - Result: executed the first real review iteration over eval IDs `1, 4, 5, 8, 9, 11, 24`, producing with-skill and without-skill runs
+- `python skills/pretext/scripts/grade_pretext_review_iteration.py --workspace skills/pretext-workspace/iteration-1`
+  - Result: generated `grading.json` for each run in the first real review iteration
+- `python <skill-creator>/scripts/aggregate_benchmark.py skills/pretext-workspace/iteration-1 --skill-name pretext --skill-path skills/pretext`
+  - Result: benchmark summary for iteration 1 is `93.6%` pass rate with skill vs `67.9%` without skill, delta `+0.26`
+- `python -X utf8 <skill-creator>/eval-viewer/generate_review.py skills/pretext-workspace/iteration-1 --skill-name pretext --benchmark skills/pretext-workspace/iteration-1/benchmark.json --static skills/pretext-workspace/iteration-1/review.html`
+  - Result: generated a static review viewer at `skills/pretext-workspace/iteration-1/review.html`
 - `python skills/pretext/scripts/select_pretext_validation.py --area reporting-tooling --format json`
   - Result: returns the expected reporting-tooling commands and follow-up checks
 - `python skills/pretext/scripts/select_pretext_validation_by_files.py --path pretext/scripts/report-server.ts --path pretext/pages/report-utils.ts`

@@ -2,6 +2,10 @@
 
 ## 2026-04-01
 
+- Ignored `skills/pretext-workspace/` so iterative review outputs stay local but do not dirty the repository
+- Added `run_pretext_review_iteration.py` and `grade_pretext_review_iteration.py` to make the first real in-repo skill review loop reproducible
+- Added explicit version-support documentation that records both the npm package anchor and the local upstream source anchor
+- Added `docs/version-support.md` to track the published npm anchor and local upstream source anchor separately
 - Added `select_pretext_route_plan.py` as a unified route-plan layer over goal, surface, owner, tooling, and validation routing
 - Expanded eval coverage with a combined route-plan scenario for multi-dimensional tasks
 - Expanded eval coverage to explicitly track owner issues and validation areas in addition to goals, surfaces, and tooling areas

@@ -259,3 +259,8 @@
   - Compared multi-dimensional routing needs against the current selector set
 - Result:
   - Added `select_pretext_route_plan.py` and a combined route-plan eval so multi-layer tasks can be routed without manually composing separate selector outputs
+
+- Check:
+  - Verified that the repository can run a real first review iteration with local Claude CLI, grading, benchmark aggregation, and a static review viewer
+- Result:
+  - Added `run_pretext_review_iteration.py` and `grade_pretext_review_iteration.py`, then completed `skills/pretext-workspace/iteration-1`
