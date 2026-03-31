@@ -33,6 +33,7 @@
 - Release tag `v0.6.6` created for upstream ownership routing and eval-coverage maintenance
 - Release tag `v0.6.7` created for upstream tooling-surface routing and expanded harness eval coverage
 - Release tag `v0.6.8` created for owner-issue and validation-area eval coverage expansion
+- Release tag `v0.6.9` created for unified route-plan routing across selectors
 - `skills/pretext/` now contains:
   - `SKILL.md`
   - `agents/openai.yaml`
@@ -55,6 +56,7 @@
   - `scripts/select_pretext_api.py`
   - `scripts/select_pretext_owner.py`
   - `scripts/select_pretext_tooling_surface.py`
+  - `scripts/select_pretext_route_plan.py`
   - `scripts/check_layout_api_sync.py`
   - `scripts/check_pretext_eval_coverage.py`
   - `scripts/pretext_validation_catalog.py`
@@ -87,6 +89,7 @@
 - Run the new formal eval prompts through the full `skill-creator` review loop
 - Use the ownership router on the next upstream-internals pass and refine issue categories only if repeated ambiguity remains
 - Observe whether the tooling-surface router reduces unnecessary loading of the full validation playbook for harness-only tasks
+- Observe whether the unified route-plan router reduces manual composition across selectors for multi-dimensional tasks
 - Observe whether the new `goal + surface` API selector reduces unnecessary reference loading in real agent use
 - Observe whether explicit correctness-contract routing reduces false jumps into upstream internals during debugging
 - Add repo-specific git-diff heuristics only if repeated multi-file change clusters prove worth encoding
@@ -115,6 +118,8 @@
   - Result: routes preprocessing and glue issues to `analysis.ts`, with the expected references and validation area
 - `python skills/pretext/scripts/select_pretext_tooling_surface.py --area probe-surface --format json`
   - Result: routes one-paragraph mismatch work to the probe surface with the expected files, references, and validation area
+- `python skills/pretext/scripts/select_pretext_route_plan.py --goal variable-width --surface custom-renderer --issue streamed-lines --tooling-area probe-surface --preserve-whitespace --locale-sensitive --format json`
+  - Result: returns a single combined route plan with the expected minimal reference set, helper commands, and derived validation plan
 - `python skills/pretext/scripts/select_pretext_validation.py --area reporting-tooling --format json`
   - Result: returns the expected reporting-tooling commands and follow-up checks
 - `python skills/pretext/scripts/select_pretext_validation_by_files.py --path pretext/scripts/report-server.ts --path pretext/pages/report-utils.ts`

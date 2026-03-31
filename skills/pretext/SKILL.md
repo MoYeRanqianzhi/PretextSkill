@@ -37,7 +37,8 @@ Keep that split intact. If a proposed solution reruns `prepare()` on resize or r
    - `custom-renderer`
    - `package`
    - `upstream`
-3. Run `python scripts/select_pretext_api.py --goal <goal> --surface <surface>` when you want the narrow API path, invalidation tuple, and reference set selected deterministically.
+3. Run `python scripts/select_pretext_route_plan.py ...` when the task mixes API selection, upstream ownership, tooling-surface choice, or validation scoping and you want one unified route plan.
+4. Run `python scripts/select_pretext_api.py --goal <goal> --surface <surface>` when you only need the narrow API path, invalidation tuple, and reference set.
 
 ## Load Only The Needed Reference
 
@@ -55,6 +56,7 @@ Keep that split intact. If a proposed solution reruns `prepare()` on resize or r
 - Read [reference/upstream-tooling-surfaces.md](reference/upstream-tooling-surfaces.md) when the task is about upstream harnesses, browser checkers, dashboards, report transport, or demo-site plumbing rather than the package API itself.
 - Read [reference/troubleshooting.md](reference/troubleshooting.md) for failure modes, research-backed guardrails, and diagnostic triage.
 - Read [reference/validation-playbook.md](reference/validation-playbook.md) for Bun commands, dashboards, and escalation paths.
+- Run `python scripts/select_pretext_route_plan.py --goal ... --surface ... --issue ... --tooling-area ...` when you want the smallest combined reference set and next-step commands across multiple routing layers.
 - Run `python scripts/select_pretext_owner.py --issue ...` when you are modifying upstream source and need the first owning module identified before patching internals.
 - Run `python scripts/select_pretext_tooling_surface.py --area ...` when you need the narrowest upstream harness or reporting surface selected before loading broader validation docs.
 - Run `python scripts/select_pretext_validation.py --area ...` when you need the smallest defensible regression plan after changing a specific subsystem or surface.

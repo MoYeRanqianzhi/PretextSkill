@@ -266,6 +266,18 @@
         "States that the first incorrect state is in line walking after segmentation and measurement are already correct",
         "Routes to the line-break validation area"
       ]
+    },
+    {
+      "id": 24,
+      "prompt": "I have a Pretext task that mixes four concerns at once: choose the right API for Thai variable-width Canvas flow with preserved whitespace, identify the first owning upstream module if streamed lines diverge from batched lines, choose the narrowest upstream harness for a single concrete mismatch, and tell me the smallest validation plan. I want one unified route plan, not four separate recommendations.",
+      "expected_output": "Uses the unified route-plan path, combines goal, surface, owner issue, tooling area, and derived validation area, and returns the minimal combined reference set with next-step commands.",
+      "files": [],
+      "expectations": [
+        "Uses or effectively reproduces the unified route-plan behavior",
+        "Combines goal, surface, owner issue, tooling area, and validation area coherently",
+        "Returns a minimal combined reference set rather than unrelated broad references",
+        "Includes concrete next-step commands for routing or validation"
+      ]
     }
   ]
 }

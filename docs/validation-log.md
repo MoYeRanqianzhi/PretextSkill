@@ -254,3 +254,8 @@
   - Compared owner issues and validation areas against the current eval coverage map
 - Result:
   - Expanded `coverage.json`, `evals.json`, and `check_pretext_eval_coverage.py` so owner-routing and validation-routing maintenance are also checked deterministically
+
+- Check:
+  - Compared multi-dimensional routing needs against the current selector set
+- Result:
+  - Added `select_pretext_route_plan.py` and a combined route-plan eval so multi-layer tasks can be routed without manually composing separate selector outputs

@@ -76,6 +76,8 @@ The skill should help with:
   - deterministic helper that maps an upstream issue category to the first owning source module and validation area
 - `scripts/select_pretext_tooling_surface.py`
   - deterministic helper that maps an upstream harness or reporting concern to the narrowest tooling surface
+- `scripts/select_pretext_route_plan.py`
+  - deterministic helper that combines goal, surface, owner issue, tooling area, and validation area into one minimal route plan
 - `scripts/check_layout_api_sync.py`
   - deterministic maintenance check that compares documented API entries against `pretext/src/layout.ts`
 - `scripts/check_pretext_eval_coverage.py`
@@ -103,6 +105,7 @@ The skill should help with:
 - Keep a formal eval suite aligned with the goal and surface taxonomy so regressions are observable
 - Keep eval coverage aligned not only with goals and surfaces, but also with owner issues and validation areas
 - Keep the upstream tooling layer separate from both package API routing and engine-ownership routing
+- Add a top-level route-plan layer so multi-dimensional tasks do not force the agent to manually compose multiple selectors
 - Make upstream module ownership explicit with deterministic routing before patching internals
 - Prefer direct narrow recipe files once the implementation shape is known, without keeping an extra generic router file
 

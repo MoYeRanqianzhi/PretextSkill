@@ -2,6 +2,8 @@
 
 ## 2026-04-01
 
+- Added `select_pretext_route_plan.py` as a unified route-plan layer over goal, surface, owner, tooling, and validation routing
+- Expanded eval coverage with a combined route-plan scenario for multi-dimensional tasks
 - Expanded eval coverage to explicitly track owner issues and validation areas in addition to goals, surfaces, and tooling areas
 - Added owner-issue and validation-area eval prompts for bidi, emoji correction, streamed-line parity, rich-line materialization, measurement-width metadata, and line-fit ownership
 - Added `reference/upstream-tooling-surfaces.md` and `select_pretext_tooling_surface.py` to route harness, reporting, and demo-site tasks more narrowly
