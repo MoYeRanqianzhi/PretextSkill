@@ -2,6 +2,9 @@
 
 ## 2026-04-01
 
+- Added `reference/socratic-review.md` as a first-principles challenge layer for ambiguous, architectural, and high-stakes route choices
+- Added `select_pretext_socratic_review.py` to challenge a tentative goal, surface, owner issue, or tooling area before implementation
+- Extended `select_pretext_route_plan.py` so unified route plans now automatically include Socratic critique and vetted-example follow-up commands
 - Repaired review-loop grading consistency so obviously affirmative evidence no longer survives as contradictory `passed: false` results
 - Added evidence-polarity normalization notes to `grade_pretext_review_iteration.py` and persisted raw grader output for future traceability
 - Ran a focused second real review iteration over evals `2, 4, 11, 20, 24, 25`

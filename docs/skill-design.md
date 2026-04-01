@@ -49,6 +49,8 @@ The skill should help with:
   - normal package-facing API only
 - `reference/adapter-patterns.md`
   - wrapper, hook, facade, and cache-boundary patterns grounded in verified downstream implementations
+- `reference/socratic-review.md`
+  - route-challenge questions, neighboring-route rejection, evidence ladders, and falsifiers
 - `reference/internal-exports.md`
   - diagnostic helpers, advanced exported types, rich-path structural fields, and source-level internals
 - `reference/internal-architecture.md`
@@ -85,6 +87,8 @@ The skill should help with:
   - deterministic helper that combines goal, surface, owner issue, tooling area, and validation area into one minimal route plan
 - `scripts/select_pretext_examples.py`
   - deterministic helper that maps a goal, surface, or pattern to vetted external Pretext implementations with real code paths
+- `scripts/select_pretext_socratic_review.py`
+  - deterministic helper that challenges a tentative route before implementation using first-principles questions and route-rejection logic
 - `scripts/run_pretext_review_iteration.py`
   - deterministic helper that executes one with-skill vs baseline review iteration into a skill-creator-style workspace
 - `scripts/grade_pretext_review_iteration.py`
@@ -111,6 +115,7 @@ The skill should help with:
 - Keep package-facing usage and upstream source modification paths clearly separated
 - Make API routing explicit across both output shape and integration surface
 - Make `layoutNextLine()` routing explicit for fixed-width streamed pagination as well as true variable-width flow
+- Make route selection falsifiable by design rather than relying on agent confidence or eloquence
 - Make correctness-contract routing explicit instead of burying it inside generic diagnostics
 - Make validation routing deterministic instead of relying on memory or intuition
 - Keep the formal review loop trustworthy enough to drive iteration by repairing obviously contradictory grading polarity against its own evidence

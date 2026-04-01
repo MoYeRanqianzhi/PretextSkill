@@ -62,6 +62,15 @@ def build_route_plan(
         )
         notes = append_unique(notes, recommendation.notes)
         primary_question_parts.append(recommendation.reason)
+        references = append_unique(references, ["reference/socratic-review.md"])
+        helper_commands.append(
+            f"python scripts/select_pretext_socratic_review.py --goal {goal}"
+            + (f" --surface {surface}" if surface != "generic" else "")
+        )
+        if surface != "generic":
+            helper_commands.append(
+                f"python scripts/select_pretext_examples.py --goal {goal} --surface {surface}"
+            )
 
     if issue is not None:
         owner = OWNER_CATALOG[issue]
@@ -71,6 +80,8 @@ def build_route_plan(
         primary_question_parts.append(owner.reason)
         if derived_validation_area is None:
             derived_validation_area = owner.validation_area
+        references = append_unique(references, ["reference/socratic-review.md"])
+        helper_commands.append(f"python scripts/select_pretext_socratic_review.py --issue {issue}")
 
     if tooling_area is not None:
         tooling = TOOLING_CATALOG[tooling_area]
@@ -80,6 +91,8 @@ def build_route_plan(
         primary_question_parts.append(tooling.reason)
         if derived_validation_area is None:
             derived_validation_area = tooling.validation_area
+        references = append_unique(references, ["reference/socratic-review.md"])
+        helper_commands.append(f"python scripts/select_pretext_socratic_review.py --tooling-area {tooling_area}")
 
     next_validation_commands: list[str] = []
     follow_up_checks: list[str] = []

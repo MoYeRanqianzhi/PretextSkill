@@ -253,6 +253,21 @@
 - Result:
   - Focused iteration 2 now reports `100.0%` with-skill pass rate versus `69.7%` without skill
 
+- Command:
+  - `python skills/pretext/scripts/select_pretext_socratic_review.py --goal streamed-lines --surface document-reader --issue streamed-lines --tooling-area probe-surface --format json`
+- Result:
+  - Returned route-challenge questions, neighboring-route rejections, falsifiers, and helper commands for the streamed reader path
+
+- Command:
+  - `python skills/pretext/scripts/select_pretext_route_plan.py --goal streamed-lines --surface document-reader --issue streamed-lines --tooling-area probe-surface --format json`
+- Result:
+  - Returned the unified route plan with `socratic-review.md` and automatic critique/example helper commands included
+
+- Command:
+  - `python -m py_compile skills/pretext/scripts/select_pretext_socratic_review.py`
+- Result:
+  - Confirmed the new Socratic review selector compiles cleanly
+
 ### Reliability Checks
 
 - Check:
