@@ -41,6 +41,7 @@
 - Release tag `v0.8.2` created for Socratic route critique and route-plan self-challenge integration
 - Release tag `v0.8.3` created for decision-contract commitments and three-stage route planning
 - Release tag `v0.8.4` created for reasoning-layer eval coverage and benchmark discrimination analysis
+- Release tag `v0.8.5` created for integrated reasoning bundles and explicit eval-role taxonomy
 - External implementation research now recorded in `docs/pretext-implementation-landscape.md`
 - `skills/pretext/` now contains:
   - `SKILL.md`
@@ -72,6 +73,7 @@
   - `scripts/select_pretext_examples.py`
   - `scripts/select_pretext_socratic_review.py`
   - `scripts/select_pretext_decision_contract.py`
+  - `scripts/select_pretext_reasoning_bundle.py`
   - `scripts/analyze_pretext_benchmark.py`
   - `scripts/run_pretext_review_iteration.py`
   - `scripts/grade_pretext_review_iteration.py`
@@ -118,6 +120,7 @@
 - Distinguish between:
   - smoke-test evals that confirm capability exists
   - discriminating evals that prove the skill adds measurable value over baseline
+- Prefer one integrated reasoning bundle over three disconnected reasoning outputs when the task is high-ambiguity and high-stakes
 - Keep the review loop traceable and self-consistent:
   - persist raw grader output
   - repair obviously contradictory pass/fail polarity when the evidence text is clearly affirmative or clearly negative
@@ -140,6 +143,7 @@
 - The git-diff validator assumes the local checkout still follows the current `./pretext/` sibling layout when `--repo` is omitted
 - Future demand may justify even narrower renderer references such as dedicated `SVG` or `WebGL` recipes
 - The external example catalog uses a star snapshot from `2026-04-01` and will need manual refresh when the external landscape changes materially
+- For very small iteration subsets, `benchmark.json` is the source of truth; external `benchmark.md` summaries may need manual sanity-checking
 
 ## Next Tasks
 
@@ -147,6 +151,8 @@
 - Keep `docs/version-support.md` and this memory snapshot updated whenever upstream package or source anchors move
 - Collect human review feedback from `skills/pretext-workspace/iteration-1/review.html`
 - Collect human review feedback from `skills/pretext-workspace/iteration-2/review.html`
+- Collect human review feedback from `skills/pretext-workspace/iteration-3/review.html`
+- Collect human review feedback from `skills/pretext-workspace/iteration-4/review.html`
 - Decide whether the next iteration should be the first full 25-eval run or a human-feedback-driven patch round
 - Decide whether the Socratic critique layer should later get its own formal eval prompt instead of living only in deterministic script validation
 - Decide whether the decision-contract layer should get its own formal eval prompt for assumption quality and route-breaker quality
@@ -233,6 +239,14 @@
   - Result: focused iteration 3 benchmark summary is `100.0%` pass rate with skill vs `100.0%` without skill, delta `+0.00`
 - `python skills/pretext/scripts/analyze_pretext_benchmark.py --benchmark skills/pretext-workspace/iteration-3/benchmark.json --format json`
   - Result: classified evals `26` and `27` as `non_discriminating_success`
+- `python skills/pretext/scripts/select_pretext_reasoning_bundle.py --goal streamed-lines --surface document-reader --issue streamed-lines --tooling-area probe-surface --format json`
+  - Result: returns one integrated reasoning bundle containing route plan, Socratic critique, decision contract, and ordered next steps
+- `python skills/pretext/scripts/run_pretext_review_iteration.py --workspace skills/pretext-workspace/iteration-4 --eval-id 28`
+  - Result: produced the focused fourth iteration workspace for the integrated reasoning-bundle prompt
+- `python <skill-creator>/scripts/aggregate_benchmark.py skills/pretext-workspace/iteration-4 --skill-name pretext --skill-path skills/pretext`
+  - Result: iteration 4 `benchmark.json` shows with skill `100.0%` and without skill `100.0%`; use the JSON as the authoritative source for this single-eval run
+- `python skills/pretext/scripts/analyze_pretext_benchmark.py --benchmark skills/pretext-workspace/iteration-4/benchmark.json --format json`
+  - Result: classified eval `28` as `non_discriminating_success`
 - `python skills/pretext/scripts/select_pretext_validation.py --area reporting-tooling --format json`
   - Result: returns the expected reporting-tooling commands and follow-up checks
 - `python skills/pretext/scripts/select_pretext_validation_by_files.py --path pretext/scripts/report-server.ts --path pretext/pages/report-utils.ts`

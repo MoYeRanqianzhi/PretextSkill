@@ -317,6 +317,19 @@
         "States route breakers or facts that would force route reconsideration",
         "Includes a minimal validation chain rather than only broad follow-up ideas"
       ]
+    },
+    {
+      "id": 28,
+      "prompt": "I do not want three separate answers. Give me one integrated repo-local reasoning bundle for this case: a single paragraph continues across fixed-width ebook columns, someone keeps calling it `variable-width/custom-renderer`, and I need the surviving route, the strongest neighboring routes to reject, the implementation contract, and the first repo-local commands to run. Keep it concrete, not philosophical.",
+      "expected_output": "Uses one integrated reasoning bundle that combines route selection, Socratic rejection of the wrong neighboring routes, and a decision-grade contract with explicit route breakers and repo-local commands.",
+      "files": [],
+      "expectations": [
+        "Uses one integrated reasoning bundle rather than three disconnected mini-answers",
+        "Chooses streamed-lines on document-reader over variable-width on custom-renderer",
+        "Rejects the strongest neighboring wrong routes explicitly",
+        "Includes decision-contract elements such as assumptions, proof obligations, or route breakers",
+        "Includes concrete repo-local commands such as reasoning_bundle, route_plan, examples, critique, or decision-contract selectors"
+      ]
     }
   ]
 }

@@ -299,6 +299,26 @@
   - Classified evals `26` and `27` as `non_discriminating_success`, meaning they currently function as smoke tests rather than benchmark gates
 
 - Command:
+  - `python skills/pretext/scripts/select_pretext_reasoning_bundle.py --goal streamed-lines --surface document-reader --issue streamed-lines --tooling-area probe-surface --format json`
+- Result:
+  - Returned one integrated reasoning bundle containing route selection, critique, decision contract, minimal references, and execution order
+
+- Command:
+  - `python -m py_compile skills/pretext/scripts/pretext_eval_roles.py skills/pretext/scripts/check_pretext_eval_coverage.py skills/pretext/scripts/analyze_pretext_benchmark.py skills/pretext/scripts/select_pretext_reasoning_bundle.py`
+- Result:
+  - Confirmed the eval-role taxonomy, benchmark analyzer, and reasoning-bundle selector compile cleanly
+
+- Command:
+  - `python skills/pretext/scripts/run_pretext_review_iteration.py --workspace skills/pretext-workspace/iteration-4 --eval-id 28`
+- Result:
+  - Wrote the focused fourth real review iteration for the integrated reasoning-bundle prompt
+
+- Command:
+  - `python skills/pretext/scripts/analyze_pretext_benchmark.py --benchmark skills/pretext-workspace/iteration-4/benchmark.json --format json`
+- Result:
+  - Classified eval `28` as `non_discriminating_success`, so the integrated bundle prompt currently behaves as a smoke test rather than a benchmark gate
+
+- Command:
   - `python skills/pretext/scripts/select_pretext_route_plan.py --goal streamed-lines --surface document-reader --issue streamed-lines --tooling-area probe-surface --format json`
 - Result:
   - Returned the unified route plan with `socratic-review.md` and automatic critique/example helper commands included

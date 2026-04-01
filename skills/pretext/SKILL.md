@@ -66,6 +66,7 @@ Keep that split intact. If a proposed solution reruns `prepare()` on resize or r
 - Run `python scripts/select_pretext_examples.py --goal ... --surface ...` when you need vetted external implementation precedents after choosing the engine path.
 - Run `python scripts/select_pretext_socratic_review.py --goal ... --surface ... --issue ... --tooling-area ...` after an initial route is chosen and you need to challenge neighboring routes, evidence quality, or falsification strategy before implementation.
 - Run `python scripts/select_pretext_decision_contract.py --goal ... --surface ... --issue ... --tooling-area ...` after the route survives critique and you need a final decision-grade contract before coding.
+- Run `python scripts/select_pretext_reasoning_bundle.py --goal ... --surface ... --issue ... --tooling-area ...` when the task is high-ambiguity or high-stakes and you want route selection, critique, and contract emitted as one integrated bundle.
 - Run `python scripts/select_pretext_owner.py --issue ...` when you are modifying upstream source and need the first owning module identified before patching internals.
 - Run `python scripts/select_pretext_tooling_surface.py --area ...` when you need the narrowest upstream harness or reporting surface selected before loading broader validation docs.
 - Run `python scripts/select_pretext_validation.py --area ...` when you need the smallest defensible regression plan after changing a specific subsystem or surface.

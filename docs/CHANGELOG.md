@@ -2,6 +2,12 @@
 
 ## 2026-04-01
 
+- Added `select_pretext_reasoning_bundle.py` to emit one integrated route, critique, and contract bundle for high-ambiguity tasks
+- Added `eval_roles` coverage and `pretext_eval_roles.py` so smoke tests and benchmark gates are tracked explicitly
+- Added eval `28` for the integrated reasoning bundle layer
+- Ran a focused fourth real review iteration over eval `28`
+- Fourth focused iteration benchmark summary: with skill `100.0%`, without skill `100.0%`, delta `+0.00`
+- Recorded that the current integrated reasoning-bundle eval also behaves as a smoke test rather than a discriminating benchmark gate
 - Added `analyze_pretext_benchmark.py` to classify evals as smoke tests, weak signals, regression candidates, or discriminating gates
 - Added `reasoning_layers` to formal eval coverage so route-plan, Socratic critique, and decision-contract layers are all tracked explicitly
 - Ran a focused third real review iteration over evals `26` and `27`

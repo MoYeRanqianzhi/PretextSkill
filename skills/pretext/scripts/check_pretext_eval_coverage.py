@@ -12,6 +12,7 @@ from select_pretext_owner import CATALOG as OWNER_CATALOG
 from select_pretext_tooling_surface import SUPPORTED_TOOLING_AREAS
 from pretext_validation_catalog import PLANS
 from pretext_reasoning_layers import SUPPORTED_REASONING_LAYERS
+from pretext_eval_roles import SUPPORTED_EVAL_ROLES
 
 
 def main() -> int:
@@ -48,6 +49,10 @@ def main() -> int:
         for eval_id in ids:
             if eval_id not in eval_ids and eval_id not in missing_eval_ids:
                 missing_eval_ids.append(eval_id)
+    for role, ids in coverage_data.get("eval_roles", {}).items():
+        for eval_id in ids:
+            if eval_id not in eval_ids and eval_id not in missing_eval_ids:
+                missing_eval_ids.append(eval_id)
 
     missing_goals = [goal for goal in SUPPORTED_GOALS if goal not in coverage_data["goals"]]
     missing_surfaces = [surface for surface in SUPPORTED_SURFACES if surface != "generic" and surface not in coverage_data["surfaces"]]
@@ -56,6 +61,9 @@ def main() -> int:
     missing_validation_areas = [area for area in sorted(PLANS.keys()) if area not in coverage_data.get("validation_areas", {})]
     missing_reasoning_layers = [
         layer for layer in SUPPORTED_REASONING_LAYERS if layer not in coverage_data.get("reasoning_layers", {})
+    ]
+    missing_eval_roles = [
+        role for role in SUPPORTED_EVAL_ROLES if role not in coverage_data.get("eval_roles", {})
     ]
     empty_goals = [goal for goal in SUPPORTED_GOALS if not coverage_data["goals"].get(goal)]
     empty_surfaces = [
@@ -75,6 +83,9 @@ def main() -> int:
     empty_reasoning_layers = [
         layer for layer in SUPPORTED_REASONING_LAYERS if not coverage_data.get("reasoning_layers", {}).get(layer)
     ]
+    empty_eval_roles = [
+        role for role in SUPPORTED_EVAL_ROLES if not coverage_data.get("eval_roles", {}).get(role)
+    ]
 
     if (
         not missing_goals
@@ -83,15 +94,17 @@ def main() -> int:
         and not missing_owner_issues
         and not missing_validation_areas
         and not missing_reasoning_layers
+        and not missing_eval_roles
         and not empty_goals
         and not empty_surfaces
         and not empty_tooling_areas
         and not empty_owner_issues
         and not empty_validation_areas
         and not empty_reasoning_layers
+        and not empty_eval_roles
         and not missing_eval_ids
     ):
-        print("Eval coverage is in sync with supported goals, surfaces, tooling areas, owner issues, validation areas, and reasoning layers.")
+        print("Eval coverage is in sync with supported goals, surfaces, tooling areas, owner issues, validation areas, reasoning layers, and eval roles.")
         return 0
 
     if missing_goals:
@@ -142,6 +155,14 @@ def main() -> int:
         print("Reasoning layers without mapped evals:")
         for layer in empty_reasoning_layers:
             print(f"- {layer}")
+    if missing_eval_roles:
+        print("Missing eval roles in coverage.json:")
+        for role in missing_eval_roles:
+            print(f"- {role}")
+    if empty_eval_roles:
+        print("Eval roles without mapped evals:")
+        for role in empty_eval_roles:
+            print(f"- {role}")
     if missing_eval_ids:
         print("Coverage references unknown eval IDs:")
         for eval_id in sorted(missing_eval_ids):

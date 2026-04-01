@@ -70,6 +70,8 @@ That coverage map now tracks:
 - tooling areas
 - owner issues
 - validation areas
+- reasoning layers
+- eval roles such as `smoke` and `gate`
 
 ## Review Standard
 
@@ -115,12 +117,19 @@ The first two real iterations have now been run on focused subsets:
   - with skill: `100.0%`
   - without skill: `100.0%`
   - delta: `+0.00`
+- eval IDs: `28`
+- workspace: `skills/pretext-workspace/iteration-4`
+- benchmark summary:
+  - with skill: `100.0%`
+  - without skill: `100.0%`
+  - delta: `+0.00`
 
 The remaining gap is:
 
 - human review feedback has not yet been collected from `skills/pretext-workspace/iteration-1/review.html`
 - human review feedback has not yet been collected from `skills/pretext-workspace/iteration-2/review.html`
 - human review feedback has not yet been collected from `skills/pretext-workspace/iteration-3/review.html`
+- human review feedback has not yet been collected from `skills/pretext-workspace/iteration-4/review.html`
 - the full 25-eval suite has not yet been run through the same loop
 
 ## Reasoning-Layer Note
@@ -145,3 +154,13 @@ Use `python skills/pretext/scripts/analyze_pretext_benchmark.py --benchmark <ben
 - weak signal
 - regression candidate
 - discriminating positive
+
+Iteration 4 over eval `28` produced the same result:
+
+- with skill: `100.0%`
+- without skill: `100.0%`
+- delta: `+0.00`
+
+So the integrated reasoning-bundle eval is also currently a smoke test, not a discriminating gate.
+
+For small iteration subsets, treat `benchmark.json` as the authoritative source when `benchmark.md` looks suspiciously empty or inconsistent.

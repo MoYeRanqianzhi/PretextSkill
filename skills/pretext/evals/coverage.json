@@ -62,5 +62,9 @@
     "route-plan": [24],
     "socratic-review": [26],
     "decision-contract": [27]
+  },
+  "eval_roles": {
+    "smoke": [26, 27, 28],
+    "gate": [2, 20, 24, 25]
   }
 }
