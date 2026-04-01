@@ -122,4 +122,5 @@ Upstream anchors:
 
 - If the product only needs engine debugging, start from `reference/troubleshooting.md`
 - If the renderer needs line strings, cursors, or variable-width flow outside the DOM, switch to [custom-renderer-recipes.md](custom-renderer-recipes.md)
+- If the task is actually about designing a reusable local wrapper or cache boundary, switch to [adapter-patterns.md](adapter-patterns.md)
 - If the task is about exported package shape rather than component integration, switch to [package-workflows.md](package-workflows.md)

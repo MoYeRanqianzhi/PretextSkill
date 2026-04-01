@@ -2,6 +2,7 @@
   "goals": {
     "height": [1],
     "fixed-lines": [2],
+    "streamed-lines": [25],
     "geometry": [3],
     "variable-width": [4, 24],
     "shrinkwrap": [3],
@@ -14,6 +15,7 @@
   "surfaces": {
     "react-dom": [1, 7],
     "custom-renderer": [2, 3, 4, 24],
+    "document-reader": [25],
     "package": [9],
     "upstream": [5, 8, 10]
   },

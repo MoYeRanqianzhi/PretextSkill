@@ -30,6 +30,29 @@ const prepared = prepareWithSegments(text, font, options)
 const { lines } = layoutWithLines(prepared, width, lineHeight)
 ```
 
+## Streamed Or Continued Flow
+
+Use this path when the same prepared paragraph must continue across:
+
+- pages
+- columns
+- variable-height windows
+- shaped regions
+- virtualized slices
+
+```ts
+import { prepareWithSegments, layoutNextLine } from '@chenglou/pretext'
+
+let cursor = { segmentIndex: 0, graphemeIndex: 0 }
+while (true) {
+  const line = layoutNextLine(prepared, cursor, width)
+  if (line === null) break
+  cursor = line.end
+}
+```
+
+Use this even when width stays constant if cursor continuity is the real requirement.
+
 ## Geometry-Only Work
 
 Use this path when width probing or shrink-wrap behavior matters more than line strings.
@@ -59,6 +82,8 @@ while (true) {
 }
 ```
 
+This is a subtype of streamed flow, not the only reason to use `layoutNextLine()`.
+
 ## Locale And Cache Lifecycle
 
 - call `setLocale()` before preparing new text when locale-sensitive segmentation matters
@@ -84,3 +109,8 @@ Before shipping a Pretext-backed feature, make these decisions explicit:
 3. What invalidates only layout?
 4. Does the renderer require line strings, geometry, or only height?
 5. Do spaces, tabs, hard breaks, or locale state matter?
+
+## When To Leave This File
+
+- If the task is really about an adapter, hook, service, or composable boundary, switch to [adapter-patterns.md](adapter-patterns.md).
+- If the task is specifically about PDF, EPUB, pagination, or reader text layers, switch to [document-reader-recipes.md](document-reader-recipes.md).

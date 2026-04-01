@@ -18,6 +18,7 @@ The current eval suite in `skills/pretext/evals/evals.json` is designed to cover
 - height-only React or DOM work
 - fixed-width custom rendering
 - geometry-only shrink-wrap work
+- streamed line continuation across pages or columns
 - variable-width line flow
 - correctness-contract disputes
 - prepare-phase profiling
@@ -32,6 +33,7 @@ This gives at least one realistic prompt for every current `select_pretext_api.p
 - `height`
 - `fixed-lines`
 - `geometry`
+- `streamed-lines`
 - `variable-width`
 - `shrinkwrap`
 - `profile`
@@ -44,6 +46,7 @@ It also covers the major integration surfaces:
 
 - `react-dom`
 - `custom-renderer`
+- `document-reader`
 - `package`
 - `upstream`
 
@@ -104,4 +107,4 @@ The first real iteration has now been run on a representative subset:
 The remaining gap is:
 
 - human review feedback has not yet been collected from `skills/pretext-workspace/iteration-1/review.html`
-- the full 24-eval suite has not yet been run through the same loop
+- the full 25-eval suite has not yet been run through the same loop

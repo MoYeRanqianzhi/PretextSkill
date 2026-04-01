@@ -124,6 +124,11 @@ Rules:
 - if the final renderer only needs geometry, stay on `walkLineRanges()` as long as possible
 - when debugging custom rendering, distinguish engine line geometry from your own draw-order, transform, or clipping bugs
 
+## When Custom Renderer Is Still Too Broad
+
+- If the task is really a PDF, EPUB, pagination, or reader text-layer problem, switch to [document-reader-recipes.md](document-reader-recipes.md).
+- If the task is really about a shared wrapper or cache facade around Pretext, switch to [adapter-patterns.md](adapter-patterns.md).
+
 Validation surfaces:
 
 - `bun run check`

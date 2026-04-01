@@ -218,6 +218,21 @@
 - Result:
   - Returned an empty plan when no upstream files were staged
 
+- Command:
+  - `python skills/pretext/scripts/select_pretext_api.py --goal streamed-lines --surface document-reader --format json`
+- Result:
+  - Returned the new cursor-continuation route with `document-reader-recipes.md`, `adapter-patterns.md`, and the expected invalidation tuple
+
+- Command:
+  - `python skills/pretext/scripts/select_pretext_examples.py --goal streamed-lines --surface document-reader --format json`
+- Result:
+  - Returned the vetted `zsh-eng/epub-reader-demo` precedent for reader pagination and cursor-continuation work
+
+- Command:
+  - `python skills/pretext/scripts/select_pretext_route_plan.py --goal streamed-lines --surface document-reader --format json`
+- Result:
+  - Confirmed that the unified route-plan layer accepts the new goal and surface and keeps the reference set narrow
+
 ### Reliability Checks
 
 - Check:

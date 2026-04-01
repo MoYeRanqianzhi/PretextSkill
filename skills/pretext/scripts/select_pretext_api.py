@@ -17,6 +17,7 @@ COMMON_QUESTIONS = [
 SUPPORTED_GOALS = [
     "height",
     "fixed-lines",
+    "streamed-lines",
     "geometry",
     "variable-width",
     "shrinkwrap",
@@ -27,7 +28,7 @@ SUPPORTED_GOALS = [
     "diagnostics",
 ]
 
-SUPPORTED_SURFACES = ["generic", "react-dom", "custom-renderer", "package", "upstream"]
+SUPPORTED_SURFACES = ["generic", "react-dom", "custom-renderer", "document-reader", "package", "upstream"]
 
 
 @dataclass(frozen=True)
@@ -59,7 +60,7 @@ def apply_surface(
 ) -> tuple[list[str], list[str]]:
     if surface == "react-dom":
         return (
-            append_unique(reference_files, ["reference/react-dom-recipes.md"]),
+            append_unique(reference_files, ["reference/react-dom-recipes.md", "reference/adapter-patterns.md"]),
             append_unique(
                 notes,
                 [
@@ -76,6 +77,17 @@ def apply_surface(
                 [
                     "Choose the rich path only when the renderer needs lines, cursors, or geometry rather than height alone.",
                     "Keep repeated frame or width-probe work in the layout phase whenever possible.",
+                ],
+            ),
+        )
+    if surface == "document-reader":
+        return (
+            append_unique(reference_files, ["reference/document-reader-recipes.md", "reference/adapter-patterns.md"]),
+            append_unique(
+                notes,
+                [
+                    "Choose this surface when paragraphs continue across pages, columns, or reader regions.",
+                    "Do not confuse fixed page width with batched full-paragraph layout when cursor continuity is still required.",
                 ],
             ),
         )
@@ -148,6 +160,29 @@ def build_recommendation(goal: str, surface: str, preserve_whitespace: bool, loc
                 "The returned lines also include widths and cursors.",
             ],
         ),
+        "streamed-lines": Recommendation(
+            goal="streamed-lines",
+            surface=surface,
+            primary_apis=[
+                "prepareWithSegments(text, font, options)",
+                "layoutNextLine(prepared, cursor, maxWidth)",
+            ],
+            helper_apis=["layoutWithLines(prepared, maxWidth, lineHeight)"],
+            reason="Use the cursor-based path when the same prepared paragraph must continue across pages, columns, regions, or streamed slices.",
+            reference_files=[
+                "reference/public-api.md",
+                "reference/integration-lifecycle.md",
+                "reference/document-reader-recipes.md",
+                "reference/whitespace-and-breaks.md",
+            ],
+            invalidates_prepare_on=["text", "font", "whiteSpace", "locale"],
+            invalidates_layout_on=["maxWidth", "lineHeight"],
+            questions=COMMON_QUESTIONS,
+            notes=[
+                "Use this even when width stays constant if cursor continuity is the real requirement.",
+                "Compare against layoutWithLines() only when you need a batch-path parity check.",
+            ],
+        ),
         "geometry": Recommendation(
             goal="geometry",
             surface=surface,
@@ -190,6 +225,7 @@ def build_recommendation(goal: str, surface: str, preserve_whitespace: bool, loc
             notes=[
                 "Advance with line.end after each emitted line.",
                 "Useful for flowing around images or non-rectangular regions.",
+                "If width stays stable and the real need is paragraph continuation across containers, choose streamed-lines instead.",
             ],
         ),
         "shrinkwrap": Recommendation(

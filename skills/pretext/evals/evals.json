@@ -278,6 +278,19 @@
         "Returns a minimal combined reference set rather than unrelated broad references",
         "Includes concrete next-step commands for routing or validation"
       ]
+    },
+    {
+      "id": 25,
+      "prompt": "I am building an EPUB-style reader where one prepared paragraph must continue across page columns. The width per column stays constant, but I still need cursor continuity across columns, and preserved code blocks should keep hard breaks. Which Pretext path and integration surface should I use?",
+      "expected_output": "Routes to the streamed-lines goal on the document-reader surface, chooses prepareWithSegments() plus layoutNextLine() for flowing prose, keeps pre-wrap guidance for preserved blocks, and loads document-reader-recipes.md rather than only generic custom-renderer advice.",
+      "files": [],
+      "expectations": [
+        "Chooses the streamed-lines goal rather than fixed-lines or variable-width by default",
+        "Chooses the document-reader surface",
+        "Selects prepareWithSegments() plus layoutNextLine() for continued paragraph flow",
+        "States that width can stay constant and cursor continuity is still the reason to use layoutNextLine()",
+        "Points to document-reader-recipes.md or equivalent reader-specific guidance"
+      ]
     }
   ]
 }

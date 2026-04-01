@@ -13,7 +13,7 @@ Core exported workflows from the README and source:
 - `prepare()` plus `layout()` for fast repeated height calculation after one-time preparation
 - `prepareWithSegments()` plus `layoutWithLines()` for full line materialization
 - `walkLineRanges()` for width and cursor-only iteration without building line strings
-- `layoutNextLine()` for variable-width line-by-line layout
+- `layoutNextLine()` for cursor-based streamed line layout, including pagination and variable-width flow
 - `clearCache()` and `setLocale()` for cache and locale management
 - `profilePrepare()` as a diagnostic export rather than a default integration path
 
@@ -33,6 +33,7 @@ The skill should help with:
 
 - Keep `SKILL.md` as a narrow Level-2 router
 - Model decisions as `output shape + integration surface + invalidation tuple`
+- Treat cursor continuation as a distinct output shape from both fixed batched lines and variable-width flow
 - Keep correctness-contract work distinct from integration work so progressive disclosure can stay narrow
 - Keep package-facing usage and upstream source modification paths clearly separated
 - Treat validation taxonomy as shared data, not duplicated prose across scripts
@@ -46,6 +47,8 @@ The skill should help with:
   - irreducible model and invalidation logic
 - `reference/public-api.md`
   - normal package-facing API only
+- `reference/adapter-patterns.md`
+  - wrapper, hook, facade, and cache-boundary patterns grounded in verified downstream implementations
 - `reference/internal-exports.md`
   - diagnostic helpers, advanced exported types, rich-path structural fields, and source-level internals
 - `reference/internal-architecture.md`
@@ -56,6 +59,8 @@ The skill should help with:
   - cross-API semantic contracts and edge-case expectations derived from exported behavior and permanent tests
 - `reference/script-and-browser-caveats.md`
   - script-sensitive segmentation, browser caveats, and research canaries
+- `reference/document-reader-recipes.md`
+  - PDF, EPUB, pagination, column continuation, and text-layer patterns
 - `reference/react-dom-recipes.md`
   - React height caching, hook patterns, virtualization, editor-oriented patterns, and DOM guardrails
 - `reference/custom-renderer-recipes.md`
@@ -78,6 +83,8 @@ The skill should help with:
   - deterministic helper that maps an upstream harness or reporting concern to the narrowest tooling surface
 - `scripts/select_pretext_route_plan.py`
   - deterministic helper that combines goal, surface, owner issue, tooling area, and validation area into one minimal route plan
+- `scripts/select_pretext_examples.py`
+  - deterministic helper that maps a goal, surface, or pattern to vetted external Pretext implementations with real code paths
 - `scripts/run_pretext_review_iteration.py`
   - deterministic helper that executes one with-skill vs baseline review iteration into a skill-creator-style workspace
 - `scripts/grade_pretext_review_iteration.py`
@@ -103,6 +110,7 @@ The skill should help with:
 
 - Keep package-facing usage and upstream source modification paths clearly separated
 - Make API routing explicit across both output shape and integration surface
+- Make `layoutNextLine()` routing explicit for fixed-width streamed pagination as well as true variable-width flow
 - Make correctness-contract routing explicit instead of burying it inside generic diagnostics
 - Make validation routing deterministic instead of relying on memory or intuition
 - Cover package, browser, corpus, Gatsby, probe, and demo-site validation surfaces with one shared taxonomy
@@ -114,6 +122,7 @@ The skill should help with:
 - Keep the first real review loop reproducible in-repo instead of as an ad hoc shell sequence
 - Prefer direct narrow recipe files once the implementation shape is known, without keeping an extra generic router file
 - Expand from verified external implementations, not from inspiration-only typography demos
+- Keep document-reader work separate from the broader custom-renderer bucket so reader-specific pagination patterns do not inflate unrelated renderer tasks
 
 ## Non-Goals
 

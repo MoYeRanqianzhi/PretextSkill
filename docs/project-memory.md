@@ -36,6 +36,7 @@
 - Release tag `v0.6.9` created for unified route-plan routing across selectors
 - Release tag `v0.7.0` created for explicit version-support documentation and the first real skill-creator review loop
 - Release tag `v0.7.1` created for vetted external implementation-landscape research
+- Release tag `v0.8.0` created for streamed-line routing, document-reader disclosure, and external example selection
 - External implementation research now recorded in `docs/pretext-implementation-landscape.md`
 - `skills/pretext/` now contains:
   - `SKILL.md`
@@ -44,11 +45,13 @@
   - `evals/coverage.json`
   - `reference/first-principles.md`
   - `reference/public-api.md`
+  - `reference/adapter-patterns.md`
   - `reference/internal-exports.md`
   - `reference/internal-architecture.md`
   - `reference/whitespace-and-breaks.md`
   - `reference/behavior-contracts.md`
   - `reference/script-and-browser-caveats.md`
+  - `reference/document-reader-recipes.md`
   - `reference/react-dom-recipes.md`
   - `reference/custom-renderer-recipes.md`
   - `reference/package-workflows.md`
@@ -60,6 +63,7 @@
   - `scripts/select_pretext_owner.py`
   - `scripts/select_pretext_tooling_surface.py`
   - `scripts/select_pretext_route_plan.py`
+  - `scripts/select_pretext_examples.py`
   - `scripts/run_pretext_review_iteration.py`
   - `scripts/grade_pretext_review_iteration.py`
   - `scripts/check_layout_api_sync.py`
@@ -89,6 +93,11 @@
 - Prefer verified external implementation code over inspiration-only demos when extending the skill
 - Treat non-GitHub search as a discovery layer, not as implementation truth, until inspectable source code is found
 - Down-rank low-signal visual demos unless they have both real Pretext code and enough source quality to justify reuse
+- Treat cursor-continuation work as its own goal:
+  - `layoutNextLine()` is not only for variable-width flow
+  - it is also the correct path when fixed-width paragraphs must continue across pages, columns, or streamed slices
+- Treat document readers as their own surface instead of overloading the generic custom-renderer bucket
+- Provide deterministic access to vetted external implementations through `select_pretext_examples.py` rather than relying on remembered repo names
 
 ## Version Support Snapshot
 
@@ -103,11 +112,11 @@
 
 ## Known Issues
 
-- A first real `skill-creator` review iteration has now been run, but only on a representative subset rather than the full 24-eval suite
+- A first real `skill-creator` review iteration has now been run, but only on a representative subset rather than the full 25-eval suite
 - Human review feedback has not yet been collected from the generated static review viewer
 - The git-diff validator assumes the local checkout still follows the current `./pretext/` sibling layout when `--repo` is omitted
 - Future demand may justify even narrower renderer references such as dedicated `SVG` or `WebGL` recipes
-- External implementation coverage is now documented, but the skill has not yet converted those findings into dedicated adapter or renderer references
+- The external example catalog uses a star snapshot from `2026-04-01` and will need manual refresh when the external landscape changes materially
 
 ## Next Tasks
 
@@ -115,7 +124,7 @@
 - Keep `docs/version-support.md` and this memory snapshot updated whenever upstream package or source anchors move
 - Collect human review feedback from `skills/pretext-workspace/iteration-1/review.html`
 - Decide whether iteration 2 should expand from the representative subset to the full eval suite
-- Decide which verified external implementation patterns are worth promoting into first-class reference files instead of leaving them only in research notes
+- Decide whether the external example selector should later grow direct file-owner hints or freshness checks beyond the current star snapshot
 - Use the ownership router on the next upstream-internals pass and refine issue categories only if repeated ambiguity remains
 - Observe whether the tooling-surface router reduces unnecessary loading of the full validation playbook for harness-only tasks
 - Observe whether the unified route-plan router reduces manual composition across selectors for multi-dimensional tasks
@@ -167,6 +176,12 @@
   - Result: captured star-count and license snapshots for vetted external references on `2026-04-01`
 - External implementation inspection
   - Result: `docs/pretext-implementation-landscape.md` now records vetted direct users, wrappers, forks, and downgraded low-signal references
+- `python skills/pretext/scripts/select_pretext_api.py --goal streamed-lines --surface document-reader --format json`
+  - Result: returns the new cursor-continuation routing, document-reader references, and the correct prepare/layout invalidation tuple
+- `python skills/pretext/scripts/select_pretext_examples.py --goal streamed-lines --surface document-reader --format json`
+  - Result: returns the vetted `zsh-eng/epub-reader-demo` precedent for streamed reader pagination
+- `python skills/pretext/scripts/select_pretext_route_plan.py --goal streamed-lines --surface document-reader --format json`
+  - Result: the unified route-plan layer now accepts the new goal and surface without widening the reference set unnecessarily
 - `python skills/pretext/scripts/select_pretext_validation.py --area reporting-tooling --format json`
   - Result: returns the expected reporting-tooling commands and follow-up checks
 - `python skills/pretext/scripts/select_pretext_validation_by_files.py --path pretext/scripts/report-server.ts --path pretext/pages/report-utils.ts`

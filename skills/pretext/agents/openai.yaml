@@ -1,4 +1,4 @@
 interface:
   display_name: "Pretext"
-  short_description: "Build and debug Pretext layouts"
-  default_prompt: "Use $pretext to build with Pretext, choose the right layout path, or debug Pretext-specific text behavior."
+  short_description: "Build and debug Pretext layouts and reader flows"
+  default_prompt: "Use $pretext to build with Pretext, choose the right layout or streamed-line path, inspect vetted implementation precedents, or debug Pretext-specific text behavior."

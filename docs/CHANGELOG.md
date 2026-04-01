@@ -2,6 +2,12 @@
 
 ## 2026-04-01
 
+- Added `streamed-lines` as a first-class goal so `layoutNextLine()` is no longer treated as only a variable-width API
+- Added `document-reader` as a first-class integration surface for PDF, EPUB, pagination, and text-layer work
+- Added `skills/pretext/reference/adapter-patterns.md` to distill real wrapper, facade, and cache-boundary patterns from verified downstream implementations
+- Added `skills/pretext/reference/document-reader-recipes.md` to split reader and pagination work out from the broader custom-renderer surface
+- Added `skills/pretext/scripts/select_pretext_examples.py` to route agents to vetted external Pretext implementations by goal, surface, or pattern
+- Expanded the formal eval suite and coverage map to include the new `streamed-lines` goal and `document-reader` surface
 - Added `docs/pretext-implementation-landscape.md` to record vetted external Pretext implementations, wrappers, forks, and downgraded low-signal references
 - Updated durable memory to prefer verified implementation code over inspiration-only demos when expanding the skill
 - Ignored `skills/pretext-workspace/` so iterative review outputs stay local but do not dirty the repository
