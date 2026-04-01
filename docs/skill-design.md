@@ -113,6 +113,7 @@ The skill should help with:
 - Make upstream module ownership explicit with deterministic routing before patching internals
 - Keep the first real review loop reproducible in-repo instead of as an ad hoc shell sequence
 - Prefer direct narrow recipe files once the implementation shape is known, without keeping an extra generic router file
+- Expand from verified external implementations, not from inspiration-only typography demos
 
 ## Non-Goals
 
@@ -133,3 +134,4 @@ The skill still does not try to:
 - `pretext/STATUS.md`
 - `pretext/RESEARCH.md`
 - `pretext/package.json`
+- `docs/pretext-implementation-landscape.md`

@@ -35,6 +35,7 @@
 - Release tag `v0.6.8` created for owner-issue and validation-area eval coverage expansion
 - Release tag `v0.6.9` created for unified route-plan routing across selectors
 - Release tag `v0.7.0` created for explicit version-support documentation and the first real skill-creator review loop
+- External implementation research now recorded in `docs/pretext-implementation-landscape.md`
 - `skills/pretext/` now contains:
   - `SKILL.md`
   - `agents/openai.yaml`
@@ -84,6 +85,9 @@
   - published npm version
   - local upstream source commit
 - Do not collapse package version and source commit into one unsupported "latest" claim
+- Prefer verified external implementation code over inspiration-only demos when extending the skill
+- Treat non-GitHub search as a discovery layer, not as implementation truth, until inspectable source code is found
+- Down-rank low-signal visual demos unless they have both real Pretext code and enough source quality to justify reuse
 
 ## Version Support Snapshot
 
@@ -102,6 +106,7 @@
 - Human review feedback has not yet been collected from the generated static review viewer
 - The git-diff validator assumes the local checkout still follows the current `./pretext/` sibling layout when `--repo` is omitted
 - Future demand may justify even narrower renderer references such as dedicated `SVG` or `WebGL` recipes
+- External implementation coverage is now documented, but the skill has not yet converted those findings into dedicated adapter or renderer references
 
 ## Next Tasks
 
@@ -109,6 +114,7 @@
 - Keep `docs/version-support.md` and this memory snapshot updated whenever upstream package or source anchors move
 - Collect human review feedback from `skills/pretext-workspace/iteration-1/review.html`
 - Decide whether iteration 2 should expand from the representative subset to the full eval suite
+- Decide which verified external implementation patterns are worth promoting into first-class reference files instead of leaving them only in research notes
 - Use the ownership router on the next upstream-internals pass and refine issue categories only if repeated ambiguity remains
 - Observe whether the tooling-surface router reduces unnecessary loading of the full validation playbook for harness-only tasks
 - Observe whether the unified route-plan router reduces manual composition across selectors for multi-dimensional tasks
@@ -154,6 +160,12 @@
   - Result: benchmark summary for iteration 1 is `93.6%` pass rate with skill vs `67.9%` without skill, delta `+0.26`
 - `python -X utf8 <skill-creator>/eval-viewer/generate_review.py skills/pretext-workspace/iteration-1 --skill-name pretext --benchmark skills/pretext-workspace/iteration-1/benchmark.json --static skills/pretext-workspace/iteration-1/review.html`
   - Result: generated a static review viewer at `skills/pretext-workspace/iteration-1/review.html`
+- `gh search code '"@chenglou/pretext"' --limit 100 --json repository,path,url`
+  - Result: produced a broad map of real downstream repositories importing the published package
+- `gh repo view <owner>/<repo> --json nameWithOwner,description,stargazerCount,url,updatedAt,licenseInfo`
+  - Result: captured star-count and license snapshots for vetted external references on `2026-04-01`
+- External implementation inspection
+  - Result: `docs/pretext-implementation-landscape.md` now records vetted direct users, wrappers, forks, and downgraded low-signal references
 - `python skills/pretext/scripts/select_pretext_validation.py --area reporting-tooling --format json`
   - Result: returns the expected reporting-tooling commands and follow-up checks
 - `python skills/pretext/scripts/select_pretext_validation_by_files.py --path pretext/scripts/report-server.ts --path pretext/pages/report-utils.ts`

@@ -2,6 +2,8 @@
 
 ## 2026-04-01
 
+- Added `docs/pretext-implementation-landscape.md` to record vetted external Pretext implementations, wrappers, forks, and downgraded low-signal references
+- Updated durable memory to prefer verified implementation code over inspiration-only demos when expanding the skill
 - Ignored `skills/pretext-workspace/` so iterative review outputs stay local but do not dirty the repository
 - Added `run_pretext_review_iteration.py` and `grade_pretext_review_iteration.py` to make the first real in-repo skill review loop reproducible
 - Added explicit version-support documentation that records both the npm package anchor and the local upstream source anchor
