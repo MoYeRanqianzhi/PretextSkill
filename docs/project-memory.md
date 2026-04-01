@@ -40,6 +40,7 @@
 - Release tag `v0.8.1` created for grading-consistency repair and the focused second real review iteration
 - Release tag `v0.8.2` created for Socratic route critique and route-plan self-challenge integration
 - Release tag `v0.8.3` created for decision-contract commitments and three-stage route planning
+- Release tag `v0.8.4` created for reasoning-layer eval coverage and benchmark discrimination analysis
 - External implementation research now recorded in `docs/pretext-implementation-landscape.md`
 - `skills/pretext/` now contains:
   - `SKILL.md`
@@ -71,6 +72,7 @@
   - `scripts/select_pretext_examples.py`
   - `scripts/select_pretext_socratic_review.py`
   - `scripts/select_pretext_decision_contract.py`
+  - `scripts/analyze_pretext_benchmark.py`
   - `scripts/run_pretext_review_iteration.py`
   - `scripts/grade_pretext_review_iteration.py`
   - `scripts/check_layout_api_sync.py`
@@ -113,6 +115,9 @@
   - state what must be true
   - state what would break the route
   - state the smallest validation path that justifies implementation
+- Distinguish between:
+  - smoke-test evals that confirm capability exists
+  - discriminating evals that prove the skill adds measurable value over baseline
 - Keep the review loop traceable and self-consistent:
   - persist raw grader output
   - repair obviously contradictory pass/fail polarity when the evidence text is clearly affirmative or clearly negative
@@ -146,6 +151,7 @@
 - Decide whether the Socratic critique layer should later get its own formal eval prompt instead of living only in deterministic script validation
 - Decide whether the decision-contract layer should get its own formal eval prompt for assumption quality and route-breaker quality
 - Decide whether the external example selector should later grow direct file-owner hints or freshness checks beyond the current star snapshot
+- Decide whether reasoning-layer evals should be hardened into discriminating prompts or retained explicitly as smoke tests
 - Use the ownership router on the next upstream-internals pass and refine issue categories only if repeated ambiguity remains
 - Observe whether the tooling-surface router reduces unnecessary loading of the full validation playbook for harness-only tasks
 - Observe whether the unified route-plan router reduces manual composition across selectors for multi-dimensional tasks
@@ -221,6 +227,12 @@
   - Result: focused iteration 2 benchmark summary is `100.0%` pass rate with skill vs `69.7%` without skill, delta `+0.30`
 - `python -X utf8 <skill-creator>/eval-viewer/generate_review.py skills/pretext-workspace/iteration-2 --skill-name pretext --benchmark skills/pretext-workspace/iteration-2/benchmark.json --previous-workspace skills/pretext-workspace/iteration-1 --static skills/pretext-workspace/iteration-2/review.html`
   - Result: generated a second static review viewer at `skills/pretext-workspace/iteration-2/review.html`
+- `python skills/pretext/scripts/run_pretext_review_iteration.py --workspace skills/pretext-workspace/iteration-3 --eval-id 26 --eval-id 27`
+  - Result: produced the focused third iteration workspace for Socratic critique and decision-contract evaluation
+- `python <skill-creator>/scripts/aggregate_benchmark.py skills/pretext-workspace/iteration-3 --skill-name pretext --skill-path skills/pretext`
+  - Result: focused iteration 3 benchmark summary is `100.0%` pass rate with skill vs `100.0%` without skill, delta `+0.00`
+- `python skills/pretext/scripts/analyze_pretext_benchmark.py --benchmark skills/pretext-workspace/iteration-3/benchmark.json --format json`
+  - Result: classified evals `26` and `27` as `non_discriminating_success`
 - `python skills/pretext/scripts/select_pretext_validation.py --area reporting-tooling --format json`
   - Result: returns the expected reporting-tooling commands and follow-up checks
 - `python skills/pretext/scripts/select_pretext_validation_by_files.py --path pretext/scripts/report-server.ts --path pretext/pages/report-utils.ts`

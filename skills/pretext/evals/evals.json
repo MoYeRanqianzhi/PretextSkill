@@ -291,6 +291,32 @@
         "States that width can stay constant and cursor continuity is still the reason to use layoutNextLine()",
         "Points to document-reader-recipes.md or equivalent reader-specific guidance"
       ]
+    },
+    {
+      "id": 26,
+      "prompt": "My first instinct is to treat this as `variable-width` on `custom-renderer`, because I am laying out one paragraph across fixed-width ebook columns. Before I implement anything, challenge that instinct. Which neighboring routes should I rule out, what facts would falsify my first instinct, and what commands should I run next?",
+      "expected_output": "Uses the Socratic critique layer to challenge the initial route, questions whether widths truly vary per line versus continuation across containers, rules out the wrong neighboring routes, and gives concrete follow-up commands for critique and route selection.",
+      "files": [],
+      "expectations": [
+        "Challenges the initial variable-width custom-renderer instinct rather than accepting it blindly",
+        "Asks whether widths truly vary per line versus whether continuation across containers is the real requirement",
+        "Rules out the wrong neighboring routes such as fixed-lines or generic custom-renderer when reader continuation is central",
+        "Includes explicit falsifiers or route-breaker style questions",
+        "Includes concrete follow-up commands such as select_pretext_socratic_review.py or related route selectors"
+      ]
+    },
+    {
+      "id": 27,
+      "prompt": "We have already decided on `streamed-lines` for a document-reader pagination bug owned by `streamed-lines` on the `probe-surface`. I do not want more brainstorming. Turn this into a decision-grade contract: what exactly must be true, what assumptions are we making, what would break the route, and what is the lightest validation chain?",
+      "expected_output": "Uses the decision-contract layer to emit an implementation-grade commitment with explicit goal and surface, invalidation obligations, assumptions, route breakers, and the minimal validation commands.",
+      "files": [],
+      "expectations": [
+        "States the chosen goal and surface explicitly",
+        "States the prepare versus layout invalidation tuple",
+        "States assumptions or proof obligations rather than only general advice",
+        "States route breakers or facts that would force route reconsideration",
+        "Includes a minimal validation chain rather than only broad follow-up ideas"
+      ]
     }
   ]
 }

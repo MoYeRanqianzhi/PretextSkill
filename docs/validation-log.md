@@ -274,6 +274,31 @@
   - Confirmed the decision-contract selector compiles cleanly
 
 - Command:
+  - `python -m py_compile skills/pretext/scripts/pretext_reasoning_layers.py skills/pretext/scripts/check_pretext_eval_coverage.py skills/pretext/scripts/analyze_pretext_benchmark.py`
+- Result:
+  - Confirmed the reasoning-layer taxonomy and benchmark-analysis helpers compile cleanly
+
+- Command:
+  - `python skills/pretext/scripts/check_pretext_eval_coverage.py`
+- Result:
+  - Confirmed coverage is now in sync across goals, surfaces, tooling areas, owner issues, validation areas, and reasoning layers
+
+- Command:
+  - `python skills/pretext/scripts/run_pretext_review_iteration.py --workspace skills/pretext-workspace/iteration-3 --eval-id 26 --eval-id 27`
+- Result:
+  - Wrote the focused third real review iteration for reasoning-layer prompts
+
+- Command:
+  - `python <skill-creator>/scripts/aggregate_benchmark.py skills/pretext-workspace/iteration-3 --skill-name pretext --skill-path skills/pretext`
+- Result:
+  - Generated iteration 3 benchmark artifacts showing `100.0%` with skill and `100.0%` without skill
+
+- Command:
+  - `python skills/pretext/scripts/analyze_pretext_benchmark.py --benchmark skills/pretext-workspace/iteration-3/benchmark.json --format json`
+- Result:
+  - Classified evals `26` and `27` as `non_discriminating_success`, meaning they currently function as smoke tests rather than benchmark gates
+
+- Command:
   - `python skills/pretext/scripts/select_pretext_route_plan.py --goal streamed-lines --surface document-reader --issue streamed-lines --tooling-area probe-surface --format json`
 - Result:
   - Returned the unified route plan with `socratic-review.md` and automatic critique/example helper commands included

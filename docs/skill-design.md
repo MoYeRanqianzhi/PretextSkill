@@ -93,6 +93,8 @@ The skill should help with:
   - deterministic helper that challenges a tentative route before implementation using first-principles questions and route-rejection logic
 - `scripts/select_pretext_decision_contract.py`
   - deterministic helper that turns a surviving route into an implementation contract with explicit obligations and breakers
+- `scripts/analyze_pretext_benchmark.py`
+  - deterministic helper that classifies evals as smoke tests, weak signals, regression candidates, or discriminating gates
 - `scripts/run_pretext_review_iteration.py`
   - deterministic helper that executes one with-skill vs baseline review iteration into a skill-creator-style workspace
 - `scripts/grade_pretext_review_iteration.py`
@@ -121,6 +123,7 @@ The skill should help with:
 - Make `layoutNextLine()` routing explicit for fixed-width streamed pagination as well as true variable-width flow
 - Make route selection falsifiable by design rather than relying on agent confidence or eloquence
 - Make the final route implementation-grade by forcing explicit commitments instead of stopping at plausible recommendations
+- Make benchmark interpretation explicit so non-discriminating evals are not mistaken for high-value benchmark gates
 - Make correctness-contract routing explicit instead of burying it inside generic diagnostics
 - Make validation routing deterministic instead of relying on memory or intuition
 - Keep the formal review loop trustworthy enough to drive iteration by repairing obviously contradictory grading polarity against its own evidence

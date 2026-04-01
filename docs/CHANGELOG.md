@@ -2,6 +2,11 @@
 
 ## 2026-04-01
 
+- Added `analyze_pretext_benchmark.py` to classify evals as smoke tests, weak signals, regression candidates, or discriminating gates
+- Added `reasoning_layers` to formal eval coverage so route-plan, Socratic critique, and decision-contract layers are all tracked explicitly
+- Ran a focused third real review iteration over evals `26` and `27`
+- Third focused iteration benchmark summary: with skill `100.0%`, without skill `100.0%`, delta `+0.00`
+- Recorded that the current reasoning-layer evals behave as smoke tests rather than discriminating benchmark gates
 - Added `reference/decision-contract.md` to turn a plausible route into an explicit implementation commitment
 - Added `select_pretext_decision_contract.py` to emit route summary, assumptions, proof obligations, route breakers, and minimal validation commands
 - Extended `select_pretext_route_plan.py` again so unified route plans now include decision-contract follow-up commands in addition to critique and example commands

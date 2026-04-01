@@ -57,5 +57,10 @@
     "package-workflow": [9],
     "demo-site": [17],
     "reporting-tooling": [16]
+  },
+  "reasoning_layers": {
+    "route-plan": [24],
+    "socratic-review": [26],
+    "decision-contract": [27]
   }
 }

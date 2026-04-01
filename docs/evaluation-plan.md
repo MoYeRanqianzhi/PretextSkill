@@ -109,9 +109,39 @@ The first two real iterations have now been run on focused subsets:
   - with skill: `100.0%`
   - without skill: `69.7%`
   - delta: `+0.30`
+- eval IDs: `26, 27`
+- workspace: `skills/pretext-workspace/iteration-3`
+- benchmark summary:
+  - with skill: `100.0%`
+  - without skill: `100.0%`
+  - delta: `+0.00`
 
 The remaining gap is:
 
 - human review feedback has not yet been collected from `skills/pretext-workspace/iteration-1/review.html`
 - human review feedback has not yet been collected from `skills/pretext-workspace/iteration-2/review.html`
+- human review feedback has not yet been collected from `skills/pretext-workspace/iteration-3/review.html`
 - the full 25-eval suite has not yet been run through the same loop
+
+## Reasoning-Layer Note
+
+Iteration 3 over evals `26` and `27` showed an important meta-result:
+
+- with skill: `100.0%`
+- without skill: `100.0%`
+- delta: `+0.00`
+
+This means the current reasoning-layer evals behave as smoke tests rather than discriminating benchmark gates.
+
+That is still useful:
+
+- they verify the skill can answer these prompts correctly
+- they do not yet prove the skill adds measurable value over baseline on these prompts
+
+Use `python skills/pretext/scripts/analyze_pretext_benchmark.py --benchmark <benchmark.json>` to classify whether an eval is:
+
+- non-discriminating success
+- non-discriminating failure
+- weak signal
+- regression candidate
+- discriminating positive
