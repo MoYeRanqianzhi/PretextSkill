@@ -113,6 +113,7 @@ The skill should help with:
 - Make `layoutNextLine()` routing explicit for fixed-width streamed pagination as well as true variable-width flow
 - Make correctness-contract routing explicit instead of burying it inside generic diagnostics
 - Make validation routing deterministic instead of relying on memory or intuition
+- Keep the formal review loop trustworthy enough to drive iteration by repairing obviously contradictory grading polarity against its own evidence
 - Cover package, browser, corpus, Gatsby, probe, and demo-site validation surfaces with one shared taxonomy
 - Keep a formal eval suite aligned with the goal and surface taxonomy so regressions are observable
 - Keep eval coverage aligned not only with goals and surfaces, but also with owner issues and validation areas

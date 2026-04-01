@@ -95,7 +95,7 @@ When running the formal `skill-creator` loop:
 
 ## Current Gap
 
-The first real iteration has now been run on a representative subset:
+The first two real iterations have now been run on focused subsets:
 
 - eval IDs: `1, 4, 5, 8, 9, 11, 24`
 - workspace: `skills/pretext-workspace/iteration-1`
@@ -103,8 +103,15 @@ The first real iteration has now been run on a representative subset:
   - with skill: `93.6%`
   - without skill: `67.9%`
   - delta: `+0.26`
+- eval IDs: `2, 4, 11, 20, 24, 25`
+- workspace: `skills/pretext-workspace/iteration-2`
+- benchmark summary:
+  - with skill: `100.0%`
+  - without skill: `69.7%`
+  - delta: `+0.30`
 
 The remaining gap is:
 
 - human review feedback has not yet been collected from `skills/pretext-workspace/iteration-1/review.html`
+- human review feedback has not yet been collected from `skills/pretext-workspace/iteration-2/review.html`
 - the full 25-eval suite has not yet been run through the same loop

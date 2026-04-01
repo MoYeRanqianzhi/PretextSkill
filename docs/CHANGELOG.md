@@ -2,6 +2,11 @@
 
 ## 2026-04-01
 
+- Repaired review-loop grading consistency so obviously affirmative evidence no longer survives as contradictory `passed: false` results
+- Added evidence-polarity normalization notes to `grade_pretext_review_iteration.py` and persisted raw grader output for future traceability
+- Ran a focused second real review iteration over evals `2, 4, 11, 20, 24, 25`
+- Generated `skills/pretext-workspace/iteration-2/benchmark.json`, `benchmark.md`, and `review.html`
+- Second focused iteration benchmark summary: with skill `100.0%`, without skill `69.7%`, delta `+0.30`
 - Added `streamed-lines` as a first-class goal so `layoutNextLine()` is no longer treated as only a variable-width API
 - Added `document-reader` as a first-class integration surface for PDF, EPUB, pagination, and text-layer work
 - Added `skills/pretext/reference/adapter-patterns.md` to distill real wrapper, facade, and cache-boundary patterns from verified downstream implementations

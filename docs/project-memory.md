@@ -37,6 +37,7 @@
 - Release tag `v0.7.0` created for explicit version-support documentation and the first real skill-creator review loop
 - Release tag `v0.7.1` created for vetted external implementation-landscape research
 - Release tag `v0.8.0` created for streamed-line routing, document-reader disclosure, and external example selection
+- Release tag `v0.8.1` created for grading-consistency repair and the focused second real review iteration
 - External implementation research now recorded in `docs/pretext-implementation-landscape.md`
 - `skills/pretext/` now contains:
   - `SKILL.md`
@@ -98,6 +99,9 @@
   - it is also the correct path when fixed-width paragraphs must continue across pages, columns, or streamed slices
 - Treat document readers as their own surface instead of overloading the generic custom-renderer bucket
 - Provide deterministic access to vetted external implementations through `select_pretext_examples.py` rather than relying on remembered repo names
+- Keep the review loop traceable and self-consistent:
+  - persist raw grader output
+  - repair obviously contradictory pass/fail polarity when the evidence text is clearly affirmative or clearly negative
 
 ## Version Support Snapshot
 
@@ -112,7 +116,7 @@
 
 ## Known Issues
 
-- A first real `skill-creator` review iteration has now been run, but only on a representative subset rather than the full 25-eval suite
+- Two real `skill-creator` review iterations have now been run, but still on focused subsets rather than the full 25-eval suite
 - Human review feedback has not yet been collected from the generated static review viewer
 - The git-diff validator assumes the local checkout still follows the current `./pretext/` sibling layout when `--repo` is omitted
 - Future demand may justify even narrower renderer references such as dedicated `SVG` or `WebGL` recipes
@@ -123,7 +127,8 @@
 - Run the new formal eval prompts through the full `skill-creator` review loop
 - Keep `docs/version-support.md` and this memory snapshot updated whenever upstream package or source anchors move
 - Collect human review feedback from `skills/pretext-workspace/iteration-1/review.html`
-- Decide whether iteration 2 should expand from the representative subset to the full eval suite
+- Collect human review feedback from `skills/pretext-workspace/iteration-2/review.html`
+- Decide whether the next iteration should be the first full 25-eval run or a human-feedback-driven patch round
 - Decide whether the external example selector should later grow direct file-owner hints or freshness checks beyond the current star snapshot
 - Use the ownership router on the next upstream-internals pass and refine issue categories only if repeated ambiguity remains
 - Observe whether the tooling-surface router reduces unnecessary loading of the full validation playbook for harness-only tasks
@@ -182,6 +187,16 @@
   - Result: returns the vetted `zsh-eng/epub-reader-demo` precedent for streamed reader pagination
 - `python skills/pretext/scripts/select_pretext_route_plan.py --goal streamed-lines --surface document-reader --format json`
   - Result: the unified route-plan layer now accepts the new goal and surface without widening the reference set unnecessarily
+- `python skills/pretext/scripts/run_pretext_review_iteration.py --workspace skills/pretext-workspace/iteration-2 --eval-id 2 --eval-id 4 --eval-id 11 --eval-id 20 --eval-id 24 --eval-id 25`
+  - Result: produced the focused second iteration workspace for fixed-lines, variable-width, probe-surface, streamed-line ownership, unified route-plan, and document-reader coverage
+- `python skills/pretext/scripts/grade_pretext_review_iteration.py --workspace skills/pretext-workspace/iteration-2`
+  - Result: produced grading outputs for iteration 2, revealing a grader polarity-consistency problem
+- Iteration-2 grading repair pass
+  - Result: repaired contradictory expectation booleans using evidence-polarity normalization and regenerated benchmark artifacts
+- `python <skill-creator>/scripts/aggregate_benchmark.py skills/pretext-workspace/iteration-2 --skill-name pretext --skill-path skills/pretext`
+  - Result: focused iteration 2 benchmark summary is `100.0%` pass rate with skill vs `69.7%` without skill, delta `+0.30`
+- `python -X utf8 <skill-creator>/eval-viewer/generate_review.py skills/pretext-workspace/iteration-2 --skill-name pretext --benchmark skills/pretext-workspace/iteration-2/benchmark.json --previous-workspace skills/pretext-workspace/iteration-1 --static skills/pretext-workspace/iteration-2/review.html`
+  - Result: generated a second static review viewer at `skills/pretext-workspace/iteration-2/review.html`
 - `python skills/pretext/scripts/select_pretext_validation.py --area reporting-tooling --format json`
   - Result: returns the expected reporting-tooling commands and follow-up checks
 - `python skills/pretext/scripts/select_pretext_validation_by_files.py --path pretext/scripts/report-server.ts --path pretext/pages/report-utils.ts`

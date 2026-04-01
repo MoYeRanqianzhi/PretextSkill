@@ -12,6 +12,73 @@ import time
 from pathlib import Path
 
 
+POSITIVE_EVIDENCE_CUES = [
+    "explicitly state",
+    "explicitly states",
+    "explicitly require",
+    "explicitly requires",
+    "explicitly say",
+    "explicitly says",
+    "explicitly choose",
+    "explicitly chooses",
+    "explicitly cite",
+    "explicitly cites",
+    "explicitly list",
+    "explicitly lists",
+    "clearly",
+    "shows",
+    "show ",
+    "name ",
+    "names",
+    "list ",
+    "lists",
+    "recommend ",
+    "recommends",
+    "uses",
+    "returns",
+    "point to",
+    "points to",
+    "includes",
+    "states ",
+    "state that",
+    "states that",
+    "describe",
+    "describes",
+    "contrast",
+    "contrasts",
+    "mentions",
+    "明确",
+    "列出",
+    "给出",
+    "指出",
+    "引用",
+    "使用",
+    "推荐",
+    "返回",
+    "说明",
+]
+
+NEGATIVE_EVIDENCE_CUES = [
+    "does not",
+    "did not",
+    "no mention",
+    "not mention",
+    "never mentions",
+    "missing",
+    "absent",
+    "fails to",
+    "stops at",
+    "no reference set",
+    "no concrete commands",
+    "does not route",
+    "does not map",
+    "未提及",
+    "没有",
+    "缺少",
+    "未返回",
+]
+
+
 def run_claude(prompt: str, workdir: Path, model: str | None) -> str:
     cmd = [
         "claude",
@@ -74,6 +141,53 @@ def normalize_expectations(raw_expectations: list[dict], fallback_expectations: 
     return normalized
 
 
+def flatten_evidence_text(evidence: object) -> str:
+    if isinstance(evidence, str):
+        return evidence
+    if isinstance(evidence, list):
+        return " ".join(flatten_evidence_text(item) for item in evidence)
+    if isinstance(evidence, dict):
+        return " ".join(flatten_evidence_text(value) for value in evidence.values())
+    return str(evidence)
+
+
+def classify_evidence_polarity(evidence: object) -> str:
+    text = flatten_evidence_text(evidence).lower()
+    if not text.strip():
+        return "unclear"
+
+    has_positive = any(cue in text for cue in POSITIVE_EVIDENCE_CUES)
+    has_negative = any(cue in text for cue in NEGATIVE_EVIDENCE_CUES)
+
+    if has_positive and not has_negative:
+        return "positive"
+    if has_negative and not has_positive:
+        return "negative"
+    return "unclear"
+
+
+def repair_expectation_polarity(expectations: list[dict]) -> tuple[list[dict], list[str]]:
+    repaired: list[dict] = []
+    notes: list[str] = []
+
+    for item in expectations:
+        next_item = dict(item)
+        polarity = classify_evidence_polarity(next_item.get("evidence", ""))
+        if polarity == "positive" and not next_item["passed"]:
+            next_item["passed"] = True
+            notes.append(
+                f"Flipped expectation to pass because the evidence text was affirmative: {next_item['text']}"
+            )
+        elif polarity == "negative" and next_item["passed"]:
+            next_item["passed"] = False
+            notes.append(
+                f"Flipped expectation to fail because the evidence text was negative: {next_item['text']}"
+            )
+        repaired.append(next_item)
+
+    return repaired, notes
+
+
 def normalize_claims(raw_claims: list[dict]) -> list[dict]:
     claims: list[dict] = []
     for raw in raw_claims:
@@ -134,6 +248,7 @@ def normalize_eval_feedback(raw_eval_feedback: object) -> dict:
 
 def normalize_grading(raw: dict, fallback_expectations: list[str]) -> dict:
     expectations = normalize_expectations(list(raw.get("expectations", [])), fallback_expectations)
+    expectations, normalization_notes = repair_expectation_polarity(expectations)
     passed = sum(1 for item in expectations if item["passed"])
     total = len(expectations)
     failed = total - passed
@@ -148,6 +263,7 @@ def normalize_grading(raw: dict, fallback_expectations: list[str]) -> dict:
         "claims": normalize_claims(list(raw.get("claims", []))),
         "user_notes_summary": normalize_user_notes(raw.get("user_notes_summary", {})),
         "eval_feedback": normalize_eval_feedback(raw.get("eval_feedback", {})),
+        "normalization_notes": normalization_notes,
     }
 
 
@@ -178,16 +294,17 @@ def build_prompt(run_dir: Path, metadata: dict) -> str:
     )
 
 
-def grade_workspace(workspace: Path, model: str | None) -> None:
+def grade_workspace(workspace: Path, model: str | None, force: bool) -> None:
     for run_dir, metadata in iter_runs(workspace):
         grading_path = run_dir / "grading.json"
-        if grading_path.exists():
+        if grading_path.exists() and not force:
             continue
         prompt = build_prompt(run_dir, metadata)
         start = time.time()
         raw = run_claude(prompt, workdir=workspace.parents[2], model=model)
         if not raw.strip():
             raw = run_claude(prompt, workdir=workspace.parents[2], model=model)
+        (run_dir / "grading_raw.txt").write_text(raw, encoding="utf-8")
         grading = normalize_grading(extract_json_object(raw), list(metadata.get("expectations", [])))
         grading_duration = time.time() - start
 
@@ -217,9 +334,10 @@ def main() -> int:
         help="Workspace directory for the iteration.",
     )
     parser.add_argument("--model", default=None, help="Optional Claude model override.")
+    parser.add_argument("--force", action="store_true", help="Regenerate grading even if grading.json already exists.")
     args = parser.parse_args()
 
-    grade_workspace(Path(args.workspace).resolve(), args.model)
+    grade_workspace(Path(args.workspace).resolve(), args.model, args.force)
     print(f"Grading written for {Path(args.workspace).resolve()}")
     return 0
 

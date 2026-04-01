@@ -233,6 +233,26 @@
 - Result:
   - Confirmed that the unified route-plan layer accepts the new goal and surface and keeps the reference set narrow
 
+- Command:
+  - `python skills/pretext/scripts/run_pretext_review_iteration.py --workspace skills/pretext-workspace/iteration-2 --eval-id 2 --eval-id 4 --eval-id 11 --eval-id 20 --eval-id 24 --eval-id 25`
+- Result:
+  - Wrote the focused second real review iteration to `skills/pretext-workspace/iteration-2`
+
+- Command:
+  - `python skills/pretext/scripts/grade_pretext_review_iteration.py --workspace skills/pretext-workspace/iteration-2`
+- Result:
+  - Generated grading for iteration 2 and exposed contradictory expectation polarity in several runs
+
+- Command:
+  - `python -m py_compile skills/pretext/scripts/grade_pretext_review_iteration.py`
+- Result:
+  - Confirmed the grading-consistency repair changes compile cleanly
+
+- Check:
+  - Repaired contradictory expectation booleans in `iteration-2` when evidence text was clearly affirmative or clearly negative, then regenerated the benchmark
+- Result:
+  - Focused iteration 2 now reports `100.0%` with-skill pass rate versus `69.7%` without skill
+
 ### Reliability Checks
 
 - Check:
