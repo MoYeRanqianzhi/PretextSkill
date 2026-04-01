@@ -35,6 +35,7 @@
 - Release tag `v0.6.8` created for owner-issue and validation-area eval coverage expansion
 - Release tag `v0.6.9` created for unified route-plan routing across selectors
 - Release tag `v0.7.0` created for explicit version-support documentation and the first real skill-creator review loop
+- Release tag `v0.7.1` created for vetted external implementation-landscape research
 - External implementation research now recorded in `docs/pretext-implementation-landscape.md`
 - `skills/pretext/` now contains:
   - `SKILL.md`
