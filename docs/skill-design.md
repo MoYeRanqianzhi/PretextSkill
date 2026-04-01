@@ -53,6 +53,8 @@ The skill should help with:
   - route-challenge questions, neighboring-route rejection, evidence ladders, and falsifiers
 - `reference/decision-contract.md`
   - decision-grade commitments, assumptions, proof obligations, route breakers, and minimal validation chains
+- `reference/eval-design.md`
+  - first-principles guidance for designing smoke tests versus true benchmark gates
 - `reference/internal-exports.md`
   - diagnostic helpers, advanced exported types, rich-path structural fields, and source-level internals
 - `reference/internal-architecture.md`
@@ -97,6 +99,8 @@ The skill should help with:
   - deterministic helper that classifies evals as smoke tests, weak signals, regression candidates, or discriminating gates
 - `scripts/select_pretext_reasoning_bundle.py`
   - deterministic helper that emits route selection, critique, contract, references, and ordered next steps as one integrated bundle
+- `scripts/select_pretext_eval_design.py`
+  - deterministic helper that recommends ambiguity hooks, local discriminators, anti-patterns, and grading focus for smoke versus gate evals
 - `scripts/run_pretext_review_iteration.py`
   - deterministic helper that executes one with-skill vs baseline review iteration into a skill-creator-style workspace
 - `scripts/grade_pretext_review_iteration.py`
@@ -127,6 +131,7 @@ The skill should help with:
 - Make the final route implementation-grade by forcing explicit commitments instead of stopping at plausible recommendations
 - Make benchmark interpretation explicit so non-discriminating evals are not mistaken for high-value benchmark gates
 - Prefer integrated reasoning bundles over disconnected selector outputs when the risk is coordination drift rather than lack of taxonomy
+- Make eval design explicit so future prompts do not accidentally collapse from intended gates into smoke tests
 - Make correctness-contract routing explicit instead of burying it inside generic diagnostics
 - Make validation routing deterministic instead of relying on memory or intuition
 - Keep the formal review loop trustworthy enough to drive iteration by repairing obviously contradictory grading polarity against its own evidence

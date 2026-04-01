@@ -2,6 +2,9 @@
 
 ## 2026-04-01
 
+- Added `reference/eval-design.md` to explain, from first principles, how smoke tests differ from true benchmark gates
+- Added `select_pretext_eval_design.py` to recommend ambiguity hooks, local signals, anti-patterns, and grading focus for smoke versus gate evals
+- Fixed taxonomy drift by registering `reasoning-bundle` as an explicit reasoning layer in eval coverage
 - Added `select_pretext_reasoning_bundle.py` to emit one integrated route, critique, and contract bundle for high-ambiguity tasks
 - Added `eval_roles` coverage and `pretext_eval_roles.py` so smoke tests and benchmark gates are tracked explicitly
 - Added eval `28` for the integrated reasoning bundle layer

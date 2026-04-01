@@ -8,4 +8,5 @@ SUPPORTED_REASONING_LAYERS = [
     "route-plan",
     "socratic-review",
     "decision-contract",
+    "reasoning-bundle",
 ]

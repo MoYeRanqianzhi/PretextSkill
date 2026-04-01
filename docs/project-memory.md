@@ -42,6 +42,7 @@
 - Release tag `v0.8.3` created for decision-contract commitments and three-stage route planning
 - Release tag `v0.8.4` created for reasoning-layer eval coverage and benchmark discrimination analysis
 - Release tag `v0.8.5` created for integrated reasoning bundles and explicit eval-role taxonomy
+- Release tag `v0.8.6` created for eval-design guidance and reasoning-layer drift repair
 - External implementation research now recorded in `docs/pretext-implementation-landscape.md`
 - `skills/pretext/` now contains:
   - `SKILL.md`
@@ -53,6 +54,7 @@
   - `reference/adapter-patterns.md`
   - `reference/socratic-review.md`
   - `reference/decision-contract.md`
+  - `reference/eval-design.md`
   - `reference/internal-exports.md`
   - `reference/internal-architecture.md`
   - `reference/whitespace-and-breaks.md`
@@ -75,6 +77,7 @@
   - `scripts/select_pretext_decision_contract.py`
   - `scripts/select_pretext_reasoning_bundle.py`
   - `scripts/analyze_pretext_benchmark.py`
+  - `scripts/select_pretext_eval_design.py`
   - `scripts/run_pretext_review_iteration.py`
   - `scripts/grade_pretext_review_iteration.py`
   - `scripts/check_layout_api_sync.py`
@@ -121,6 +124,10 @@
   - smoke-test evals that confirm capability exists
   - discriminating evals that prove the skill adds measurable value over baseline
 - Prefer one integrated reasoning bundle over three disconnected reasoning outputs when the task is high-ambiguity and high-stakes
+- Treat eval design as a first-class engineering problem:
+  - decide whether a prompt is intended as `smoke` or `gate`
+  - design misleading neighboring routes on purpose for gate prompts
+  - use repo-local discriminators instead of generic explanation prompts
 - Keep the review loop traceable and self-consistent:
   - persist raw grader output
   - repair obviously contradictory pass/fail polarity when the evidence text is clearly affirmative or clearly negative
@@ -158,6 +165,7 @@
 - Decide whether the decision-contract layer should get its own formal eval prompt for assumption quality and route-breaker quality
 - Decide whether the external example selector should later grow direct file-owner hints or freshness checks beyond the current star snapshot
 - Decide whether reasoning-layer evals should be hardened into discriminating prompts or retained explicitly as smoke tests
+- Use `select_pretext_eval_design.py` before adding new gate prompts so ambiguity hooks and local discriminators are deliberate
 - Use the ownership router on the next upstream-internals pass and refine issue categories only if repeated ambiguity remains
 - Observe whether the tooling-surface router reduces unnecessary loading of the full validation playbook for harness-only tasks
 - Observe whether the unified route-plan router reduces manual composition across selectors for multi-dimensional tasks

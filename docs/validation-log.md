@@ -304,6 +304,16 @@
   - Returned one integrated reasoning bundle containing route selection, critique, decision contract, minimal references, and execution order
 
 - Command:
+  - `python skills/pretext/scripts/select_pretext_eval_design.py --role gate --goal streamed-lines --surface document-reader --reasoning-layer reasoning-bundle --format json`
+- Result:
+  - Returned gate-design guidance for reasoning bundles, including ambiguity hooks, required repo-local signals, anti-patterns, and grading focus
+
+- Command:
+  - `python skills/pretext/scripts/check_pretext_eval_coverage.py`
+- Result:
+  - Confirmed that `reasoning-bundle` is now registered in the reasoning-layer coverage taxonomy alongside route-plan, Socratic critique, and decision-contract
+
+- Command:
   - `python -m py_compile skills/pretext/scripts/pretext_eval_roles.py skills/pretext/scripts/check_pretext_eval_coverage.py skills/pretext/scripts/analyze_pretext_benchmark.py skills/pretext/scripts/select_pretext_reasoning_bundle.py`
 - Result:
   - Confirmed the eval-role taxonomy, benchmark analyzer, and reasoning-bundle selector compile cleanly
