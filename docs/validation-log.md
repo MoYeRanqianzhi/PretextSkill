@@ -259,6 +259,21 @@
   - Returned route-challenge questions, neighboring-route rejections, falsifiers, and helper commands for the streamed reader path
 
 - Command:
+  - `python skills/pretext/scripts/select_pretext_decision_contract.py --goal streamed-lines --surface document-reader --issue streamed-lines --tooling-area probe-surface --format json`
+- Result:
+  - Returned a decision-grade contract for the streamed reader path, including proof obligations, route breakers, and the minimal validation chain
+
+- Command:
+  - `python skills/pretext/scripts/select_pretext_route_plan.py --goal streamed-lines --surface document-reader --issue streamed-lines --tooling-area probe-surface --format json`
+- Result:
+  - Confirmed that the unified route plan now includes decision-contract references and helper commands alongside critique and example commands
+
+- Command:
+  - `python -m py_compile skills/pretext/scripts/select_pretext_decision_contract.py`
+- Result:
+  - Confirmed the decision-contract selector compiles cleanly
+
+- Command:
   - `python skills/pretext/scripts/select_pretext_route_plan.py --goal streamed-lines --surface document-reader --issue streamed-lines --tooling-area probe-surface --format json`
 - Result:
   - Returned the unified route plan with `socratic-review.md` and automatic critique/example helper commands included

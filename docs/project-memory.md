@@ -39,6 +39,7 @@
 - Release tag `v0.8.0` created for streamed-line routing, document-reader disclosure, and external example selection
 - Release tag `v0.8.1` created for grading-consistency repair and the focused second real review iteration
 - Release tag `v0.8.2` created for Socratic route critique and route-plan self-challenge integration
+- Release tag `v0.8.3` created for decision-contract commitments and three-stage route planning
 - External implementation research now recorded in `docs/pretext-implementation-landscape.md`
 - `skills/pretext/` now contains:
   - `SKILL.md`
@@ -49,6 +50,7 @@
   - `reference/public-api.md`
   - `reference/adapter-patterns.md`
   - `reference/socratic-review.md`
+  - `reference/decision-contract.md`
   - `reference/internal-exports.md`
   - `reference/internal-architecture.md`
   - `reference/whitespace-and-breaks.md`
@@ -68,6 +70,7 @@
   - `scripts/select_pretext_route_plan.py`
   - `scripts/select_pretext_examples.py`
   - `scripts/select_pretext_socratic_review.py`
+  - `scripts/select_pretext_decision_contract.py`
   - `scripts/run_pretext_review_iteration.py`
   - `scripts/grade_pretext_review_iteration.py`
   - `scripts/check_layout_api_sync.py`
@@ -106,6 +109,10 @@
   - every serious route should survive challenge from neighboring goals and surfaces
   - the skill should explicitly ask what fact would make the current route wrong
 - Make Socratic critique part of the route-planning layer rather than a separate optional habit
+- Make the final route decision explicit as a contract:
+  - state what must be true
+  - state what would break the route
+  - state the smallest validation path that justifies implementation
 - Keep the review loop traceable and self-consistent:
   - persist raw grader output
   - repair obviously contradictory pass/fail polarity when the evidence text is clearly affirmative or clearly negative
@@ -137,6 +144,7 @@
 - Collect human review feedback from `skills/pretext-workspace/iteration-2/review.html`
 - Decide whether the next iteration should be the first full 25-eval run or a human-feedback-driven patch round
 - Decide whether the Socratic critique layer should later get its own formal eval prompt instead of living only in deterministic script validation
+- Decide whether the decision-contract layer should get its own formal eval prompt for assumption quality and route-breaker quality
 - Decide whether the external example selector should later grow direct file-owner hints or freshness checks beyond the current star snapshot
 - Use the ownership router on the next upstream-internals pass and refine issue categories only if repeated ambiguity remains
 - Observe whether the tooling-surface router reduces unnecessary loading of the full validation playbook for harness-only tasks
@@ -199,6 +207,10 @@
   - Result: returns explicit challenge questions, neighboring routes to reject, falsifiers, and follow-up selector commands for the tentative route
 - `python skills/pretext/scripts/select_pretext_route_plan.py --goal streamed-lines --surface document-reader --issue streamed-lines --tooling-area probe-surface --format json`
   - Result: the unified route plan now includes `socratic-review.md` plus critique and external-example helper commands automatically
+- `python skills/pretext/scripts/select_pretext_decision_contract.py --goal streamed-lines --surface document-reader --issue streamed-lines --tooling-area probe-surface --format json`
+  - Result: returns route summary, required statements, assumptions, proof obligations, route breakers, and the minimal validation chain for the streamed reader path
+- `python skills/pretext/scripts/select_pretext_route_plan.py --goal streamed-lines --surface document-reader --issue streamed-lines --tooling-area probe-surface --format json`
+  - Result: the unified route plan now includes decision-contract follow-up commands as part of the default helper chain
 - `python skills/pretext/scripts/run_pretext_review_iteration.py --workspace skills/pretext-workspace/iteration-2 --eval-id 2 --eval-id 4 --eval-id 11 --eval-id 20 --eval-id 24 --eval-id 25`
   - Result: produced the focused second iteration workspace for fixed-lines, variable-width, probe-surface, streamed-line ownership, unified route-plan, and document-reader coverage
 - `python skills/pretext/scripts/grade_pretext_review_iteration.py --workspace skills/pretext-workspace/iteration-2`

@@ -62,10 +62,13 @@ def build_route_plan(
         )
         notes = append_unique(notes, recommendation.notes)
         primary_question_parts.append(recommendation.reason)
-        references = append_unique(references, ["reference/socratic-review.md"])
+        references = append_unique(references, ["reference/socratic-review.md", "reference/decision-contract.md"])
         helper_commands.append(
             f"python scripts/select_pretext_socratic_review.py --goal {goal}"
             + (f" --surface {surface}" if surface != "generic" else "")
+        )
+        helper_commands.append(
+            f"python scripts/select_pretext_decision_contract.py --goal {goal} --surface {surface}"
         )
         if surface != "generic":
             helper_commands.append(
@@ -80,8 +83,12 @@ def build_route_plan(
         primary_question_parts.append(owner.reason)
         if derived_validation_area is None:
             derived_validation_area = owner.validation_area
-        references = append_unique(references, ["reference/socratic-review.md"])
+        references = append_unique(references, ["reference/socratic-review.md", "reference/decision-contract.md"])
         helper_commands.append(f"python scripts/select_pretext_socratic_review.py --issue {issue}")
+        if goal is not None:
+            helper_commands.append(
+                f"python scripts/select_pretext_decision_contract.py --goal {goal} --surface {surface} --issue {issue}"
+            )
 
     if tooling_area is not None:
         tooling = TOOLING_CATALOG[tooling_area]
@@ -91,8 +98,15 @@ def build_route_plan(
         primary_question_parts.append(tooling.reason)
         if derived_validation_area is None:
             derived_validation_area = tooling.validation_area
-        references = append_unique(references, ["reference/socratic-review.md"])
+        references = append_unique(references, ["reference/socratic-review.md", "reference/decision-contract.md"])
         helper_commands.append(f"python scripts/select_pretext_socratic_review.py --tooling-area {tooling_area}")
+        if goal is not None:
+            command = (
+                f"python scripts/select_pretext_decision_contract.py --goal {goal} --surface {surface} --tooling-area {tooling_area}"
+            )
+            if issue is not None:
+                command += f" --issue {issue}"
+            helper_commands.append(command)
 
     next_validation_commands: list[str] = []
     follow_up_checks: list[str] = []

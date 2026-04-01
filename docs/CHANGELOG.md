@@ -2,6 +2,9 @@
 
 ## 2026-04-01
 
+- Added `reference/decision-contract.md` to turn a plausible route into an explicit implementation commitment
+- Added `select_pretext_decision_contract.py` to emit route summary, assumptions, proof obligations, route breakers, and minimal validation commands
+- Extended `select_pretext_route_plan.py` again so unified route plans now include decision-contract follow-up commands in addition to critique and example commands
 - Added `reference/socratic-review.md` as a first-principles challenge layer for ambiguous, architectural, and high-stakes route choices
 - Added `select_pretext_socratic_review.py` to challenge a tentative goal, surface, owner issue, or tooling area before implementation
 - Extended `select_pretext_route_plan.py` so unified route plans now automatically include Socratic critique and vetted-example follow-up commands

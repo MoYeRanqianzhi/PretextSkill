@@ -51,6 +51,8 @@ The skill should help with:
   - wrapper, hook, facade, and cache-boundary patterns grounded in verified downstream implementations
 - `reference/socratic-review.md`
   - route-challenge questions, neighboring-route rejection, evidence ladders, and falsifiers
+- `reference/decision-contract.md`
+  - decision-grade commitments, assumptions, proof obligations, route breakers, and minimal validation chains
 - `reference/internal-exports.md`
   - diagnostic helpers, advanced exported types, rich-path structural fields, and source-level internals
 - `reference/internal-architecture.md`
@@ -89,6 +91,8 @@ The skill should help with:
   - deterministic helper that maps a goal, surface, or pattern to vetted external Pretext implementations with real code paths
 - `scripts/select_pretext_socratic_review.py`
   - deterministic helper that challenges a tentative route before implementation using first-principles questions and route-rejection logic
+- `scripts/select_pretext_decision_contract.py`
+  - deterministic helper that turns a surviving route into an implementation contract with explicit obligations and breakers
 - `scripts/run_pretext_review_iteration.py`
   - deterministic helper that executes one with-skill vs baseline review iteration into a skill-creator-style workspace
 - `scripts/grade_pretext_review_iteration.py`
@@ -116,6 +120,7 @@ The skill should help with:
 - Make API routing explicit across both output shape and integration surface
 - Make `layoutNextLine()` routing explicit for fixed-width streamed pagination as well as true variable-width flow
 - Make route selection falsifiable by design rather than relying on agent confidence or eloquence
+- Make the final route implementation-grade by forcing explicit commitments instead of stopping at plausible recommendations
 - Make correctness-contract routing explicit instead of burying it inside generic diagnostics
 - Make validation routing deterministic instead of relying on memory or intuition
 - Keep the formal review loop trustworthy enough to drive iteration by repairing obviously contradictory grading polarity against its own evidence
