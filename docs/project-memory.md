@@ -97,6 +97,19 @@
 - Local `origin/HEAD` currently matches the checked-out local upstream clone
 - Durable procedure document: `docs/version-support.md`
 
+## Audit & Fix Record (2026-04-12)
+
+10-agent parallel audit completed. All findings applied in commit `98898bd`:
+
+| File | Key Fixes |
+|------|-----------|
+| `recipes.md` | Fixed 2 broken links (P0), removed misleading locale param from React Hook |
+| `public-api.md` | Added explicit `prepared` param types for all 4 layout functions |
+| `internal-exports.md` | Coverage ~22% → ~90%: +8 SegmentBreakKind, +14 measurement.ts, +15 analysis.ts, +7 line-break.ts exports, +3 rich-path fields |
+| `internal-architecture.md` | Added 3 cross-module dependencies, documented measureAnalysis() CJK logic, fixed dead Python ref |
+| `adapter-patterns.md` | Added 3 anti-patterns (system-ui, empty text, font shorthand), cache capacity guidance, fixed switchLocale type |
+| `validation-and-tooling.md` | Added accuracy-snapshot series, corpus-status:refresh, 6 Safari variants — all 35 package.json scripts covered |
+
 ## Known Issues
 
 - Two real `skill-creator` review iterations have now been run, but still on focused subsets rather than the full 25-eval suite
