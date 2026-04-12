@@ -25,7 +25,7 @@ Owns:
 
 - whitespace normalization
 - segmentation with `Intl.Segmenter`
-- segment kinds such as `space`, `tab`, `soft-hyphen`, `hard-break`, and `zero-width-break`
+- segment kinds: `text`, `space`, `preserved-space`, `tab`, `glue`, `zero-width-break`, `soft-hyphen`, `hard-break`
 - punctuation glue rules
 - script-sensitive preprocessing such as CJK, Arabic, and Myanmar-oriented rules
 - locale-sensitive word segmentation state
@@ -94,6 +94,7 @@ Owns:
 - orchestration across analysis, measurement, bidi, and line-break layers
 - public package-facing API surface
 - shape of prepared rich-path data
+- `measureAnalysis()`: converts a `TextAnalysis` into prepared parallel arrays, including CJK-specific logic that splits CJK segments into grapheme-level units with kinsoku (line-break prohibition) and `leftStickyPunctuation` glue rules, and engine-profile-aware `carryCJKAfterClosingQuote` handling
 - rich line materialization from line ranges
 - cache reset and locale reset wiring
 - `profilePrepare()` as a diagnostic export
@@ -103,6 +104,7 @@ Reach here when the problem is:
 - public API shape should change
 - prepared rich-path fields should change
 - package-level orchestration is wrong
+- CJK grapheme splitting or kinsoku glue during prepare is wrong (this lives in `measureAnalysis()`, not in `analysis.ts`)
 - `prepare()` and `prepareWithSegments()` no longer behave consistently
 
 Avoid using this file as the first place to patch deep behavior unless the bug is truly orchestration-level.
@@ -129,6 +131,12 @@ Avoid changing this file when the issue only affects ordinary line counting or h
 5. `line-break.ts` consumes prepared arrays to count or walk lines
 6. `layout.ts` materializes line text only for rich APIs
 
+Cross-module dependencies beyond the primary orchestration in `layout.ts`:
+
+- `line-break.ts` → `measurement.ts`: `line-break.ts` imports `getEngineProfile()` from `measurement.ts` to obtain `lineFitEpsilon`, `preferPrefixWidthsForBreakableRuns`, and `preferEarlySoftHyphenBreak` for line-fit decisions
+- `measurement.ts` → `analysis.ts`: `measurement.ts` imports `isCJK()` from `analysis.ts` to tag `containsCJK` on segment metrics
+- `layout.ts` → `analysis.ts`: `layout.ts` imports CJK helpers (`isCJK`, `kinsokuEnd`, `kinsokuStart`, `leftStickyPunctuation`, `endsWithClosingQuote`) from `analysis.ts` for grapheme-level CJK splitting in `measureAnalysis()`
+
 ## Safe Change Questions
 
 Before patching upstream code, ask:
@@ -138,7 +146,7 @@ Before patching upstream code, ask:
 3. Am I about to move work from prepare into layout?
 4. Am I about to overfit a known canary instead of fixing a general rule?
 
-If ownership is still unclear after those questions, run `python scripts/select_pretext_owner.py --issue ...` before patching source.
+If ownership is still unclear after those questions, run `bun run scripts/select-pretext-validation-from-git.ts` before patching source.
 
 ## Change-To-Validation Map
 

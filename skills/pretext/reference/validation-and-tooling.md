@@ -21,6 +21,8 @@ Broad browser parity, whitespace-preservation sweeps, refreshing checked-in brow
 - `pretext/scripts/accuracy-check.ts`
 - `pretext/scripts/pre-wrap-check.ts`
 
+Snapshot commands write full-sweep results to `accuracy/*.json` for checked-in regression baselines.
+
 ### `benchmark-harness`
 
 Throughput changes, benchmark methodology or snapshot changes, prepare-phase split metrics.
@@ -45,6 +47,7 @@ Representative corpus rows, width sweeps, font-matrix comparisons, corpus taxono
 - `pretext/scripts/corpus-check.ts`
 - `pretext/scripts/corpus-sweep.ts`
 - `pretext/scripts/corpus-font-matrix.ts`
+- `pretext/scripts/corpus-representative.ts`
 - `pretext/scripts/corpus-status.ts`
 - `pretext/scripts/corpus-taxonomy.ts`
 
@@ -97,23 +100,33 @@ If the problem is "what behavior should the engine have?", switch to [behavior-c
 ## Browser & Oracle Checks
 
 - `bun run accuracy-check` — main Chrome browser sweep
-- `bun run accuracy-check:safari`
 - `bun run accuracy-check:firefox`
+- `bun run accuracy-check:safari`
+- `bun run accuracy-snapshot` — full Chrome sweep → `accuracy/chrome.json`
+- `bun run accuracy-snapshot:firefox` — full Firefox sweep → `accuracy/firefox.json`
+- `bun run accuracy-snapshot:safari` — full Safari sweep → `accuracy/safari.json`
 - `bun run pre-wrap-check` — dedicated whitespace-preservation oracle
 - `bun run probe-check` — single-paragraph interactive parity surface
+- `bun run probe-check:safari`
 - `bun run benchmark-check` — main benchmark snapshot
 - `bun run benchmark-check:safari`
 
 ## Corpus & Long-Form Checks
 
 - `bun run corpus-check` — diagnose representative corpus mismatches
+- `bun run corpus-check:safari`
 - `bun run corpus-sweep` — broader corpus regression pass
+- `bun run corpus-sweep:safari`
 - `bun run corpus-font-matrix` — compare the same corpus under alternate fonts
+- `bun run corpus-font-matrix:safari`
 - `bun run corpus-status` — rebuild the corpus dashboard from checked-in snapshots
-- `bun run corpus-representative` — refresh representative corpus samples
+- `bun run corpus-status:refresh` — end-to-end refresh: re-sample representative corpus, re-sweep Chrome, rebuild dashboard
+- `bun run corpus-representative` — refresh representative corpus samples → `corpora/representative.json`
 - `bun run corpus-taxonomy` — inspect the corpus categorization layer
 - `bun run gatsby-check` — long-form article parity check
+- `bun run gatsby-check:safari`
 - `bun run gatsby-sweep` — broader Gatsby-derived sweep
+- `bun run gatsby-sweep:safari`
 
 ## Package Confidence
 
@@ -139,6 +152,8 @@ Run this loop when: package entrypoint changes, exported types change, build out
 
 - `bun run site:build` — rebuild the demo site
 - `bun start` — start the demo server for manual inspection
+- `bun run start:watch` — start the demo server with file watching (auto-reload)
+- `bun run start:lan` — start the demo server on LAN (0.0.0.0)
 - `bun run status-dashboard` — rebuild status reporting from checked-in snapshots
 
 Useful pages: `/demos/index`, `/demos/accordion`, `/demos/bubbles`, `/demos/dynamic-layout`, `/demos/editorial-engine`, `/demos/justification-comparison`, `/accuracy`, `/benchmark`, `/corpus`, `/probe`

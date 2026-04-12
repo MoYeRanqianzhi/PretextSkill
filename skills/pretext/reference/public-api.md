@@ -21,6 +21,7 @@ Use this file when the task is about the normal package-facing Pretext API.
 
 ### `layout(prepared, maxWidth, lineHeight)`
 
+- `prepared`: `PreparedText` (also accepts `PreparedTextWithSegments`, which extends it)
 - Returns: `LayoutResult`
 - Use for: cheap repeated height and line-count layout at a fixed width
 - Notes:
@@ -29,6 +30,7 @@ Use this file when the task is about the normal package-facing Pretext API.
 
 ### `layoutWithLines(prepared, maxWidth, lineHeight)`
 
+- `prepared`: `PreparedTextWithSegments` (requires segment data; plain `PreparedText` is not accepted)
 - Returns: `LayoutLinesResult`
 - Use for: fixed-width line materialization
 - Notes:
@@ -37,6 +39,7 @@ Use this file when the task is about the normal package-facing Pretext API.
 
 ### `walkLineRanges(prepared, maxWidth, onLine)`
 
+- `prepared`: `PreparedTextWithSegments` (requires segment data; plain `PreparedText` is not accepted)
 - Returns: line count
 - Use for: geometry-only iteration, shrink-wrap search, and width probing
 - Notes:
@@ -44,6 +47,7 @@ Use this file when the task is about the normal package-facing Pretext API.
 
 ### `layoutNextLine(prepared, start, maxWidth)`
 
+- `prepared`: `PreparedTextWithSegments` (requires segment data; plain `PreparedText` is not accepted)
 - Returns: `LayoutLine | null`
 - Use for: variable-width per-line layout
 - Notes:

@@ -68,8 +68,14 @@ Treat this as an escape hatch for custom rendering and diagnostics, not as a pro
   - normalized prepared segments aligned with the parallel arrays
 - Field `widths`
   - measured segment widths
+- Field `lineEndFitAdvances`
+  - width contribution used for line-fit decisions when a line ends after this segment
+- Field `lineEndPaintAdvances`
+  - painted width contribution when a line ends after this segment
+- Field `simpleLineWalkFastPath`
+  - boolean flag indicating that the simpler line walker can be used across all layout APIs
 - Field `kinds`
-  - break semantics per segment such as `text`, `space`, `hard-break`, `tab`, or `soft-hyphen`
+  - break semantics per segment: `text`, `space`, `preserved-space`, `tab`, `glue`, `zero-width-break`, `soft-hyphen`, or `hard-break`
 - Field `breakableWidths`
   - per-grapheme widths for breakable runs
 - Field `breakablePrefixWidths`
@@ -97,15 +103,59 @@ Treat these modules as repo-internal or upstream-hacking surfaces, not as normal
 
 ### `src/analysis.ts`
 
-- Exports whitespace modes, segment kinds, locale helpers, CJK and punctuation helpers, and `analyzeText()`
+Exports whitespace modes, segment kinds, locale helpers, CJK and punctuation helpers, and the main analysis entry point.
+
+Key exports:
+
+- Type `WhiteSpaceMode` — `'normal' | 'pre-wrap'`
+- Type `SegmentBreakKind` — `'text' | 'space' | 'preserved-space' | 'tab' | 'glue' | 'zero-width-break' | 'soft-hyphen' | 'hard-break'`
+- Type `MergedSegmentation` — parallel arrays: `texts`, `isWordLike`, `kinds`, `starts`, plus `len`
+- Type `AnalysisChunk` — `startSegmentIndex`, `endSegmentIndex`, `consumedEndSegmentIndex`
+- Type `TextAnalysis` — `normalized`, `chunks`, plus all `MergedSegmentation` fields
+- Type `AnalysisProfile` — `{ carryCJKAfterClosingQuote: boolean }`
+- `analyzeText(text, profile, whiteSpace?)` → `TextAnalysis` — main entry point for text segmentation and analysis
+- `normalizeWhitespaceNormal(text)` → `string` — collapses whitespace runs per CSS `white-space: normal`
+- `setAnalysisLocale(locale?)` → `void` — changes the `Intl.Segmenter` locale used for word segmentation
+- `clearAnalysisCaches()` → `void` — resets the shared word segmenter
+- `isCJK(s)` → `boolean` — checks whether a string contains CJK / kana / Hangul / fullwidth characters
+- `endsWithClosingQuote(text)` → `boolean` — checks trailing closing-quote characters
+- `kinsokuStart` — `Set<string>` of CJK line-start-prohibited characters
+- `kinsokuEnd` — `Set<string>` of CJK line-end-prohibited / opening characters
+- `leftStickyPunctuation` — `Set<string>` of punctuation that sticks to the preceding segment
 
 ### `src/measurement.ts`
 
-- Exports measurement caches, engine-profile helpers, grapheme-width helpers, and emoji-correction helpers
+Exports measurement caches, engine-profile helpers, grapheme-width helpers, and emoji-correction helpers.
+
+Key exports:
+
+- Type `SegmentMetrics` — `{ width, containsCJK, emojiCount?, graphemeWidths?, graphemePrefixWidths? }`
+- Type `EngineProfile` — `{ lineFitEpsilon, carryCJKAfterClosingQuote, preferPrefixWidthsForBreakableRuns, preferEarlySoftHyphenBreak }`
+- `getMeasureContext()` → `CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D` — lazily creates a canvas context for text measurement
+- `getSegmentMetricCache(font)` → `Map<string, SegmentMetrics>` — per-font metric cache
+- `getSegmentMetrics(seg, cache)` → `SegmentMetrics` — measures a single segment string, returning cached metrics
+- `getEngineProfile()` → `EngineProfile` — detects browser engine and returns tuned layout parameters
+- `parseFontSize(font)` → `number` — extracts pixel size from a CSS font string
+- `textMayContainEmoji(text)` → `boolean` — fast regex check for potential emoji content
+- `getCorrectedSegmentWidth(seg, metrics, emojiCorrection)` → `number` — applies per-emoji width correction
+- `getSegmentGraphemeWidths(seg, metrics, cache, emojiCorrection)` → `number[] | null` — per-grapheme widths for overflow-wrap breaking
+- `getSegmentGraphemePrefixWidths(seg, metrics, cache, emojiCorrection)` → `number[] | null` — cumulative prefix widths for narrow browser-policy shims
+- `getFontMeasurementState(font, needsEmojiCorrection)` → `{ cache, fontSize, emojiCorrection }` — bundles measurement state for a given font
+- `clearMeasurementCaches()` → `void` — clears all metric and emoji-correction caches
 
 ### `src/line-break.ts`
 
-- Exports low-level line walking helpers such as `countPreparedLines()` and `walkPreparedLines()`
+Exports low-level line walking helpers and the types they operate on.
+
+Key exports:
+
+- Type `LineBreakCursor` — `{ segmentIndex, graphemeIndex }`
+- Type `PreparedLineBreakData` — the structural contract consumed by the line walker: `widths`, `lineEndFitAdvances`, `lineEndPaintAdvances`, `kinds`, `simpleLineWalkFastPath`, `breakableWidths`, `breakablePrefixWidths`, `discretionaryHyphenWidth`, `tabStopAdvance`, `chunks`
+- Type `InternalLayoutLine` — `{ startSegmentIndex, startGraphemeIndex, endSegmentIndex, endGraphemeIndex, width }`
+- `countPreparedLines(prepared, maxWidth)` → `number` — fast line-count-only path (no allocations)
+- `walkPreparedLines(prepared, maxWidth, onLine?)` → `number` — full line walker with optional per-line callback
+- `layoutNextLineRange(prepared, start, maxWidth)` → `InternalLayoutLine | null` — incremental single-line layout from a cursor
+- `normalizeLineStart(prepared, start)` → `LineBreakCursor | null` — adjusts a cursor past leading collapsible whitespace
 
 ### `src/bidi.ts`
 

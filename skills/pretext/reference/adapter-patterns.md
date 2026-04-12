@@ -41,6 +41,9 @@ type PrepareKey = {
   locale?: string
 }
 
+// NOTE: Unbounded Maps work for small/fixed text sets. In production, consider
+// an LRU cache or a maximum size with periodic eviction to avoid unbounded
+// memory growth (e.g., chat apps with streaming messages).
 const heightCache = new Map<string, ReturnType<typeof prepare>>()
 const richCache = new Map<string, ReturnType<typeof prepareWithSegments>>()
 
@@ -50,7 +53,7 @@ function keyOf(input: PrepareKey) {
 
 // Call switchLocale() once at the adapter boundary (e.g. on user locale change),
 // NOT inside per-measurement functions. See Pattern 5.
-export function switchLocale(locale: string) {
+export function switchLocale(locale: string | undefined) {
   setLocale(locale)
   heightCache.clear()
   richCache.clear()
@@ -157,6 +160,9 @@ This avoids partial mismatches such as:
 - mixing height-only and rich-path callers behind one opaque method that always chooses the rich path
 - deriving locale policy in components instead of in the adapter boundary
 - storing prepared values in one cache and width-specific layout results in the same cache without clear separation
+- using `system-ui` font on macOS for accuracy-sensitive measurement — canvas resolves `system-ui` to different optical variants than the DOM, causing width mismatches. Use named fonts (Helvetica, Inter, etc.) instead. See Pretext source `layout.ts` Limitations comment.
+- not handling empty text input — `prepare("")` returns a valid empty prepared handle, but adapter code that assumes non-empty segments (e.g., accessing `segments[0]`) will break. Always guard or accept the zero-segment case.
+- using incorrect CSS font shorthand format — `prepare()` passes the `font` string directly to `canvas.font`. It must be a valid CSS font shorthand (e.g., `"16px Inter"` or `"italic 600 14px/1.5 Helvetica"`). Bare family names or non-standard formats silently fall back to browser defaults.
 
 ## External Anchors
 

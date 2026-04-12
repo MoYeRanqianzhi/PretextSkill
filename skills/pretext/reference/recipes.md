@@ -29,6 +29,10 @@ Use when the app needs one reusable hook for caching and measurement.
 import { useRef } from 'react'
 import { prepare, layout } from '@chenglou/pretext'
 
+// Locale is intentionally not handled here. setLocale() clears internal
+// caches and must be called once at the adapter boundary, not per
+// measurement. See adapter-patterns.md Pattern 5 for the recommended
+// approach to centralizing locale changes.
 export function usePretextHeightCache() {
   const cacheRef = useRef(new Map<string, ReturnType<typeof prepare>>())
 
@@ -38,9 +42,8 @@ export function usePretextHeightCache() {
     width: number,
     lineHeight: number,
     whiteSpace: 'normal' | 'pre-wrap' = 'normal',
-    locale?: string,
   ) {
-    const key = JSON.stringify({ text, font, whiteSpace, locale })
+    const key = JSON.stringify({ text, font, whiteSpace })
     let prepared = cacheRef.current.get(key)
     if (!prepared) {
       prepared = prepare(text, font, { whiteSpace })
@@ -57,7 +60,8 @@ Rules:
 
 - key the cache by the full invalidation tuple, not only by text
 - keep width and line height in the layout phase
-- if locale or whitespace mode can change, include them in the key, call `setLocale(locale)` before preparing, and rebuild prepared state
+- if whitespace mode can change, include it in the key and rebuild prepared state
+- manage locale at the adapter boundary (see [adapter-patterns.md](adapter-patterns.md) Pattern 5); do not call `setLocale()` inside a per-measurement hook because it clears caches and belongs in a centralized lifecycle
 
 Upstream anchors: `pretext/pages/demos/accordion.ts`, `pretext/pages/demos/masonry/index.ts`
 
@@ -251,6 +255,6 @@ Validation surfaces: `bun run check`, `bun run site:build`, `bun run probe-check
 
 ## When To Leave This File
 
-- Engine debugging or concrete mismatches: `reference/troubleshooting.md`
+- Engine debugging, whitespace semantics, or concrete mismatches: [behavior-contracts.md](behavior-contracts.md)
 - Reusable adapters, wrappers, or cache boundaries: [adapter-patterns.md](adapter-patterns.md)
-- Package shape or export concerns: [package-workflows.md](package-workflows.md)
+- Package shape, export concerns, or validation commands: [validation-and-tooling.md](validation-and-tooling.md)
