@@ -121,11 +121,22 @@
 
 ## Next Tasks
 
-- Run isolated skill test: build "小猫动态实时变化排版" demo using a subagent constrained to ONLY the pretext skill
 - Run the formal eval prompts through the full `skill-creator` review loop with the new TS scripts
 - Keep `docs/version-support.md` and this memory snapshot updated whenever upstream package or source anchors move
 - Collect human review feedback from existing iteration review.html files
 - Decide whether to clean up `_archive/` directory or keep for reference
+
+## Demo Record (2026-04-12)
+
+- `demos/kitten-dynamic-layout.html` — 765-line self-contained HTML demo
+  - Built by agent constrained to ONLY pretext skill guidance (isolated test)
+  - Uses `prepareWithSegments()` + `layoutWithLines()` (fixed-lines goal)
+  - 5 kitten cards: English, Chinese, Japanese, mixed-language, pre-wrap tab-formatted
+  - Interactive controls: width slider (200–800px), font size (12–32px), line height (16–52px), card selector, whiteSpace toggle
+  - Performance dashboard: prepare count, layout count, timing in ms, insight indicator
+  - **Verified behavior**: width-only changes do NOT trigger re-prepare (prepare count stays at 5, layout count rises to 20); font size change DOES trigger re-prepare (prepare count jumps to 15)
+  - Zero console errors
+  - Spec at `docs/demo-spec.md`
 
 ## Validation Record
 
