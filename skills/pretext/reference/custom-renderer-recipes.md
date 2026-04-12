@@ -39,7 +39,8 @@ Use this pattern when the product wants the tightest width that still fits a mul
 import { prepareWithSegments, walkLineRanges } from '@chenglou/pretext'
 
 let widest = 0
-walkLineRanges(prepared, width, line => {
+// walkLineRanges returns the total line count (number)
+const lineCount = walkLineRanges(prepared, width, line => {
   if (line.width > widest) widest = line.width
 })
 ```

@@ -48,11 +48,15 @@ function keyOf(input: PrepareKey) {
   return JSON.stringify(input)
 }
 
-export function measureHeight(input: PrepareKey, width: number, lineHeight: number) {
-  if (input.locale !== undefined) {
-    setLocale(input.locale)
-  }
+// Call switchLocale() once at the adapter boundary (e.g. on user locale change),
+// NOT inside per-measurement functions. See Pattern 5.
+export function switchLocale(locale: string) {
+  setLocale(locale)
+  heightCache.clear()
+  richCache.clear()
+}
 
+export function measureHeight(input: PrepareKey, width: number, lineHeight: number) {
   const key = keyOf(input)
   let prepared = heightCache.get(key)
   if (!prepared) {
@@ -64,10 +68,6 @@ export function measureHeight(input: PrepareKey, width: number, lineHeight: numb
 }
 
 export function measureLines(input: PrepareKey, width: number, lineHeight: number) {
-  if (input.locale !== undefined) {
-    setLocale(input.locale)
-  }
-
   const key = keyOf(input)
   let prepared = richCache.get(key)
   if (!prepared) {

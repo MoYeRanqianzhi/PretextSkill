@@ -1,16 +1,30 @@
 ---
 name: pretext
-description: Build with `@chenglou/pretext` for DOM-free multiline text measurement and layout. Use when implementing or refactoring height prediction, custom line rendering, shrink-wrap width search, streamed line continuation, pagination or reader text layers, variable-width text flow, whitespace-preserving editors, locale-aware segmentation, or Pretext-specific debugging and profiling in JavaScript or TypeScript. Also use when modifying the upstream Pretext repo while preserving the prepare/layout split, cache and locale rules, and other documented invariants.
+description: "Pretext is a pure JS/TS text measurement & layout library that avoids DOM reflow. Use this skill when the task involves @chenglou/pretext: choosing APIs (prepare/layout), debugging measurement accuracy, integrating into React/Canvas/SVG/PDF renderers, handling whitespace or locale, or modifying upstream internals. Do not use for generic CSS, DOM, or text-layout work unless the task explicitly uses Pretext."
 ---
 
 # pretext
 
-Treat Pretext as a two-phase engine:
+Pretext is a two-phase engine — **prepare once, layout many times**:
 
-- `prepare` phase: turn `(text, font, whiteSpace, locale)` into reusable measured state
-- `layout` phase: turn `(prepared, maxWidth, lineHeight)` into height, lines, or line geometry
+- **`prepare` phase**: turn `(text, font, whiteSpace, locale)` into reusable measured state
+- **`layout` phase**: turn `(prepared, maxWidth, lineHeight)` into height, lines, or line geometry
 
 Keep that split intact. If a proposed solution reruns `prepare()` on resize or reintroduces DOM reads into the hot path, treat it as suspect.
+
+## Simplest Case (80% of tasks)
+
+Most tasks just need text height without touching the DOM:
+
+```ts
+import { prepare, layout } from '@chenglou/pretext'
+
+const prepared = prepare('Hello world 你好', '16px Inter')
+const { height, lineCount } = layout(prepared, containerWidth, 20)
+// On resize: only rerun layout(), never re-prepare
+```
+
+If this covers your task, you're done. Read on only when you need lines, geometry, variable widths, or advanced features.
 
 ## Ask These Questions First
 
@@ -19,70 +33,88 @@ Keep that split intact. If a proposed solution reruns `prepare()` on resize or r
 3. Which inputs invalidate preparation, and which inputs invalidate only layout?
 4. Is this an integration problem, a correctness-contract problem, a browser caveat, or a validation problem?
 
-## Choose Goal And Surface
+## Quick Start
 
-1. Choose the primary goal:
-   - `height`
-   - `fixed-lines`
-   - `streamed-lines`
-   - `geometry`
-   - `variable-width`
-   - `shrinkwrap`
-   - `profile`
-   - `correctness`
-   - `cache-locale`
-   - `upstream-internals`
-   - `diagnostics`
-2. Choose the integration surface when it matters:
-   - `react-dom`
-   - `custom-renderer`
-   - `document-reader`
-   - `package`
-   - `upstream`
-3. Run `python scripts/select_pretext_route_plan.py ...` when the task mixes API selection, upstream ownership, tooling-surface choice, or validation scoping and you want one unified route plan.
-4. Run `python scripts/select_pretext_api.py --goal <goal> --surface <surface>` when you only need the narrow API path, invalidation tuple, and reference set.
+1. Name the smallest useful route inputs you already know:
 
-## Load Only The Needed Reference
+   | Goal | When to use |
+   |------|-------------|
+   | `height` | Only need height/lineCount — use `prepare()` + `layout()` |
+   | `fixed-lines` | Need actual line text at fixed width — use `prepareWithSegments()` + `layoutWithLines()` |
+   | `streamed-lines` | Need lines one-at-a-time for pagination/columns — use `prepareWithSegments()` + `layoutNextLine()` |
+   | `geometry` | Need line widths/cursors without building strings — use `prepareWithSegments()` + `walkLineRanges()` |
+   | `variable-width` | Each line has a different max width — use `prepareWithSegments()` + `layoutNextLine()` |
+   | `shrinkwrap` | Find the tightest container width — use `prepareWithSegments()` + `walkLineRanges()` in a binary search |
+   | `profile` | Diagnose prepare-phase slowness — use `profilePrepare()` (diagnostic only) |
+   | `correctness` | Debug measurement mismatch — check font/lineHeight sync, whitespace mode, locale |
+   | `cache-locale` | Manage caches or switch locale — use `clearCache()` / `setLocale()` |
 
-- Read [reference/first-principles.md](reference/first-principles.md) for the irreducible model, invalidation rules, and architectural constraints.
-- Read [reference/socratic-review.md](reference/socratic-review.md) when the task is ambiguous, architectural, high-stakes, or when a tempting route still needs to be challenged.
-- Read [reference/decision-contract.md](reference/decision-contract.md) when the route is already plausible and you need to turn it into an implementation commitment with explicit assumptions, proof obligations, and route breakers.
-- Read [reference/eval-design.md](reference/eval-design.md) when the task is about improving benchmarks, prompt discrimination, or the difference between smoke tests and gate evals.
-- Read [reference/public-api.md](reference/public-api.md) for the normal product-facing package API.
-- Read [reference/internal-exports.md](reference/internal-exports.md) only when the task explicitly needs diagnostic helpers, rich-path structural details, or source-level internals.
-- Read [reference/internal-architecture.md](reference/internal-architecture.md) when modifying the upstream repo and you need module boundaries, data-flow guidance, or change-impact validation.
-- Read [reference/whitespace-and-breaks.md](reference/whitespace-and-breaks.md) for whitespace modes, break policy, tabs, zero-width separators, and soft-hyphen behavior.
+   - `surface` when it matters: `react-dom`, `custom-renderer`, `document-reader`, `package`, or `upstream`
+   - optional `issue`, `tooling-area`, or explicit validation scope when the task is already narrowed
+
+2. Run `python scripts/select_pretext_route_plan.py --goal <goal> --surface <surface>` as the default entry point.
+3. Read only the references named by the route plan, then run the smallest validation chain that can falsify the current assumption.
+
+## Default Path
+
+Use this path for normal implementation, refactor, and debugging work.
+
+1. Start with `python scripts/select_pretext_route_plan.py --goal ... --surface ... --issue ... --tooling-area ...` when the task mixes API choice, upstream ownership, tooling-surface selection, or validation scoping.
+2. Use `python scripts/select_pretext_api.py --goal <goal> --surface <surface>` only when the API route is already clear and you only need the narrow API path, invalidation tuple, and minimal reference set.
+3. Read the smallest reference set first:
+   - `reference/first-principles.md` for the irreducible model and invalidation rules
+   - `reference/public-api.md` for normal package-facing API work
+   - `reference/internal-exports.md` and `reference/internal-architecture.md` only when the package-facing route is insufficient and the task truly descends into upstream internals
+4. Keep the default path light. Do not load critique, decision-contract, or bundled reasoning layers unless the task is ambiguous, high-stakes, or still feels under-justified after the first route pass.
+
+## Escalation Path
+
+Use escalation only when the default path leaves real uncertainty.
+
+- Run `python scripts/select_pretext_socratic_review.py --goal ... --surface ... --issue ... --tooling-area ...` when the route is plausible but still needs to be challenged against neighboring routes, weaker evidence, or a better falsifier.
+- Run `python scripts/select_pretext_decision_contract.py --goal ... --surface ... --issue ... --tooling-area ...` after the route survives critique and you need explicit assumptions, proof obligations, route breakers, and validation commitments before coding.
+- Run `python scripts/select_pretext_reasoning_bundle.py --goal ... --surface ... --issue ... --tooling-area ...` only for high-ambiguity or high-risk tasks that need route selection, critique, and decision contract emitted as one integrated bundle.
+- Run `python scripts/select_pretext_owner.py --issue ...` when upstream source ownership is the real question.
+- Run `python scripts/select_pretext_tooling_surface.py --area ...` when the question is about harnesses, dashboards, probes, or report transport rather than the package API.
+- Run `python scripts/select_pretext_examples.py --goal ... --surface ...` only after a route is already plausible and you need external implementation precedent to validate, not choose, the route.
+- Run `python scripts/select_pretext_eval_design.py --role smoke|gate --goal ... --surface ... --reasoning-layer ...` when improving eval prompts, benchmark discrimination, or reasoning-layer coverage.
+
+## Validation Order
+
+Prefer the narrowest validation selector that matches what you already know:
+
+1. Run `python scripts/select_pretext_validation_from_git.py --repo pretext --rev-range ...` when you want validation inferred directly from upstream git diff state.
+2. Otherwise run `python scripts/select_pretext_validation_by_files.py --path ...` when you already know which files changed.
+3. Otherwise run `python scripts/select_pretext_validation.py --area ...` when the change area is already known.
+4. Report validation in this order: selected area, commands, follow-up checks, then the escalation trigger if those checks fail.
+
+## On-Demand References
+
 - Read [reference/behavior-contracts.md](reference/behavior-contracts.md) when the task is about exact semantic expectations, cross-API invariants, or whether a behavior change would be a regression.
-- Read [reference/script-and-browser-caveats.md](reference/script-and-browser-caveats.md) for script-sensitive segmentation, punctuation-glue classes, bidi, emoji, browser caveats, and research canaries.
+- Read [reference/whitespace-and-breaks.md](reference/whitespace-and-breaks.md) for whitespace modes, break policy, tabs, zero-width separators, and soft-hyphen behavior.
+- Read [reference/script-and-browser-caveats.md](reference/script-and-browser-caveats.md) for script-sensitive segmentation, punctuation glue, bidi, emoji, browser caveats, and research canaries.
 - Read [reference/integration-lifecycle.md](reference/integration-lifecycle.md) for caching, resize, custom rendering, shrink-wrap, React or virtualization, and variable-width line flow patterns.
 - Read [reference/adapter-patterns.md](reference/adapter-patterns.md) when you need a local facade, hook, service, or composable boundary informed by real downstream implementations.
-- Read [reference/react-dom-recipes.md](reference/react-dom-recipes.md) when you need React or DOM-oriented integration patterns such as height caches or whitespace-preserving editors.
-- Read [reference/custom-renderer-recipes.md](reference/custom-renderer-recipes.md) when you need Canvas, SVG, WebGL, shrink-wrap, or variable-width rendering patterns.
-- Read [reference/document-reader-recipes.md](reference/document-reader-recipes.md) when you need PDF, EPUB, pagination, text-layer, or multi-column continuation patterns.
+- Read [reference/react-dom-recipes.md](reference/react-dom-recipes.md) for React or DOM-oriented integration patterns such as height caches or whitespace-preserving editors.
+- Read [reference/custom-renderer-recipes.md](reference/custom-renderer-recipes.md) for Canvas, SVG, WebGL, shrink-wrap, or variable-width rendering patterns.
+- Read [reference/document-reader-recipes.md](reference/document-reader-recipes.md) for PDF, EPUB, pagination, text-layer, or multi-column continuation patterns.
 - Read [reference/package-workflows.md](reference/package-workflows.md) when the task is about package shape, published-artifact confidence, or release-oriented validation.
 - Read [reference/upstream-tooling-surfaces.md](reference/upstream-tooling-surfaces.md) when the task is about upstream harnesses, browser checkers, dashboards, report transport, or demo-site plumbing rather than the package API itself.
 - Read [reference/troubleshooting.md](reference/troubleshooting.md) for failure modes, research-backed guardrails, and diagnostic triage.
 - Read [reference/validation-playbook.md](reference/validation-playbook.md) for Bun commands, dashboards, and escalation paths.
-- Run `python scripts/select_pretext_route_plan.py --goal ... --surface ... --issue ... --tooling-area ...` when you want the smallest combined reference set and next-step commands across multiple routing layers.
-- Run `python scripts/select_pretext_examples.py --goal ... --surface ...` when you need vetted external implementation precedents after choosing the engine path.
-- Run `python scripts/select_pretext_socratic_review.py --goal ... --surface ... --issue ... --tooling-area ...` after an initial route is chosen and you need to challenge neighboring routes, evidence quality, or falsification strategy before implementation.
-- Run `python scripts/select_pretext_decision_contract.py --goal ... --surface ... --issue ... --tooling-area ...` after the route survives critique and you need a final decision-grade contract before coding.
-- Run `python scripts/select_pretext_reasoning_bundle.py --goal ... --surface ... --issue ... --tooling-area ...` when the task is high-ambiguity or high-stakes and you want route selection, critique, and contract emitted as one integrated bundle.
-- Run `python scripts/select_pretext_eval_design.py --role smoke|gate --goal ... --surface ... --reasoning-layer ...` when you are designing or revising eval prompts and need to know what makes a prompt capability-confirming versus genuinely discriminating.
-- Run `python scripts/select_pretext_owner.py --issue ...` when you are modifying upstream source and need the first owning module identified before patching internals.
-- Run `python scripts/select_pretext_tooling_surface.py --area ...` when you need the narrowest upstream harness or reporting surface selected before loading broader validation docs.
-- Run `python scripts/select_pretext_validation.py --area ...` when you need the smallest defensible regression plan after changing a specific subsystem or surface.
-- Run `python scripts/select_pretext_validation_by_files.py --path ...` when you already know which files changed and want the validation plan inferred from them.
-- Run `python scripts/select_pretext_validation_from_git.py --repo pretext --rev-range ...` when you want validation inferred directly from upstream git diff state.
+- Read [reference/socratic-review.md](reference/socratic-review.md) only after an initial route exists and still needs to be challenged.
+- Read [reference/decision-contract.md](reference/decision-contract.md) only after a route survives critique and needs a decision-grade commitment.
+- Read [reference/eval-design.md](reference/eval-design.md) only when the task is about eval design rather than product integration or engine behavior.
 
 ## Non-Negotiables
 
 1. Re-prepare only when text, font, whitespace mode, or locale changes.
 2. Re-layout when width or line height changes.
 3. Keep `font` and `lineHeight` synchronized with the real renderer.
-4. Use `{ whiteSpace: 'pre-wrap' }` only when visible spaces, tabs, or hard breaks are semantically required.
-5. `setLocale()` affects future prepare calls only and clears caches.
-6. Avoid `system-ui` for accuracy-sensitive macOS work.
+4. Use `prepare()` for height-only; use `prepareWithSegments()` for lines, geometry, or cursors.
+5. Use `{ whiteSpace: 'pre-wrap' }` only when visible spaces, tabs, or hard breaks are semantically required.
+6. `setLocale()` affects future prepare calls only and clears caches. Centralize locale changes; never call `setLocale()` inside per-measurement hot paths.
+7. Avoid `system-ui` for accuracy-sensitive macOS work.
 
 ## Output Rules
 
@@ -92,3 +124,4 @@ Keep that split intact. If a proposed solution reruns `prepare()` on resize or r
 4. If you descend into internals, explain why the normal package-facing API is insufficient.
 5. Separate integration mistakes from true engine limitations or upstream canaries.
 6. Prefer the lightest validation path that can falsify the current assumption.
+7. Show the validation command run and its output as evidence.

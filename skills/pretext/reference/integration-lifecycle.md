@@ -60,7 +60,8 @@ Use this path when width probing or shrink-wrap behavior matters more than line 
 ```ts
 import { prepareWithSegments, walkLineRanges } from '@chenglou/pretext'
 
-walkLineRanges(prepared, width, line => {
+// walkLineRanges returns the total line count (number)
+const lineCount = walkLineRanges(prepared, width, line => {
   // inspect line.width, line.start, line.end
 })
 ```
