@@ -18,74 +18,28 @@
 
 - Git repository initialized and pushed to `main`
 - Remote repository created at `https://github.com/MoYeRanqianzhi/PretextSkill`
-- Release tag `v0.0.0` created for the repository bootstrap milestone
-- Release tag `v0.1.0` created for the initial English skill milestone
-- Release tag `v0.2.0` created for the first-principles disclosure refactor
-- Release tag `v0.3.0` created for trigger refinement, API-boundary cleanup, and sync-check tooling
-- Release tag `v0.4.0` created for upstream internal-architecture guidance and validation routing
-- Release tag `v0.5.0` created for app-level recipes and file-based validation routing
-- Release tag `v0.6.0` created for narrowed recipe routing and git-diff-based validation inference
-- Release tag `v0.6.1` created for streamlining recipe references
-- Release tag `v0.6.2` created for finalized recipe routing and git-based validation cleanup
-- Release tag `v0.6.3` created for surface-aware API routing and the shared validation catalog
-- Release tag `v0.6.4` created for behavior-contract routing and correctness-focused progressive disclosure
-- Release tag `v0.6.5` created for the formal eval suite and deeper advanced-type coverage
-- Release tag `v0.6.6` created for upstream ownership routing and eval-coverage maintenance
-- Release tag `v0.6.7` created for upstream tooling-surface routing and expanded harness eval coverage
-- Release tag `v0.6.8` created for owner-issue and validation-area eval coverage expansion
-- Release tag `v0.6.9` created for unified route-plan routing across selectors
-- Release tag `v0.7.0` created for explicit version-support documentation and the first real skill-creator review loop
-- Release tag `v0.7.1` created for vetted external implementation-landscape research
-- Release tag `v0.8.0` created for streamed-line routing, document-reader disclosure, and external example selection
-- Release tag `v0.8.1` created for grading-consistency repair and the focused second real review iteration
-- Release tag `v0.8.2` created for Socratic route critique and route-plan self-challenge integration
-- Release tag `v0.8.3` created for decision-contract commitments and three-stage route planning
-- Release tag `v0.8.4` created for reasoning-layer eval coverage and benchmark discrimination analysis
-- Release tag `v0.8.5` created for integrated reasoning bundles and explicit eval-role taxonomy
-- Release tag `v0.8.6` created for eval-design guidance and reasoning-layer drift repair
-- External implementation research now recorded in `docs/pretext-implementation-landscape.md`
+- Release tag `v0.3.0-restructured` created for the major restructuring milestone
 - `skills/pretext/` now contains:
-  - `SKILL.md`
+  - `SKILL.md` (rewritten: goal table routing, architectural guardrails, 7-file reference structure)
   - `agents/openai.yaml`
   - `evals/evals.json`
   - `evals/coverage.json`
-  - `reference/first-principles.md`
-  - `reference/public-api.md`
-  - `reference/adapter-patterns.md`
-  - `reference/socratic-review.md`
-  - `reference/decision-contract.md`
-  - `reference/eval-design.md`
-  - `reference/internal-exports.md`
-  - `reference/internal-architecture.md`
-  - `reference/whitespace-and-breaks.md`
-  - `reference/behavior-contracts.md`
-  - `reference/script-and-browser-caveats.md`
-  - `reference/document-reader-recipes.md`
-  - `reference/react-dom-recipes.md`
-  - `reference/custom-renderer-recipes.md`
-  - `reference/package-workflows.md`
-  - `reference/upstream-tooling-surfaces.md`
-  - `reference/integration-lifecycle.md`
-  - `reference/troubleshooting.md`
-  - `reference/validation-playbook.md`
-  - `scripts/select_pretext_api.py`
-  - `scripts/select_pretext_owner.py`
-  - `scripts/select_pretext_tooling_surface.py`
-  - `scripts/select_pretext_route_plan.py`
-  - `scripts/select_pretext_examples.py`
-  - `scripts/select_pretext_socratic_review.py`
-  - `scripts/select_pretext_decision_contract.py`
-  - `scripts/select_pretext_reasoning_bundle.py`
-  - `scripts/analyze_pretext_benchmark.py`
-  - `scripts/select_pretext_eval_design.py`
-  - `scripts/run_pretext_review_iteration.py`
-  - `scripts/grade_pretext_review_iteration.py`
-  - `scripts/check_layout_api_sync.py`
-  - `scripts/check_pretext_eval_coverage.py`
-  - `scripts/pretext_validation_catalog.py`
-  - `scripts/select_pretext_validation.py`
-  - `scripts/select_pretext_validation_by_files.py`
-  - `scripts/select_pretext_validation_from_git.py`
+  - **Reference files (7 total, consolidated from 19):**
+    - `reference/public-api.md` — complete public API reference
+    - `reference/internal-exports.md` — internal exports documentation
+    - `reference/internal-architecture.md` — module ownership guide
+    - `reference/adapter-patterns.md` — facade/hook/service boundary patterns
+    - `reference/behavior-contracts.md` — merged from 4 files: semantics, whitespace, script caveats, troubleshooting
+    - `reference/recipes.md` — merged from 4 files: React/DOM, Canvas/SVG, PDF/EPUB, integration lifecycle
+    - `reference/validation-and-tooling.md` — merged from 3 files: validation playbook, tooling surfaces, package workflows
+  - **Scripts (6 TypeScript files, converted from 20 Python):**
+    - `scripts/select-pretext-validation-from-git.ts` — consolidated validation selector (git diff + file path + inline catalog)
+    - `scripts/check-layout-api-sync.ts` — layout.ts exports vs documented API sync checker
+    - `scripts/check-pretext-eval-coverage.ts` — eval coverage validator (simplified)
+    - `scripts/run-pretext-review-iteration.ts` — eval iteration runner
+    - `scripts/grade-pretext-review-iteration.ts` — eval grader
+    - `scripts/analyze-pretext-benchmark.ts` — benchmark delta classifier
+  - `_archive/` — archived 13 Python scripts and 3 process reference docs
 
 ## Durable Decisions
 
@@ -154,24 +108,11 @@
 
 ## Next Tasks
 
-- Run the new formal eval prompts through the full `skill-creator` review loop
+- Run isolated skill test: build "小猫动态实时变化排版" demo using a subagent constrained to ONLY the pretext skill
+- Run the formal eval prompts through the full `skill-creator` review loop with the new TS scripts
 - Keep `docs/version-support.md` and this memory snapshot updated whenever upstream package or source anchors move
-- Collect human review feedback from `skills/pretext-workspace/iteration-1/review.html`
-- Collect human review feedback from `skills/pretext-workspace/iteration-2/review.html`
-- Collect human review feedback from `skills/pretext-workspace/iteration-3/review.html`
-- Collect human review feedback from `skills/pretext-workspace/iteration-4/review.html`
-- Decide whether the next iteration should be the first full 25-eval run or a human-feedback-driven patch round
-- Decide whether the Socratic critique layer should later get its own formal eval prompt instead of living only in deterministic script validation
-- Decide whether the decision-contract layer should get its own formal eval prompt for assumption quality and route-breaker quality
-- Decide whether the external example selector should later grow direct file-owner hints or freshness checks beyond the current star snapshot
-- Decide whether reasoning-layer evals should be hardened into discriminating prompts or retained explicitly as smoke tests
-- Use `select_pretext_eval_design.py` before adding new gate prompts so ambiguity hooks and local discriminators are deliberate
-- Use the ownership router on the next upstream-internals pass and refine issue categories only if repeated ambiguity remains
-- Observe whether the tooling-surface router reduces unnecessary loading of the full validation playbook for harness-only tasks
-- Observe whether the unified route-plan router reduces manual composition across selectors for multi-dimensional tasks
-- Observe whether the new `goal + surface` API selector reduces unnecessary reference loading in real agent use
-- Observe whether explicit correctness-contract routing reduces false jumps into upstream internals during debugging
-- Add repo-specific git-diff heuristics only if repeated multi-file change clusters prove worth encoding
+- Collect human review feedback from existing iteration review.html files
+- Decide whether to clean up `_archive/` directory or keep for reference
 
 ## Validation Record
 
