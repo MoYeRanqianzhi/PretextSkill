@@ -44,6 +44,7 @@ def build_route_plan(
     validation_area: str | None,
     preserve_whitespace: bool,
     locale_sensitive: bool,
+    include_escalation: bool,
 ) -> RoutePlan:
     references = ["reference/first-principles.md"]
     helper_commands = []
@@ -62,14 +63,15 @@ def build_route_plan(
         )
         notes = append_unique(notes, recommendation.notes)
         primary_question_parts.append(recommendation.reason)
-        references = append_unique(references, ["reference/socratic-review.md", "reference/decision-contract.md"])
-        helper_commands.append(
-            f"python scripts/select_pretext_socratic_review.py --goal {goal}"
-            + (f" --surface {surface}" if surface != "generic" else "")
-        )
-        helper_commands.append(
-            f"python scripts/select_pretext_decision_contract.py --goal {goal} --surface {surface}"
-        )
+        if include_escalation:
+            references = append_unique(references, ["reference/socratic-review.md", "reference/decision-contract.md"])
+            helper_commands.append(
+                f"python scripts/select_pretext_socratic_review.py --goal {goal}"
+                + (f" --surface {surface}" if surface != "generic" else "")
+            )
+            helper_commands.append(
+                f"python scripts/select_pretext_decision_contract.py --goal {goal} --surface {surface}"
+            )
         if surface != "generic":
             helper_commands.append(
                 f"python scripts/select_pretext_examples.py --goal {goal} --surface {surface}"
@@ -83,12 +85,13 @@ def build_route_plan(
         primary_question_parts.append(owner.reason)
         if derived_validation_area is None:
             derived_validation_area = owner.validation_area
-        references = append_unique(references, ["reference/socratic-review.md", "reference/decision-contract.md"])
-        helper_commands.append(f"python scripts/select_pretext_socratic_review.py --issue {issue}")
-        if goal is not None:
-            helper_commands.append(
-                f"python scripts/select_pretext_decision_contract.py --goal {goal} --surface {surface} --issue {issue}"
-            )
+        if include_escalation:
+            references = append_unique(references, ["reference/socratic-review.md", "reference/decision-contract.md"])
+            helper_commands.append(f"python scripts/select_pretext_socratic_review.py --issue {issue}")
+            if goal is not None:
+                helper_commands.append(
+                    f"python scripts/select_pretext_decision_contract.py --goal {goal} --surface {surface} --issue {issue}"
+                )
 
     if tooling_area is not None:
         tooling = TOOLING_CATALOG[tooling_area]
@@ -98,15 +101,16 @@ def build_route_plan(
         primary_question_parts.append(tooling.reason)
         if derived_validation_area is None:
             derived_validation_area = tooling.validation_area
-        references = append_unique(references, ["reference/socratic-review.md", "reference/decision-contract.md"])
-        helper_commands.append(f"python scripts/select_pretext_socratic_review.py --tooling-area {tooling_area}")
-        if goal is not None:
-            command = (
-                f"python scripts/select_pretext_decision_contract.py --goal {goal} --surface {surface} --tooling-area {tooling_area}"
-            )
-            if issue is not None:
-                command += f" --issue {issue}"
-            helper_commands.append(command)
+        if include_escalation:
+            references = append_unique(references, ["reference/socratic-review.md", "reference/decision-contract.md"])
+            helper_commands.append(f"python scripts/select_pretext_socratic_review.py --tooling-area {tooling_area}")
+            if goal is not None:
+                command = (
+                    f"python scripts/select_pretext_decision_contract.py --goal {goal} --surface {surface} --tooling-area {tooling_area}"
+                )
+                if issue is not None:
+                    command += f" --issue {issue}"
+                helper_commands.append(command)
 
     next_validation_commands: list[str] = []
     follow_up_checks: list[str] = []
@@ -146,6 +150,11 @@ def main() -> int:
     parser.add_argument("--validation-area", choices=sorted(PLANS.keys()), help="Optional explicit validation area.")
     parser.add_argument("--preserve-whitespace", action="store_true", help="Include pre-wrap guidance when goal routing is used.")
     parser.add_argument("--locale-sensitive", action="store_true", help="Include locale guidance when goal routing is used.")
+    parser.add_argument(
+        "--include-escalation",
+        action="store_true",
+        help="Also include critique and decision-contract helpers for high-ambiguity or high-risk tasks.",
+    )
     parser.add_argument("--format", choices=["text", "json"], default="text", help="Output format.")
     args = parser.parse_args()
 
@@ -157,6 +166,7 @@ def main() -> int:
         validation_area=args.validation_area,
         preserve_whitespace=args.preserve_whitespace,
         locale_sensitive=args.locale_sensitive,
+        include_escalation=args.include_escalation,
     )
 
     if args.format == "json":

@@ -330,6 +330,132 @@
         "Includes decision-contract elements such as assumptions, proof obligations, or route breakers",
         "Includes concrete repo-local commands such as reasoning_bundle, route_plan, examples, critique, or decision-contract selectors"
       ]
+    },
+    {
+      "id": 29,
+      "prompt": "I am using @chenglou/pretext in a virtualized reader and need to choose the correct repo-local route before I code. The paragraph continues across fixed-width columns, I need cursor continuity, and I want the exact prepare vs layout invalidation tuple plus the first selector command to run.",
+      "expected_output": "Triggers the pretext skill, routes to streamed-lines on the document-reader surface, states the invalidation tuple, and gives a repo-local selector command such as select_pretext_route_plan.py or select_pretext_api.py.",
+      "files": [],
+      "expectations": [
+        "Clearly treats the task as a Pretext-specific routing task",
+        "Chooses streamed-lines on the document-reader surface",
+        "States that text, font, whiteSpace, and locale invalidate preparation",
+        "States that width and lineHeight invalidate only layout",
+        "Includes a repo-local selector command"
+      ]
+    },
+    {
+      "id": 30,
+      "prompt": "Please help me optimize multiline truncation in a normal React card list with CSS line-clamp and maybe a ResizeObserver cache. I am not using Pretext and I do not want repo-specific tooling; I just need generic frontend advice.",
+      "expected_output": "Recognizes this as generic frontend layout work rather than a Pretext task, avoids Pretext-specific selectors or upstream validation, and stays at the CSS/React advice level.",
+      "files": [],
+      "expectations": [
+        "Explicitly frames the task as generic frontend or CSS layout work rather than a Pretext routing problem",
+        "Avoids recommending select_pretext_route_plan.py or other pretext selectors",
+        "Avoids mentioning upstream Pretext ownership or validation surfaces",
+        "Keeps the advice at generic frontend or CSS layout level"
+      ]
+    },
+    {
+      "id": 31,
+      "prompt": "I am wrapping Canvas labels around shapes, but we explicitly decided not to use Pretext. Challenge my first instinct anyway: I keep calling this variable-width/custom-renderer. If that instinct is wrong, tell me what fact would falsify it and what route to reject, but do not assume a generic custom renderer answer is acceptable.",
+      "expected_output": "Uses a stronger Socratic gate: it must reject the wrong neighboring route explicitly, explain what fact would falsify variable-width/custom-renderer, and avoid defaulting to a generic renderer answer without route justification.",
+      "files": [],
+      "expectations": [
+        "Explicitly challenges the initial variable-width custom-renderer instinct",
+        "States a concrete falsifier or neighboring-route rejection",
+        "Explains why the current instinct may be overpaying for the wrong route",
+        "Does not stop at generic rendering advice without route critique"
+      ]
+    },
+    {
+      "id": 32,
+      "prompt": "We already chose streamed-lines for a Pretext pagination bug and now I need a strict decision contract, not more brainstorming. State the chosen route, the assumptions, the route breakers, and the lightest validation chain. If any of those are missing, the answer is not useful.",
+      "expected_output": "Uses a stronger decision-contract gate: it must explicitly emit route, assumptions, route breakers, and the minimal validation chain rather than broad recommendations.",
+      "files": [],
+      "expectations": [
+        "States the chosen route explicitly",
+        "Lists assumptions or proof obligations",
+        "Lists route breakers or conditions that would invalidate the route",
+        "Includes a minimal validation chain with concrete commands"
+      ]
+    },
+    {
+      "id": 33,
+      "prompt": "Give me one repo-local reasoning bundle for this Pretext case: a paragraph continues across fixed-width ebook columns, someone keeps mislabeling it as variable-width/custom-renderer, and I need the surviving route, the strongest wrong routes to reject, the contract, and the first repo-local commands. A high-level summary without concrete repo-local commands is a failure.",
+      "expected_output": "Uses a stricter reasoning-bundle gate: it must choose streamed-lines/document-reader, reject the strongest neighboring wrong routes, include decision-contract elements, and provide concrete repo-local commands.",
+      "files": [],
+      "expectations": [
+        "Uses one integrated reasoning bundle rather than disconnected advice",
+        "Chooses streamed-lines on document-reader over variable-width on custom-renderer",
+        "Rejects the strongest neighboring wrong routes explicitly",
+        "Includes decision-contract elements such as assumptions or route breakers",
+        "Includes concrete repo-local commands"
+      ]
+    },
+    {
+      "id": 34,
+      "prompt": "This is a true trigger-boundary test for the pretext skill, not a generic explanation prompt. I am using @chenglou/pretext in a reader with fixed-width columns, and I want exactly one repo-local selector command to start from. Your answer fails if it does not name the route as streamed-lines/document-reader, does not give the full prepare-vs-layout invalidation tuple, or gives more than one first command.",
+      "expected_output": "Acts as a harder route-plan gate: it must explicitly choose streamed-lines/document-reader, give the full invalidation tuple, and provide exactly one first repo-local selector command instead of a loose command list.",
+      "files": [],
+      "expectations": [
+        "Explicitly chooses streamed-lines on document-reader",
+        "States the full prepare invalidation tuple",
+        "States the full layout invalidation tuple",
+        "Provides exactly one first repo-local selector command",
+        "Does not expand into a broad multi-command bundle"
+      ]
+    },
+    {
+      "id": 35,
+      "prompt": "Treat this as a strict Socratic gate, not a helpful discussion. The team keeps calling this a variable-width/custom-renderer problem because text wraps around shapes in Canvas. Your answer fails unless it explicitly rejects that default route, states one concrete falsifier that would force a route change, and names the narrower surviving route in one sentence.",
+      "expected_output": "Acts as a harder Socratic gate: it must reject the default variable-width/custom-renderer framing, state one concrete falsifier, and name the narrower surviving route rather than giving broad renderer advice.",
+      "files": [],
+      "expectations": [
+        "Explicitly rejects the default variable-width/custom-renderer framing",
+        "States one concrete falsifier that would force a route change",
+        "Names a narrower surviving route in one sentence",
+        "Avoids broad generic renderer advice"
+      ]
+    },
+    {
+      "id": 36,
+      "prompt": "This is a hard reasoning-bundle gate. For the Pretext case where one paragraph continues across fixed-width ebook columns, your answer fails unless the first sentence names streamed-lines/document-reader, the next section rejects both variable-width and fixed-lines with separate reasons, the contract lists at least one assumption and one route breaker, and the command section contains exactly three repo-local commands in priority order.",
+      "expected_output": "Acts as a harder reasoning-bundle gate: it must use a tightly structured integrated bundle with the exact surviving route, separate rejections for the two strongest wrong routes, explicit contract elements, and exactly three prioritized repo-local commands.",
+      "files": [],
+      "expectations": [
+        "First sentence names streamed-lines on document-reader",
+        "Rejects variable-width and fixed-lines with separate reasons",
+        "Includes at least one explicit assumption and one route breaker",
+        "Provides exactly three repo-local commands in priority order",
+        "Keeps the output as one integrated reasoning bundle"
+      ]
+    },
+    {
+      "id": 37,
+      "prompt": "This is an internal-consistency route-plan gate, not a formatting test. For the Pretext reader case with fixed-width columns, you must choose streamed-lines/document-reader, give the exact prepare and layout invalidation tuples, and then give exactly one first selector command. Your answer fails if that one command is not select_pretext_route_plan.py, or if the command does not match the chosen route, or if the tuples and the route are internally inconsistent.",
+      "expected_output": "Acts as a stricter route-plan consistency gate: it must choose streamed-lines/document-reader, keep the tuples consistent with that route, and give exactly one matching first command: select_pretext_route_plan.py with the correct goal and surface.",
+      "files": [],
+      "expectations": [
+        "Chooses streamed-lines on document-reader",
+        "States prepare invalidation as text, font, whiteSpace, and locale",
+        "States layout invalidation as maxWidth and lineHeight",
+        "Provides exactly one first command and it is select_pretext_route_plan.py with streamed-lines/document-reader",
+        "Keeps route, tuples, and command internally consistent"
+      ]
+    },
+    {
+      "id": 38,
+      "prompt": "This is an internal-consistency reasoning-bundle gate. For the Pretext case where one paragraph continues across fixed-width ebook columns, your answer fails unless the first sentence names streamed-lines/document-reader, the next section rejects variable-width and fixed-lines for two different reasons, the contract names at least one assumption and one route breaker, and the command section contains exactly three repo-local commands where command 1 is route choice, command 2 is critique, and command 3 is contract or validation. If the commands do not match those roles, the answer fails.",
+      "expected_output": "Acts as a stricter reasoning-bundle consistency gate: it must keep the route, rejection logic, contract, and the three command roles aligned rather than merely satisfying a surface format.",
+      "files": [],
+      "expectations": [
+        "First sentence names streamed-lines on document-reader",
+        "Rejects variable-width and fixed-lines for two different reasons",
+        "Includes at least one explicit assumption and one route breaker",
+        "Provides exactly three repo-local commands with roles route-choice, critique, and contract-or-validation in that order",
+        "Keeps the command roles consistent with the preceding route and contract"
+      ]
     }
   ]
 }

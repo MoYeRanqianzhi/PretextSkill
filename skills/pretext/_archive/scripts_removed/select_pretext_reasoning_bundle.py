@@ -56,6 +56,7 @@ def build_reasoning_bundle(
         validation_area=validation_area,
         preserve_whitespace=preserve_whitespace,
         locale_sensitive=locale_sensitive,
+        include_escalation=True,
     )
     socratic_review = build_review(goal=goal, surface=surface, issue=issue, tooling_area=tooling_area)
     decision_contract = build_contract(

@@ -50,61 +50,50 @@ If this covers your task, you're done. Read on only when you need lines, geometr
    | `cache-locale` | Manage caches or switch locale — use `clearCache()` / `setLocale()` |
 
    - `surface` when it matters: `react-dom`, `custom-renderer`, `document-reader`, `package`, or `upstream`
-   - optional `issue`, `tooling-area`, or explicit validation scope when the task is already narrowed
 
-2. Run `python scripts/select_pretext_route_plan.py --goal <goal> --surface <surface>` as the default entry point.
-3. Read only the references named by the route plan, then run the smallest validation chain that can falsify the current assumption.
+2. Use the goal table to pick the API pair, then read the matching reference file from the Default Path below.
+3. Run the smallest validation chain that can falsify the current assumption.
 
 ## Default Path
 
 Use this path for normal implementation, refactor, and debugging work.
 
-1. Start with `python scripts/select_pretext_route_plan.py --goal ... --surface ... --issue ... --tooling-area ...` when the task mixes API choice, upstream ownership, tooling-surface selection, or validation scoping.
-2. Use `python scripts/select_pretext_api.py --goal <goal> --surface <surface>` only when the API route is already clear and you only need the narrow API path, invalidation tuple, and minimal reference set.
-3. Read the smallest reference set first:
-   - `reference/first-principles.md` for the irreducible model and invalidation rules
+1. Use the goal table above to pick the right API pair. If the goal is unclear, start with `prepare()` + `layout()` (height-only) and escalate only when you need richer output.
+2. Read the smallest reference set first:
    - `reference/public-api.md` for normal package-facing API work
+   - `reference/behavior-contracts.md` when the task is about exact semantics, whitespace, script caveats, or debugging
+   - `reference/recipes.md` when the task is about integration (React, Canvas, PDF, variable-width, etc.)
+   - `reference/adapter-patterns.md` when you need a local facade, hook, or service boundary
    - `reference/internal-exports.md` and `reference/internal-architecture.md` only when the package-facing route is insufficient and the task truly descends into upstream internals
-4. Keep the default path light. Do not load critique, decision-contract, or bundled reasoning layers unless the task is ambiguous, high-stakes, or still feels under-justified after the first route pass.
+   - `reference/validation-and-tooling.md` for upstream harness commands, dashboards, and package workflows
+3. Keep the default path light. Do not load multiple reference files unless the task genuinely spans multiple concerns.
 
 ## Escalation Path
 
 Use escalation only when the default path leaves real uncertainty.
 
-- Run `python scripts/select_pretext_socratic_review.py --goal ... --surface ... --issue ... --tooling-area ...` when the route is plausible but still needs to be challenged against neighboring routes, weaker evidence, or a better falsifier.
-- Run `python scripts/select_pretext_decision_contract.py --goal ... --surface ... --issue ... --tooling-area ...` after the route survives critique and you need explicit assumptions, proof obligations, route breakers, and validation commitments before coding.
-- Run `python scripts/select_pretext_reasoning_bundle.py --goal ... --surface ... --issue ... --tooling-area ...` only for high-ambiguity or high-risk tasks that need route selection, critique, and decision contract emitted as one integrated bundle.
-- Run `python scripts/select_pretext_owner.py --issue ...` when upstream source ownership is the real question.
-- Run `python scripts/select_pretext_tooling_surface.py --area ...` when the question is about harnesses, dashboards, probes, or report transport rather than the package API.
-- Run `python scripts/select_pretext_examples.py --goal ... --surface ...` only after a route is already plausible and you need external implementation precedent to validate, not choose, the route.
-- Run `python scripts/select_pretext_eval_design.py --role smoke|gate --goal ... --surface ... --reasoning-layer ...` when improving eval prompts, benchmark discrimination, or reasoning-layer coverage.
+- When a bug tempts you toward a complicated runtime correction, first ask: Is this actually an integration mismatch? Is the behavior already covered by a preprocessing rule? Is the problem a known canary rather than a clean local bug? Prefer small, semantically justified rules over heavy runtime work.
+- When upstream source ownership is the real question, check `reference/internal-architecture.md` for module ownership.
+- When the question is about harnesses, dashboards, probes, or report transport, check `reference/validation-and-tooling.md`.
+- When you need external implementation precedent, check `reference/adapter-patterns.md` for vetted downstream examples.
 
 ## Validation Order
 
 Prefer the narrowest validation selector that matches what you already know:
 
-1. Run `python scripts/select_pretext_validation_from_git.py --repo pretext --rev-range ...` when you want validation inferred directly from upstream git diff state.
-2. Otherwise run `python scripts/select_pretext_validation_by_files.py --path ...` when you already know which files changed.
-3. Otherwise run `python scripts/select_pretext_validation.py --area ...` when the change area is already known.
+1. Run `bun run scripts/select-pretext-validation-from-git.ts --repo pretext --rev-range ...` when you want validation inferred directly from upstream git diff state.
+2. Run `bun run scripts/select-pretext-validation-from-git.ts --path <file> --path <file>` when you already know which files changed.
+3. When the change area is already known, look up the area in `reference/validation-and-tooling.md` for the matching commands.
 4. Report validation in this order: selected area, commands, follow-up checks, then the escalation trigger if those checks fail.
 
 ## On-Demand References
 
-- Read [reference/behavior-contracts.md](reference/behavior-contracts.md) when the task is about exact semantic expectations, cross-API invariants, or whether a behavior change would be a regression.
-- Read [reference/whitespace-and-breaks.md](reference/whitespace-and-breaks.md) for whitespace modes, break policy, tabs, zero-width separators, and soft-hyphen behavior.
-- Read [reference/script-and-browser-caveats.md](reference/script-and-browser-caveats.md) for script-sensitive segmentation, punctuation glue, bidi, emoji, browser caveats, and research canaries.
-- Read [reference/integration-lifecycle.md](reference/integration-lifecycle.md) for caching, resize, custom rendering, shrink-wrap, React or virtualization, and variable-width line flow patterns.
+- Read [reference/behavior-contracts.md](reference/behavior-contracts.md) for exact semantic expectations, cross-API invariants, whitespace modes, break policy, tabs, script-sensitive segmentation, punctuation glue, bidi, emoji, browser caveats, research canaries, and diagnostic triage.
+- Read [reference/recipes.md](reference/recipes.md) for integration patterns: React/DOM, Canvas/SVG/WebGL, PDF/EPUB/pagination, variable-width flow, caching, resize, shrink-wrap, and performance guardrails.
 - Read [reference/adapter-patterns.md](reference/adapter-patterns.md) when you need a local facade, hook, service, or composable boundary informed by real downstream implementations.
-- Read [reference/react-dom-recipes.md](reference/react-dom-recipes.md) for React or DOM-oriented integration patterns such as height caches or whitespace-preserving editors.
-- Read [reference/custom-renderer-recipes.md](reference/custom-renderer-recipes.md) for Canvas, SVG, WebGL, shrink-wrap, or variable-width rendering patterns.
-- Read [reference/document-reader-recipes.md](reference/document-reader-recipes.md) for PDF, EPUB, pagination, text-layer, or multi-column continuation patterns.
-- Read [reference/package-workflows.md](reference/package-workflows.md) when the task is about package shape, published-artifact confidence, or release-oriented validation.
-- Read [reference/upstream-tooling-surfaces.md](reference/upstream-tooling-surfaces.md) when the task is about upstream harnesses, browser checkers, dashboards, report transport, or demo-site plumbing rather than the package API itself.
-- Read [reference/troubleshooting.md](reference/troubleshooting.md) for failure modes, research-backed guardrails, and diagnostic triage.
-- Read [reference/validation-playbook.md](reference/validation-playbook.md) for Bun commands, dashboards, and escalation paths.
-- Read [reference/socratic-review.md](reference/socratic-review.md) only after an initial route exists and still needs to be challenged.
-- Read [reference/decision-contract.md](reference/decision-contract.md) only after a route survives critique and needs a decision-grade commitment.
-- Read [reference/eval-design.md](reference/eval-design.md) only when the task is about eval design rather than product integration or engine behavior.
+- Read [reference/public-api.md](reference/public-api.md) for the complete public API reference.
+- Read [reference/internal-exports.md](reference/internal-exports.md) and [reference/internal-architecture.md](reference/internal-architecture.md) only when the package-facing API is insufficient and the task descends into upstream internals.
+- Read [reference/validation-and-tooling.md](reference/validation-and-tooling.md) for Bun commands, upstream harnesses, dashboards, package workflows, and escalation paths.
 
 ## Non-Negotiables
 
@@ -116,6 +105,14 @@ Prefer the narrowest validation selector that matches what you already know:
 6. `setLocale()` affects future prepare calls only and clears caches. Centralize locale changes; never call `setLocale()` inside per-measurement hot paths.
 7. Avoid `system-ui` for accuracy-sensitive macOS work.
 
+## Architectural Guardrails
+
+- Do not move measurement back into `layout()`.
+- Do not introduce DOM reads as the normal measurement path.
+- Do not rerun `prepare()` just because width changed.
+- Treat the fast `layout()` path as a design constraint, not an optimization accident.
+- When a bug tempts you toward a complicated runtime correction, first ask: Is this actually an integration mismatch? Is the behavior already covered by a preprocessing rule? Is the problem a known canary rather than a clean local bug? Prefer small, semantically justified rules over heavy runtime work.
+
 ## Output Rules
 
 1. State the chosen output shape and why it matches the task.
@@ -125,3 +122,5 @@ Prefer the narrowest validation selector that matches what you already know:
 5. Separate integration mistakes from true engine limitations or upstream canaries.
 6. Prefer the lightest validation path that can falsify the current assumption.
 7. Show the validation command run and its output as evidence.
+
+Every serious answer or implementation should make these inputs explicit: text source, font shorthand, line height, width source, whitespace mode, and locale requirements.

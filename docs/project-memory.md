@@ -300,6 +300,53 @@
 - Forward-test prompt: package entrypoint and declaration output changed
   - Result: a fresh agent selected `package-workflows.md`, the package confidence loop, and the correct package-contract checks
 
+- `python skills/pretext/scripts/run_pretext_review_iteration.py --workspace skills/pretext-workspace/iteration-5 --eval-id 29 --eval-id 30 --eval-id 31 --eval-id 32 --eval-id 33`
+  - Result: produced the focused fifth iteration workspace for trigger-boundary validation and stronger reasoning-layer gate prompts
+- `python skills/pretext/scripts/grade_pretext_review_iteration.py --workspace skills/pretext-workspace/iteration-5 --force`
+  - Result: grading succeeded after fixing subprocess environment propagation for `CLAUDE_CODE_GIT_BASH_PATH` on Windows
+- `python <skill-creator>/scripts/aggregate_benchmark.py skills/pretext-workspace/iteration-5 --skill-name pretext --skill-path skills/pretext`
+  - Result: iteration 5 benchmark summary is `90.0%` with skill vs `91.0%` without skill, delta `-0.01`
+- `python skills/pretext/scripts/analyze_pretext_benchmark.py --benchmark skills/pretext-workspace/iteration-5/benchmark.json --format json`
+  - Result: classified eval `29` and `32` as `discriminating_positive`, eval `31` and `33` as `non_discriminating_success`, and eval `30` as `regression_candidate`
+- `python -X utf8 <skill-creator>/eval-viewer/generate_review.py skills/pretext-workspace/iteration-5 --skill-name pretext --benchmark skills/pretext-workspace/iteration-5/benchmark.json --previous-workspace skills/pretext-workspace/iteration-4 --static skills/pretext-workspace/iteration-5/review.html`
+  - Result: generated a fifth static review viewer at `skills/pretext-workspace/iteration-5/review.html`
+- Iteration-5 interpretation
+  - Result: tightened `SKILL.md` description still preserves positive Pretext-specific triggering on eval `29`, strengthens decision-contract discrimination on eval `32`, but eval `31` and `33` remain smoke-like and eval `30` needs wording repair because its negated expectation phrasing confuses grader polarity repair
+- Updated `skills/pretext/scripts/run_pretext_review_iteration.py` and `skills/pretext/scripts/grade_pretext_review_iteration.py`
+  - Result: both scripts now pass their filtered environment into `subprocess.run(...)`, fixing Windows evaluation runs that depend on `CLAUDE_CODE_GIT_BASH_PATH`
+- Updated eval `30` wording in `skills/pretext/evals/evals.json`
+  - Result: reframed the negative boundary expectation in positive terms so future grading can verify generic-layout handling without negation-induced polarity flips
+
+- `python skills/pretext/scripts/run_pretext_review_iteration.py --workspace skills/pretext-workspace/iteration-6 --eval-id 34 --eval-id 35 --eval-id 36`
+  - Result: produced the focused sixth iteration workspace for harder route-plan, Socratic, and reasoning-bundle gate prompts
+- `python skills/pretext/scripts/grade_pretext_review_iteration.py --workspace skills/pretext-workspace/iteration-6`
+  - Result: grading completed successfully for all harder-gate runs
+- `python <skill-creator>/scripts/aggregate_benchmark.py skills/pretext-workspace/iteration-6 --skill-name pretext --skill-path skills/pretext`
+  - Result: iteration 6 benchmark summary is `100.0%` with skill vs `91.7%` without skill, delta `+0.08`
+- `python skills/pretext/scripts/analyze_pretext_benchmark.py --benchmark skills/pretext-workspace/iteration-6/benchmark.json --format json`
+  - Result: classified eval `35` as `discriminating_positive`, while evals `34` and `36` remain `non_discriminating_success`
+- `python -X utf8 <skill-creator>/eval-viewer/generate_review.py skills/pretext-workspace/iteration-6 --skill-name pretext --benchmark skills/pretext-workspace/iteration-6/benchmark.json --previous-workspace skills/pretext-workspace/iteration-5 --static skills/pretext-workspace/iteration-6/review.html`
+  - Result: generated a sixth static review viewer at `skills/pretext-workspace/iteration-6/review.html`
+- Iteration-6 interpretation
+  - Result: stronger gate wording successfully hardened the Socratic path into a real gate, but route-plan and reasoning-bundle remain smoke-like because baseline can still satisfy their stricter formatting constraints
+- Updated `skills/pretext/evals/evals.json` and `skills/pretext/evals/coverage.json` for iteration 6
+  - Result: promoted route-plan coverage into `gate`, removed eval `29` from `smoke`, and added harder gate prompts `34`, `35`, and `36`
+
+- `python skills/pretext/scripts/run_pretext_review_iteration.py --workspace skills/pretext-workspace/iteration-7 --eval-id 37 --eval-id 38`
+  - Result: produced the focused seventh iteration workspace for route-plan and reasoning-bundle internal-consistency gates
+- `python skills/pretext/scripts/grade_pretext_review_iteration.py --workspace skills/pretext-workspace/iteration-7`
+  - Result: grading completed successfully for both consistency-gate runs
+- `python <skill-creator>/scripts/aggregate_benchmark.py skills/pretext-workspace/iteration-7 --skill-name pretext --skill-path skills/pretext`
+  - Result: iteration 7 benchmark summary is `100.0%` with skill vs `100.0%` without skill, delta `+0.00`
+- `python skills/pretext/scripts/analyze_pretext_benchmark.py --benchmark skills/pretext-workspace/iteration-7/benchmark.json --format json`
+  - Result: classified both eval `37` and eval `38` as `non_discriminating_success`
+- `python -X utf8 <skill-creator>/eval-viewer/generate_review.py skills/pretext-workspace/iteration-7 --skill-name pretext --benchmark skills/pretext-workspace/iteration-7/benchmark.json --previous-workspace skills/pretext-workspace/iteration-6 --static skills/pretext-workspace/iteration-7/review.html`
+  - Result: generated a seventh static review viewer at `skills/pretext-workspace/iteration-7/review.html`
+- Iteration-7 interpretation
+  - Result: stronger internal-consistency constraints still did not make route-plan or reasoning-bundle prompts discriminating; baseline continues to satisfy these structures reliably enough that they should be treated as smoke tests
+- Updated `skills/pretext/evals/evals.json` and `skills/pretext/evals/coverage.json` for iteration 7
+  - Result: added stricter consistency gates `37` and `38` that tie command choice to route and contract role alignment
+
 ## Working Rules
 
 - Document important findings before relying on memory

@@ -1,6 +1,6 @@
 # Behavior Contracts
 
-Use this file when the task is about exact semantic expectations, edge cases, or whether a proposed change would break an existing Pretext contract.
+Use this file when the task is about exact semantic expectations, edge cases, whether a proposed change would break an existing Pretext contract, visible whitespace or break-character behavior, script-sensitive segmentation, punctuation-glue classes, bidi or emoji caveats, browser quirks, or diagnosing "wrong layout" reports.
 
 ## Purpose
 
@@ -16,6 +16,8 @@ The canonical evidence base is:
 - `pretext/src/layout.test.ts`
 - `pretext/README.md`
 
+---
+
 ## Cross-API Contracts
 
 Preserve these before attempting internal refactors:
@@ -26,48 +28,87 @@ Preserve these before attempting internal refactors:
 - rich line boundary cursors must reconstruct the prepared normalized text exactly
 - soft-hyphen rendering may insert visible hyphens in line text, but cursor-based reconstruction must preserve the original source slices
 
-## Whitespace Contracts
+---
 
-### Normal Mode
+## Whitespace Detail
 
-- ordinary spaces, tabs, and line breaks collapse under the normal path
-- whitespace-only input becomes empty under the normal path
-- trailing whitespace hangs past the line edge and does not trigger a wrap on its own
+### `whiteSpace: 'normal'`
 
-### `pre-wrap` Mode
+- collapses ordinary whitespace runs (spaces, tabs, line breaks)
+- trims ordinary whitespace at the edges; whitespace-only input becomes empty
+- trailing collapsible whitespace hangs past the line edge without forcing a break
+
+### `whiteSpace: 'pre-wrap'`
 
 - ordinary spaces remain visible
-- hard breaks are explicit line boundaries
-- CRLF is normalized to a single hard break
-- tabs remain explicit segments and align to tab stops
+- `\t` tabs remain as explicit segments and align to tab stops (default `tab-size: 8`)
+- hard breaks are explicit line boundaries; CRLF normalizes to a single hard break
 - tab stops restart after a hard break
 - whitespace-only lines remain visible
 - trailing spaces or tabs before a hard break stay on the current line
 - consecutive hard breaks preserve empty lines, but a terminal hard break does not invent an extra trailing empty line
 
-## Break Contracts
+### Explicit Glue And Break Characters
 
-- non-breaking spaces, narrow no-break spaces, and word joiners stay as visible glue content rather than ordinary collapsible whitespace
-- zero-width spaces are explicit break opportunities
-- soft hyphens are discretionary break points, not ordinary visible glyphs in the source stream
-- overlong breakable runs may split at grapheme boundaries
-- long breakable segments should move to a fresh line when the current line already has content and the next segment cannot fit
-- line count should grow monotonically as width shrinks
+- non-breaking space (`\u00A0`), narrow no-break space (`\u202F`), and word joiner (`\u2060`) stay as visible glue content, not ordinary collapsible whitespace
+- zero-width space (`\u200B`) is an explicit break opportunity
+- soft hyphen (`\u00AD`) is a discretionary break point, not an ordinary visible glyph in the source stream
 
-## Script And Glue Contracts
+### Soft Hyphen Behavior
 
-The current model intentionally preserves these high-value behaviors:
+- stays invisible on unbroken lines
+- renders as a visible trailing `-` only when chosen as the break point
+- round-trips through rich cursors using source slices, not merely rendered line text
 
-- closing punctuation attaches to the preceding word
-- opening punctuation and opening-quote clusters attach to the following word only when context justifies it
-- Arabic punctuation and punctuation-plus-mark clusters remain attached correctly
-- Myanmar punctuation and follower-style classes remain in the preprocessing domain, not the layout hot path
-- Devanagari danda punctuation remains attached to the preceding word
-- CJK and Hangul punctuation attachment remains explicit
-- astral CJK ideographs are treated as CJK break units
+### Narrow-Width Consequence
+
+Because the default target includes `overflow-wrap: break-word`, very narrow widths can still break inside words, but only at grapheme boundaries. Line count should grow monotonically as width shrinks.
+
+---
+
+## Script & Browser Detail
+
+### Punctuation And Structured Token Rules
+
+Tests establish explicit expectations for:
+
+- closing punctuation attaching to the preceding word
+- opening punctuation and quote clusters attaching to the following word when context requires
+- contextual ASCII quote glue
+- Arabic punctuation and punctuation-plus-mark clusters
+- Devanagari danda punctuation
+- Myanmar punctuation and possessive-marker glue
+- CJK and Hangul punctuation attachment
+- URL-like runs and query-string structure
+- numeric time ranges
+- hyphenated numeric identifiers
+- repeated punctuation runs
+
+### Script And Directional Behavior
+
+- CJK text can split into grapheme-level break units; astral CJK ideographs are treated as CJK break units
+- Hangul punctuation attachment has explicit behavior
 - mixed-direction text is a stable smoke-test path for the rich APIs
+- locale-sensitive segmentation uses `Intl.Segmenter`
+- Thai and other locale-sensitive scripts can depend on `setLocale()` before preparation
 
-For deeper script-specific boundaries and canaries, also load [script-and-browser-caveats.md](script-and-browser-caveats.md).
+### Browser Caveats
+
+- `system-ui` is unsafe for accuracy-sensitive macOS layout
+- Chrome and Firefox on macOS can over-measure emoji in canvas at small sizes; Pretext uses a cached correction
+
+### Research Canaries
+
+These are not ordinary "just patch it" bug zones. Treat them as places where the current model has known tension or exactness ceilings.
+
+| Area | Current Read | Design Caution |
+| --- | --- | --- |
+| Myanmar | unresolved quote and follower-style classes | do not stack instinctive glue rules without broad evidence |
+| Japanese | punctuation and proportional-font exactness ceiling | do not keep piling on narrow punctuation heuristics |
+| Chinese | narrow-width and font-sensitive exactness ceiling | treat as a real canary, not an obvious missed punctuation rule |
+| Arabic | remaining fine-width shaping or context classes | be skeptical of heavy shaping-aware width caches |
+
+---
 
 ## Locale And Cache Contracts
 
@@ -76,6 +117,8 @@ For deeper script-specific boundaries and canaries, also load [script-and-browse
 - existing prepared values do not mutate after a locale change
 - `clearCache()` is an intentional cache-lifecycle tool, not a normal render-loop primitive
 
+---
+
 ## Custom Rendering Contracts
 
 - `LayoutCursor.start` is inclusive
@@ -83,13 +126,83 @@ For deeper script-specific boundaries and canaries, also load [script-and-browse
 - `LayoutLineRange` must preserve geometry parity with `LayoutLine`
 - rich-path line text reconstruction must not silently lose preserved whitespace, hard breaks, or source-only soft-hyphen markers
 
+---
+
+## Diagnostic Exports
+
+### `profilePrepare()`
+
+Use when the question is specifically about prepare-phase cost or segment counts.
+
+It reports:
+
+- `analysisMs`
+- `measureMs`
+- `totalMs`
+- `analysisSegments`
+- `preparedSegments`
+- `breakableSegments`
+
+Treat it as a diagnostic helper, not a runtime integration primitive.
+
+---
+
+## Research-Backed Guardrails
+
+The upstream research log strongly favors these constraints:
+
+- keep `layout()` arithmetic-only
+- do not move measurement into `layout()`
+- do not reintroduce DOM reads as the default measurement path
+- prefer small semantic preprocessing rules over heavy runtime corrections
+
+Be skeptical of fixes that:
+
+- add pair-correction tables
+- add shaping-aware width caches without strong evidence
+- compensate for `system-ui` with guessed substitutions
+
+---
+
+## First-Pass Debug Order
+
+Check these before suspecting a Pretext bug:
+
+1. `font` mismatch
+2. `lineHeight` mismatch
+3. width mismatch
+4. wrong whitespace mode
+5. wrong locale state
+6. wrong API shape for the task
+
+---
+
+## Bug Report Shape
+
+Always include:
+
+- input text
+- font string
+- line height
+- width
+- whitespace mode
+- locale
+- chosen API
+- expected behavior
+- actual behavior
+
+Without those, most Pretext bugs are underspecified.
+
+---
+
 ## Diagnostic Rule
 
-When a bug report claims “Pretext is wrong,” ask:
+When a bug report claims "Pretext is wrong," ask:
 
 1. Which exact contract above is being violated?
 2. Can the issue be reproduced with the exported APIs before touching internals?
 3. Is the failure in segmentation, measurement, line walking, or line materialization?
-4. Is this a real regression, or a known canary documented elsewhere?
+4. Is this a real regression, or a known canary documented in the Research Canaries table?
+5. Is the correct whitespace mode in use? Is the issue actually a glue or break character?
 
 If you cannot answer those questions precisely, stay in diagnosis mode rather than patching internals.

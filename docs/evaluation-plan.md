@@ -95,6 +95,137 @@ When running the formal `skill-creator` loop:
 3. Compare with-skill and baseline outputs before changing the skill again.
 4. Expand the eval set only when a real failure mode appears repeatedly.
 
+## Iteration 5: Trigger-Boundary And Stronger Reasoning Gates
+
+After the progressive-disclosure refactor, iteration 5 adds a small targeted subset instead of broadening the whole suite immediately.
+
+- eval IDs: `29, 30, 31, 32, 33`
+- workspace: `skills/pretext-workspace/iteration-5`
+- goal:
+  - verify that the tightened frontmatter description still triggers on clearly Pretext-specific route-selection work
+  - verify that generic frontend layout work is no longer swallowed as a Pretext routing task
+  - replace weak reasoning-layer smoke prompts with stricter gate prompts for Socratic critique, decision contracts, and repo-local reasoning bundles
+
+The new subset adds:
+
+- `29` — positive trigger / route-plan sample
+- `30` — negative trigger boundary sample
+- `31` — stronger Socratic gate
+- `32` — stronger decision-contract gate
+- `33` — stronger reasoning-bundle gate
+
+Benchmark summary for iteration 5:
+
+- with skill: `90.0%`
+- without skill: `91.0%`
+- delta: `-0.01`
+
+Discrimination analysis:
+
+- `29` → `discriminating_positive`
+- `30` → `regression_candidate`
+- `31` → `non_discriminating_success`
+- `32` → `discriminating_positive`
+- `33` → `non_discriminating_success`
+
+Interpretation:
+
+- The tightened description did **not** break positive triggering for an explicitly Pretext-local route-selection prompt (`29`).
+- The negative trigger sample (`30`) exposed a grading issue in the expectation wording: the with-skill answer correctly stayed generic, but the current expectation text uses a negated phrasing that the grader polarity repair can still misread. Treat this sample as a useful boundary test, but revise its wording before using it as a hard gate.
+- The stricter decision-contract prompt (`32`) now behaves as a real gate and distinguishes the skill from baseline.
+- The stricter Socratic (`31`) and reasoning-bundle (`33`) prompts still behave like smoke tests: they confirm capability but do not yet show meaningful benchmark separation from baseline.
+
+Artifacts:
+
+- `skills/pretext-workspace/iteration-5/benchmark.json`
+- `skills/pretext-workspace/iteration-5/benchmark.md`
+- `skills/pretext-workspace/iteration-5/review.html`
+
+Next step:
+
+- collect human review feedback from `skills/pretext-workspace/iteration-5/review.html`
+- then revise eval `30` wording and decide whether `29` should be promoted from `smoke` to `gate`
+
+## Iteration 6: Gate Hardening For Route-Plan And Reasoning Bundles
+
+Iteration 6 focuses narrowly on replacing the still-smoke-like route-plan and reasoning-bundle prompts with harder gate variants.
+
+- eval IDs: `34, 35, 36`
+- workspace: `skills/pretext-workspace/iteration-6`
+- goal:
+  - harden the route-plan gate so it cannot drift into a loose multi-command answer
+  - harden the Socratic gate so it must reject the default route and name a falsifier
+  - harden the reasoning-bundle gate so it must use one integrated structure with exact route, explicit contract elements, and a tightly constrained command section
+
+The new subset adds:
+
+- `34` — harder route-plan gate requiring exactly one first command and full invalidation tuples
+- `35` — harder Socratic gate requiring an explicit rejection, one falsifier, and one narrower surviving route
+- `36` — harder reasoning-bundle gate requiring first-sentence route naming, separate wrong-route rejection, contract elements, and exactly three repo-local commands
+
+Benchmark summary for iteration 6:
+
+- with skill: `100.0%`
+- without skill: `91.7%`
+- delta: `+0.08`
+
+Discrimination analysis:
+
+- `34` → `non_discriminating_success`
+- `35` → `discriminating_positive`
+- `36` → `non_discriminating_success`
+
+Interpretation:
+
+- Gate hardening successfully converted the stronger Socratic prompt (`35`) into a meaningful benchmark gate.
+- The harder route-plan prompt (`34`) and the harder reasoning-bundle prompt (`36`) still behave like smoke tests: they confirm capability, but baseline can still satisfy them reliably enough that they do not yet separate the skill from baseline.
+- The next iteration, if needed, should focus only on making `34` and `36` internally coupled enough that baseline cannot satisfy them by matching format alone.
+
+Artifacts:
+
+- `skills/pretext-workspace/iteration-6/benchmark.json`
+- `skills/pretext-workspace/iteration-6/benchmark.md`
+- `skills/pretext-workspace/iteration-6/review.html`
+
+## Iteration 7: Internal-Consistency Gates
+
+Iteration 7 narrows further: instead of adding more formatting pressure, it tries to force internal consistency between route choice, invalidation tuples, and command roles.
+
+- eval IDs: `37, 38`
+- workspace: `skills/pretext-workspace/iteration-7`
+- goal:
+  - force route-plan answers to keep route, invalidation tuples, and the first command mutually consistent
+  - force reasoning-bundle answers to keep command roles aligned with the route and the contract
+
+The new subset adds:
+
+- `37` — stricter route-plan consistency gate
+- `38` — stricter reasoning-bundle consistency gate
+
+Benchmark summary for iteration 7:
+
+- with skill: `100.0%`
+- without skill: `100.0%`
+- delta: `+0.00`
+
+Discrimination analysis:
+
+- `37` → `non_discriminating_success`
+- `38` → `non_discriminating_success`
+
+Interpretation:
+
+- Even after tightening internal-consistency requirements, baseline can still satisfy both prompts well enough that they remain smoke tests rather than useful benchmark gates.
+- The results suggest that route-plan and reasoning-bundle prompts are still too naturally satisfiable by baseline when the desired answer shape is strongly specified.
+- The most effective reasoning-layer gate remains the stronger Socratic prompt from iteration 6 (`35`).
+- A future iteration should probably stop trying to force discrimination through format and instead require repo-grounded evidence or selector-specific failure modes that baseline is less likely to reconstruct on its own.
+
+Artifacts:
+
+- `skills/pretext-workspace/iteration-7/benchmark.json`
+- `skills/pretext-workspace/iteration-7/benchmark.md`
+- `skills/pretext-workspace/iteration-7/review.html`
+
 ## Current Gap
 
 The first two real iterations have now been run on focused subsets:
